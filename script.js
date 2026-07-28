@@ -75,35 +75,23 @@
     el.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   });
 
-  /* ---- whimsy: a little corgi peeking over the footer ---- */
-  var foot = document.querySelector('footer');
-  if (foot && !foot.querySelector('.footer-corgi')) {
-    var corgi = document.createElement('div');
-    corgi.className = 'footer-corgi';
-    corgi.setAttribute('aria-hidden', 'true');
-    corgi.setAttribute('title', 'hi!');
-    corgi.innerHTML =
-      '<svg viewBox="0 0 100 98" xmlns="http://www.w3.org/2000/svg">' +
-      '<ellipse cx="34" cy="86" rx="9" ry="11" fill="#F7EBD3"/>' +
-      '<ellipse cx="66" cy="86" rx="9" ry="11" fill="#F7EBD3"/>' +
-      '<path d="M30 92 l0 6 M34 93 l0 6 M38 92 l0 6" stroke="#d9c6a4" stroke-width="1.4" stroke-linecap="round"/>' +
-      '<path d="M62 92 l0 6 M66 93 l0 6 M70 92 l0 6" stroke="#d9c6a4" stroke-width="1.4" stroke-linecap="round"/>' +
-      '<path d="M18 46 L27 8 L42 48 Z" fill="#E3A46A"/>' +
-      '<path d="M82 46 L73 8 L58 48 Z" fill="#E3A46A"/>' +
-      '<path d="M24 40 L28 18 L36 43 Z" fill="#E79FA0"/>' +
-      '<path d="M76 40 L72 18 L64 43 Z" fill="#E79FA0"/>' +
-      '<ellipse cx="50" cy="56" rx="31" ry="27" fill="#E3A46A"/>' +
-      '<path d="M50 34 Q42 54 46 78 Q50 83 54 78 Q58 54 50 34 Z" fill="#F7EBD3"/>' +
-      '<ellipse cx="50" cy="70" rx="16" ry="12" fill="#F7EBD3"/>' +
-      '<circle cx="37" cy="55" r="4.4" fill="#2b2320"/>' +
-      '<circle cx="63" cy="55" r="4.4" fill="#2b2320"/>' +
-      '<circle cx="38.4" cy="53.6" r="1.3" fill="#fff"/>' +
-      '<circle cx="64.4" cy="53.6" r="1.3" fill="#fff"/>' +
-      '<ellipse cx="50" cy="67" rx="4.6" ry="3.2" fill="#2b2320"/>' +
-      '<path d="M50 70 Q45 75 41 72 M50 70 Q55 75 59 72" stroke="#2b2320" stroke-width="1.6" fill="none" stroke-linecap="round"/>' +
-      '<circle cx="28" cy="63" r="4" fill="#F4B8B8" opacity=".7"/>' +
-      '<circle cx="72" cy="63" r="4" fill="#F4B8B8" opacity=".7"/>' +
-      '</svg>';
-    foot.appendChild(corgi);
+  /* ---- load the type system (DM Serif Display / Familjen Grotesk / Karla / Public Sans) ---- */
+  if (!document.getElementById('lm-fonts')) {
+    var fl = document.createElement('link');
+    fl.id = 'lm-fonts';
+    fl.rel = 'stylesheet';
+    fl.href = 'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Familjen+Grotesk:wght@400;500;600;700&family=Karla:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap';
+    document.head.appendChild(fl);
+  }
+
+  /* ---- simplified footer (drop the email + the "|", cleaner up-arrow) ---- */
+  var footInner = document.querySelector('footer .foot');
+  if (footInner) {
+    footInner.innerHTML =
+      '<a class="to-top" href="#top"><span class="up" aria-hidden="true">↑</span> return to top</a>' +
+      '<div class="quick"><span class="label">quick nav</span>' +
+      '<a href="index.html">home</a><a href="resume.html">resume</a>' +
+      '<a href="projects.html">projects</a><a href="gallery.html">gallery</a>' +
+      '<a href="about.html">about</a></div>';
   }
 })();
