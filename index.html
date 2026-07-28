@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lindsey Mardona — developer. designer. musician.</title>
+  <meta name="description" content="hi, i'm Lindsey — developer, designer, and musician. UX/UI designer and HCI grad student building thoughtful, human-centered technology." />
+  <meta name="author" content="Lindsey Mardona" />
+  <link rel="canonical" href="https://lindseymardona.com/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lindsey Mardona — developer. designer. musician." />
+  <meta property="og:description" content="developer/designer by day, musician by night." />
+  <meta property="og:url" content="https://lindseymardona.com/" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,500;1,600;1,700&family=Yellowtail&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --blush: #F4D7D7;
+      --blush-deep: #EFC9C9;
+      --olive: #B7C182;
+      --olive-deep: #A9B471;
+      --ink: #1F1D1B;
+      --ink-soft: #35322F;
+      --paper: #FFFFFF;
+      --gray: #EFEEEC;
+      --coral: #F4715E;
+      --coral-soft: #F58C7B;
+      --line: rgba(31, 29, 27, 0.9);
+      --hair: rgba(31, 29, 27, 0.14);
+      --shadow: 0 14px 34px -18px rgba(31, 29, 27, 0.45);
+      --maxw: 1180px;
+      --sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --script: 'Yellowtail', cursive;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background: var(--blush);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .skip-link {
+      position: absolute; left: -999px; top: 0;
+      background: var(--ink); color: #fff; padding: 10px 16px; z-index: 300;
+      border-radius: 0 0 8px 0;
+    }
+    .skip-link:focus { left: 0; }
+
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 40px; }
+
+    /* ---------------- NAV ---------------- */
+    .nav {
+      background: var(--blush);
+      padding-top: 26px;
+    }
+    .nav-inner {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 40px;
+      padding-bottom: 14px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    .nav-inner a {
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 1.1rem;
+      color: var(--ink);
+      position: relative;
+    }
+    .nav-inner a::after {
+      content: ""; position: absolute; left: 0; bottom: -4px;
+      width: 0; height: 2px; background: var(--ink); transition: width .25s ease;
+    }
+    .nav-inner a:hover::after, .nav-inner a:focus-visible::after { width: 100%; }
+    .nav-toggle { display: none; }
+
+    /* ---------------- HERO ---------------- */
+    .hero { background: var(--blush); padding: 56px 0 70px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr 0.8fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .hello { font-family: var(--script); font-size: clamp(4rem, 9vw, 6.4rem); line-height: .8; margin: 0 0 18px; }
+    .name { font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 400; margin: 0 0 4px; }
+    .name b { font-weight: 700; }
+    .roles { font-size: clamp(1rem, 2.2vw, 1.35rem); font-weight: 500; margin: 0; }
+    .squiggle { margin: 20px 0 22px; color: var(--ink); max-width: 300px; }
+    .socials { display: flex; gap: 14px; }
+    .socials a {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--ink); color: var(--blush);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .socials a:hover, .socials a:focus-visible { transform: translateY(-3px); background: var(--ink-soft); }
+    .socials svg { width: 20px; height: 20px; }
+
+    .welcome {
+      border-left: 1.5px solid var(--line);
+      padding-left: 44px;
+      font-size: 1.05rem;
+    }
+    .welcome p { margin: 0 0 20px; }
+    .welcome .arrow-link {
+      display: block;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+      margin: 0 0 12px;
+      width: fit-content;
+    }
+    .welcome .arrow-link:hover { color: var(--coral); }
+    .welcome .lovely { margin-top: 20px; }
+
+    .portrait { justify-self: end; }
+    .portrait .frame {
+      width: clamp(180px, 20vw, 240px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--olive) 0%, var(--coral-soft) 100%);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .portrait img { width: 100%; height: 100%; object-fit: cover; }
+    .portrait .initials { font-family: var(--script); font-size: 3.4rem; color: #fff; }
+
+    /* ---------------- WORKIN' LATE (olive) ---------------- */
+    .late { background: var(--olive); padding: 60px 0 72px; }
+    .late-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-bottom: 52px;
+    }
+    .late-quote {
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      margin: 0 0 26px;
+    }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 18px; }
+    .pill {
+      text-decoration: none;
+      background: var(--ink);
+      color: var(--blush);
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 12px 26px;
+      border-radius: 999px;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .pill b { font-weight: 700; }
+    .pill:hover, .pill:focus-visible { transform: translateY(-2px); background: var(--ink-soft); }
+
+    .currently { border-left: 1.5px solid var(--line); padding-left: 44px; }
+    .currently h2 { font-size: 1.15rem; font-weight: 600; margin: 0 0 10px; }
+    .currently ul { margin: 0; padding-left: 20px; }
+    .currently li { margin-bottom: 8px; font-size: 1.02rem; }
+
+    /* project grid */
+    .projects {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .proj {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .proj:hover, .proj:focus-visible { transform: translateY(-5px); box-shadow: 0 22px 40px -18px rgba(31,29,27,.5); }
+    .proj-thumb {
+      aspect-ratio: 16 / 10;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      color: #fff;
+      padding: 20px;
+      background:
+        radial-gradient(120% 120% at 50% 0%, #2b2f52 0%, #1a1c34 70%);
+    }
+    .proj-thumb .plabel { font-weight: 600; font-size: 1.05rem; }
+    .proj-thumb .psub { font-size: .8rem; opacity: .8; margin-top: 4px; }
+    .proj img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 4px; }
+    .proj-caption {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 6px 4px; font-size: .9rem; color: var(--ink-soft);
+    }
+    /* the little dev/design tab on the left edge */
+    .tab {
+      position: absolute;
+      left: -14px; top: 26px;
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .tab.dev { background: var(--ink); }
+    .tab.design { background: var(--coral); }
+    .tab svg { width: 18px; height: 18px; }
+
+    /* ---------------- SINGER (blush) ---------------- */
+    .singer { background: var(--blush); padding: 62px 0; }
+    .singer-quote {
+      font-style: italic; font-weight: 700;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      margin: 0 0 18px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .singer .socials { margin-bottom: 22px; }
+    .singer p { font-size: 1.08rem; max-width: 640px; margin: 0; }
+    .singer a { text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+    .singer a:hover { color: var(--coral); }
+
+    /* ---------------- FOOTER ---------------- */
+    footer {
+      background: var(--gray);
+      border-top: 5px solid var(--coral);
+      padding: 26px 0 30px;
+    }
+    .foot {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+    }
+    .to-top { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink-soft); font-style: italic; }
+    .to-top .circle {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--ink-soft);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .to-top:hover .circle { background: var(--ink); color: var(--gray); border-color: var(--ink); }
+    .quick { text-align: center; font-size: .96rem; }
+    .quick .label { font-weight: 600; margin-right: 6px; }
+    .quick a { text-decoration: none; margin: 0 6px; }
+    .quick a:hover { text-decoration: underline; }
+    .foot-email { text-align: right; }
+    .foot-email a { text-decoration: underline; text-underline-offset: 3px; color: var(--ink-soft); font-size: .95rem; }
+
+    /* ---------------- RESPONSIVE ---------------- */
+    @media (max-width: 900px) {
+      .wrap { padding: 0 24px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 32px; text-align: left; }
+      .welcome { border-left: none; padding-left: 0; border-top: 1.5px solid var(--hair); padding-top: 26px; }
+      .portrait { justify-self: start; order: -1; }
+      .late-top { grid-template-columns: 1fr; gap: 30px; }
+      .currently { border-left: none; padding-left: 0; border-top: 1.5px solid rgba(31,29,27,.25); padding-top: 24px; }
+      .projects { grid-template-columns: 1fr; gap: 26px; }
+      .foot { grid-template-columns: 1fr; text-align: center; gap: 16px; }
+      .foot-email { text-align: center; }
+      .quick { order: 3; }
+    }
+    @media (max-width: 620px) {
+      .nav-inner { justify-content: center; gap: 22px; flex-wrap: wrap; }
+      .nav-inner a { font-size: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">skip to content</a>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a href="index.html" aria-current="page">home</a>
+      <a href="resume.html">resume</a>
+      <a href="projects.html">projects</a>
+      <a href="about.html">about</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-left">
+          <p class="hello">hello,</p>
+          <p class="name">my name is <b>Lindsey</b></p>
+          <p class="roles">developer. designer. musician.</p>
+          <svg class="squiggle" viewBox="0 0 300 22" fill="none" aria-hidden="true">
+            <path d="M2 12 C 30 2, 55 2, 82 12 S 140 22, 168 12 S 224 2, 252 12 S 296 18, 298 11"
+                  stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <div class="socials">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6S0 4.88 0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.24 8h4.5V24H.24V8zm7.5 0h4.32v2.19h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V24h-4.5v-6.36c0-1.52-.03-3.48-2.12-3.48-2.12 0-2.45 1.66-2.45 3.37V24h-4.5V8z"/></svg>
+            </a>
+            <a href="https://github.com/lindseymardona" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.2 11.4.6.11.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.55-1.38-1.34-1.75-1.34-1.75-1.1-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.4 1.24-3.24-.13-.3-.54-1.53.12-3.18 0 0 1-.32 3.3 1.24a11.5 11.5 0 0 1 6 0c2.3-1.56 3.3-1.24 3.3-1.24.66 1.65.25 2.88.12 3.18.77.84 1.24 1.92 1.24 3.24 0 4.63-2.8 5.65-5.48 5.95.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 22.3 24 17.8 24 12.5 24 5.87 18.63.5 12 .5z"/></svg>
+            </a>
+            <a href="mailto:lindseymardona@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="welcome">
+          <p>welcome, thanks for stopping by! developer/designer by day, musician by night. learn more about me <a href="about.html">here.</a> →</p>
+          <a class="arrow-link" href="projects.html">dev work →</a>
+          <a class="arrow-link" href="projects.html">ui/ux work →</a>
+          <p class="lovely">have a lovely day ❤</p>
+        </div>
+
+        <div class="portrait">
+          <div class="frame">
+            <img src="assets/lindsey.jpg" alt="Portrait of Lindsey Mardona"
+                 onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=&quot;initials&quot;>lm</span>');" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKIN' LATE -->
+    <section class="late">
+      <div class="wrap">
+        <div class="late-top">
+          <div>
+            <p class="late-quote">"i'm workin' late..."</p>
+            <div class="pill-row">
+              <a class="pill" href="projects.html">see all <b>dev</b> →</a>
+              <a class="pill" href="projects.html">see all <b>design</b> →</a>
+            </div>
+          </div>
+          <div class="currently">
+            <h2>currently:</h2>
+            <ul>
+              <li>ui/ux designer @ the ucla latino policy &amp; politics institute</li>
+              <li>sp'25 scholar @ mentor me collective x grow with google</li>
+              <li>working on this site!</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="projects">
+          <a class="proj" href="projects.html">
+            <span class="tab dev" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            </span>
+            <span class="sr-tab" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">development project</span>
+            <div class="proj-thumb"><span class="plabel">project one</span><span class="psub">add a screenshot</span></div>
+            <div class="proj-caption"><span>dev project</span><span aria-hidden="true">→</span></div>
+          </a>
+
+          <a class="proj" href="projects.html">
+            <span class="tab design" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </span>
+            <div class="proj-thumb"><span class="plabel">Latino Climate &amp; Health Dashboard</span><span class="psub">UCLA LPPI · add a screenshot</span></div>
+            <div class="proj-caption"><span>design project</span><span aria-hidden="true">→</span></div>
+          </a>
+
+          <a class="proj" href="projects.html">
+            <span class="tab dev" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            </span>
+            <div class="proj-thumb"><span class="plabel">project three</span><span class="psub">add a screenshot</span></div>
+            <div class="proj-caption"><span>dev project</span><span aria-hidden="true">→</span></div>
+          </a>
+
+          <a class="proj" href="projects.html">
+            <span class="tab design" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </span>
+            <div class="proj-thumb"><span class="plabel">project four</span><span class="psub">add a screenshot</span></div>
+            <div class="proj-caption"><span>design project</span><span aria-hidden="true">→</span></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SINGER -->
+    <section class="singer">
+      <div class="wrap">
+        <p class="singer-quote">"...'cause i'm a singer" <span aria-hidden="true">🎵</span></p>
+        <div class="socials">
+          <a href="https://x.com/" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2h3.3l-7.2 8.3L23.8 22h-6.6l-5.2-6.8L5.9 22H2.6l7.7-8.8L2.2 2h6.8l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.1 3.9H5.2L17.7 20Z"/></svg>
+          </a>
+          <a href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5a3 3 0 0 0-2.1-2.1C19.5 4 12 4 12 4s-7.5 0-9.4.4A3 3 0 0 0 .5 6.5 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.5 3 3 0 0 0 2.1 2.1C4.5 20 12 20 12 20s7.5 0 9.4-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.5ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/></svg>
+          </a>
+        </div>
+        <p>in my spare time, i love singing and creating music! i recently co-wrote a song for miku expo 2024 called <a href="#" target="_blank" rel="noopener">"dear yesterday"</a>. stream it on <a href="#" target="_blank" rel="noopener">spotify?</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap foot">
+      <a class="to-top" href="#top">
+        <span class="circle" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+        </span>
+        return to top
+      </a>
+      <div class="quick">
+        <span class="label">quick nav |</span>
+        <a href="index.html">home</a>
+        <a href="resume.html">resume</a>
+        <a href="projects.html">dev</a>
+        <a href="projects.html">design</a>
+        <a href="about.html">about</a>
+      </div>
+      <div class="foot-email">
+        <a href="mailto:lindseymardona@gmail.com">lindseymardona(at)gmail(dot)com</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
