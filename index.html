@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Borel&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body id="top">
@@ -58,7 +59,7 @@
         </div>
 
         <div class="welcome">
-          <p>welcome, thanks for stopping by! developer/designer by day, musician by night. learn more about me <a href="about.html">here.</a> →</p>
+          <p>welcome, thanks for stopping by! developer/designer by day, musician by night. learn more about me <span class="nowrap"><a href="about.html">here.</a> →</span></p>
           <div class="welcome-btns">
             <a class="pill" href="projects.html">projects →</a>
             <a class="pill ghost" href="gallery.html">design gallery →</a>
@@ -73,8 +74,8 @@
             <img src="assets/lindsey.jpg" alt="Portrait of Lindsey Mardona"
                  onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=&quot;initials&quot;>lm</span>');" />
           </div>
-          <svg class="accent f1" viewBox="0 0 40 40" aria-hidden="true"><g fill="#C3C98D"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
-          <svg class="accent f2" viewBox="0 0 40 40" aria-hidden="true"><g fill="#99585E"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
+          <svg class="accent f1" viewBox="0 0 40 40" aria-hidden="true"><g fill="#99585E"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
+          <svg class="accent f2" viewBox="0 0 40 40" aria-hidden="true"><g fill="#C3C98D"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
           <svg class="accent sq" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="3" width="24" height="24" rx="9" fill="#FF4557"/></svg>
         </div>
       </div>
@@ -101,6 +102,18 @@
         </div>
 
         <div class="projects">
+          <a class="proj reveal" href="gingko.html">
+            <div class="proj-thumb"><img src="assets/proj-gingko.jpg" alt="Gingko therapist-matching app screens" loading="lazy" /></div>
+            <div class="proj-body">
+              <h3>Gingko</h3>
+              <p class="desc">A culturally-aware therapist-matching app that makes finding the right care feel less overwhelming. <em>(full write-up soon)</em></p>
+              <div class="proj-foot">
+                <div class="chip-row"><span class="chip">Figma</span><span class="chip">Mobile UX</span><span class="chip">Product</span></div>
+                <span class="card-go" aria-hidden="true"><i class="fa-solid fa-right-long"></i></span>
+              </div>
+            </div>
+          </a>
+
           <a class="proj reveal" href="case-study-lppi.html">
             <div class="proj-thumb"><img src="assets/proj-lppi.jpg" alt="Latino Climate & Health Dashboard interface" loading="lazy" /></div>
             <div class="proj-body">
@@ -108,7 +121,7 @@
               <p class="desc">A first-of-its-kind public dashboard that turns neighborhood-level climate &amp; health data into county factsheets advocates can actually use.</p>
               <div class="proj-foot">
                 <div class="chip-row"><span class="chip">Figma</span><span class="chip">UX Research</span><span class="chip">Data Viz</span></div>
-                <span class="card-go" aria-hidden="true">→</span>
+                <span class="card-go" aria-hidden="true"><i class="fa-solid fa-right-long"></i></span>
               </div>
             </div>
           </a>
@@ -120,31 +133,19 @@
               <p class="desc">An interactive map of Asian-American political potential, built for UCLA Political Science &amp; Asian American Studies.</p>
               <div class="proj-foot">
                 <div class="chip-row"><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span><span class="chip">Data Viz</span></div>
-                <span class="card-go" aria-hidden="true">→</span>
+                <span class="card-go" aria-hidden="true"><i class="fa-solid fa-right-long"></i></span>
               </div>
             </div>
           </a>
 
-          <a class="proj reveal" href="projects.html">
-            <div class="proj-thumb"><span class="ph"><span class="plabel">Robot Monitoring UI</span><span class="psub">add a screenshot</span></span></div>
+          <a class="proj reveal" href="anixmate.html">
+            <div class="proj-thumb"><img src="assets/proj-anixmate.jpg" alt="aniXmate anime recommendation site" loading="lazy" /></div>
             <div class="proj-body">
-              <h3>Robot Monitoring UI</h3>
-              <p class="desc">UI wireframes, prototypes, and human-robot interaction research for robot monitoring systems at DOGU (Seoul).</p>
+              <h3>aniXmate</h3>
+              <p class="desc">An anime recommendation site that suggests your next watch based on the ones you already loved. <em>(full write-up soon)</em></p>
               <div class="proj-foot">
-                <div class="chip-row"><span class="chip">Figma</span><span class="chip">Wireframing</span><span class="chip">HRI</span></div>
-                <span class="card-go" aria-hidden="true">→</span>
-              </div>
-            </div>
-          </a>
-
-          <a class="proj reveal" href="projects.html">
-            <div class="proj-thumb"><span class="ph"><span class="plabel">AAPI Movement Hub</span><span class="psub">add a screenshot</span></span></div>
-            <div class="proj-body">
-              <h3>AAPI Movement Hub</h3>
-              <p class="desc">UX and market research — usage &amp; demographic analysis with competitive recommendations for improving the site.</p>
-              <div class="proj-foot">
-                <div class="chip-row"><span class="chip">UX Research</span><span class="chip">Competitive Analysis</span></div>
-                <span class="card-go" aria-hidden="true">→</span>
+                <div class="chip-row"><span class="chip">Web Design</span><span class="chip">UI</span><span class="chip">Search UX</span></div>
+                <span class="card-go" aria-hidden="true"><i class="fa-solid fa-right-long"></i></span>
               </div>
             </div>
           </a>
