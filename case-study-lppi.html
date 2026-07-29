@@ -81,17 +81,34 @@
           <h2 id="process">Process</h2>
           <p><strong>The experience.</strong> An interactive map of California counties. Selecting a county surfaces an infographic-style factsheet with that county's data, deliberately contrasting Latino and non-Latino White populations on the chosen metric — extreme heat or air pollution. Final scope: 24 factsheets (23 counties plus a statewide sheet), each produced for both topics.</p>
 
-          <div class="figph">[ Add: interactive map + a sample county factsheet ]</div>
+          <figure>
+            <img src="assets/lchd/factsheet-air.jpg" alt="A county air-pollution factsheet — an infographic pairing each metric for Latino and non-Latino White neighborhoods, with a neighborhood map of PM2.5 exposure" loading="lazy" />
+            <figcaption>A county factsheet — infographic-style, pairing every metric for Latino vs. non-Latino White neighborhoods so a disparity reads in seconds. Selecting a county on the map opens its sheet.</figcaption>
+          </figure>
 
           <p><strong>Validation.</strong> We ran a Qualtrics survey with the internal team and policymakers to test whether the factsheets communicated clearly. I helped shape the survey and translated what came back into the next round of design.</p>
 
           <p><strong>The core problem — restraint.</strong> Early factsheets were text-heavy to the point of drowning the numbers, which were the whole point. Across iterations I cut copy aggressively and rebuilt the visual hierarchy so the statistics carried the weight — using size, color, and directional indicators to steer the eye to what mattered. This meant genuine editorial tradeoffs on both sides: researchers released carefully written passages, and I dropped graphs and visuals of my own, all to fit the essential data legibly in a fixed space. <strong>Facilitating that negotiation — helping a research team let go in service of the reader — was as much of the work as the design itself.</strong></p>
 
-          <div class="figph">[ Add: before/after of a factsheet — verbose early draft vs. final ]</div>
+          <figure class="fig-wide">
+            <img src="assets/lchd/before-after.jpg" alt="Before and after of an extreme-heat factsheet: a text-heavy early draft on the left, and the final on the right where the statistics carry the weight" loading="lazy" />
+            <figcaption>Left: an early draft, drowning the numbers. Right: the final — copy cut, hierarchy rebuilt, the statistics given room to carry the weight.</figcaption>
+          </figure>
 
           <p><strong>Iteration as system-building.</strong> The flagship extreme-heat factsheet went through 10 rounds of revision, because it was effectively inventing the template. That investment paid off: air pollution reused the established pattern and needed only 4 rounds, and the dashboard itself took roughly 4. The early grind produced a reusable system, not just a single deliverable.</p>
 
-          <p><strong>A stakeholder curveball.</strong> One director approved a color scheme, then about six revisions later wanted a more monochromatic palette — which forced significant rework. It was a clean lesson in locking visual direction earlier and, more importantly, building with reusable color styles so a global change costs minutes instead of a redo. I carried that lesson directly into later work.</p>
+          <p><strong>A late curveball on color.</strong> The palette I'd designed used two distinct color families — one per topic — so extreme heat and air pollution read as different chapters at a glance. It went through ten rounds of revision and passed WCAG contrast testing before it was approved. Then, with under a month to the deadline, leadership decided it read as too colorful and asked for a single, more subdued green-and-blue palette shared across both factsheets. It wasn't the direction the team or I would have chosen — I still think distinct palettes served the reader better — but the constraint was real, so we made the shift work. The saving grace: I'd set the whole thing up on reusable Figma color styles, so swapping the palette across every factsheet was a near-instant global change instead of editing each sheet by hand. That's a habit I now build in from the very first file.</p>
+
+          <figure class="fig-wide">
+            <img src="assets/lchd/colors.jpg" alt="The approved color system — a distinct palette for extreme heat (reds and magenta) and for air pollution (blues and green), with tints and type styles" loading="lazy" />
+            <figcaption>The approved system: a distinct palette per topic, so the two factsheets read as different chapters.</figcaption>
+          </figure>
+          <figure class="fig-wide">
+            <img src="assets/lchd/ada.jpg" alt="A WCAG contrast-compliance sheet testing text and background color pairings for AA and AAA passes" loading="lazy" />
+            <figcaption>Every text-on-color pairing was contrast-tested for WCAG AA/AAA before sign-off.</figcaption>
+          </figure>
+
+          <p><strong>A shifting brand.</strong> Partway through, the dashboard also moved from sharing its parent initiative's branding to standing up its own visual identity. Re-skinning the system to a new brand while factsheets were still in flight was exactly the situation where reusable Figma styles and components earn their keep.</p>
 
           <h2 id="outcome">Outcome</h2>
           <p>The dashboard launched publicly on June 24, 2025, billed as the first tool of its kind to provide Latino neighborhood-level climate-and-health data across California. It surfaced stark, actionable disparities — for example, that Latino neighborhoods are roughly <strong>twice as likely</strong> to face poor air quality and asthma-related ER visits compared with non-Latino White neighborhoods.</p>
@@ -100,9 +117,14 @@
             <li>Presented at <strong>NALEO's 43rd Annual Conference</strong>.</li>
             <li>Used in LPPI's <strong>2026 Policy in Action Summit</strong> and community "policy plática" convenings to ground advocacy discussions.</li>
             <li>Reached <strong>6,000+ users</strong> in its first year.</li>
-            <li>Acknowledged <strong>by name</strong> in the dashboard's official Technical Documentation for factsheet design and dashboard development.</li>
+            <li>Acknowledged <strong>by name</strong> in the dashboard's official Technical Documentation for the factsheet and dashboard design.</li>
           </ul>
-          <p>Follow-on work included a mobile prototype, event stickers, and a vertical conference banner.</p>
+          <p>Follow-on work included a mobile prototype, event stickers, and a vertical conference banner. I designed the mobile version on a proper auto-layout and component system in Figma — applying what I'd just finished learning in Google's UX Design Certificate — which made it noticeably more rigorous and maintainable than my original design files for the web build.</p>
+
+          <figure class="fig-wide">
+            <img src="assets/lchd/mobile.jpg" alt="Three screens of the LCHD mobile prototype: the county-profiles home with the map, the newsroom, and the data reference" loading="lazy" />
+            <figcaption>The mobile prototype — county profiles, newsroom, and data reference — built on auto-layout and components from the ground up.</figcaption>
+          </figure>
 
           <h2 id="reflection">Reflection</h2>
           <p><strong>Design systems from day one.</strong> I'd establish a proper Figma component and color-token system at the start. I only did this well on the later mobile prototype — after completing Google's UX Design Certificate — and the color-scheme rework is exactly the kind of pain a token system prevents.</p>

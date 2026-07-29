@@ -122,11 +122,26 @@
     window.addEventListener('load', setPetalDrop);
   }
 
-  /* move each project card's tech chips into its thumbnail (slide up on hover) */
-  [].slice.call(document.querySelectorAll('.proj')).forEach(function (card) {
-    var thumb = card.querySelector('.proj-thumb');
-    var chips = card.querySelector('.proj-body .chip-row');
-    if (thumb && chips) { chips.classList.add('thumb-chips'); thumb.appendChild(chips); }
+  /* ---- nav pseudo-logo (top-left wordmark that takes you home) ---- */
+  var navInner = document.querySelector('.nav .nav-inner');
+  if (navInner && !navInner.querySelector('.nav-logo')) {
+    var logo = document.createElement('a');
+    logo.className = 'nav-logo';
+    logo.href = 'index.html';
+    logo.setAttribute('aria-label', 'Lindsey Mardona — home');
+    logo.textContent = 'lvm';
+    navInner.insertBefore(logo, navInner.firstChild);
+  }
+
+  /* tech chips now live pinned in the card body (no hover-to-reveal) — nothing to move */
+
+  /* project-card meta: split "date · type" onto two right-aligned lines */
+  [].slice.call(document.querySelectorAll('.proj-meta')).forEach(function (m) {
+    if (m.querySelector('.pm-type')) return;
+    var parts = m.textContent.split(' · ');
+    if (parts.length < 2) return;
+    var date = parts.shift();
+    m.innerHTML = '<span class="pm-date">' + date + '</span><span class="pm-type">' + parts.join(' · ') + '</span>';
   });
 
   /* ---- light deterrents against casual image saving (not foolproof) ---- */
@@ -165,6 +180,8 @@
     nav.appendChild(prog);
     var progBar = prog.querySelector('.bar');
     var hero = document.querySelector('.hero, .page-hero, .cs-hero');
+    var lastY = window.scrollY || 0;
+    var mobileNav = window.matchMedia('(max-width: 820px)');
     var onNavScroll = function () {
       var y = window.scrollY || window.pageYOffset || 0;
       var navH = nav.offsetHeight || 80;
@@ -174,7 +191,22 @@
       var trigger = Math.max(40, Math.min(heroBased, max * 0.35));
       nav.classList.toggle('scrolled', max > 60 && y > trigger);
       progBar.style.width = (max > 0 ? Math.min(100, (y / max) * 100) : 0) + '%';
+      // mobile auto-hide: slide the bar away while scrolling down, bring it back on
+      // any upward scroll (and always show it near the very top)
+      if (mobileNav.matches) {
+        if (y <= 72) {
+          nav.classList.remove('nav-hidden');
+        } else if (y > lastY + 6) {
+          nav.classList.add('nav-hidden');
+        } else if (y < lastY - 6) {
+          nav.classList.remove('nav-hidden');
+        }
+      } else {
+        nav.classList.remove('nav-hidden');
+      }
+      lastY = y;
     };
+    mobileNav.addEventListener('change', function () { nav.classList.remove('nav-hidden'); });
     window.addEventListener('scroll', onNavScroll, { passive: true });
     window.addEventListener('resize', onNavScroll);
     onNavScroll();
@@ -205,11 +237,84 @@
   if (rail) {
     var railLinks = [].slice.call(rail.querySelectorAll('a'));
     var railHeads = railLinks.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+    var csNav = document.querySelector('.nav');
+    var csMq = window.matchMedia('(max-width: 820px)');
+
+    /* ---- point "back" at wherever you actually came from (?from=home) ---- */
+    var fromHome = new URLSearchParams(location.search).get('from') === 'home';
+    var backHref = fromHome ? 'index.html' : 'projects.html';
+    var backLabel = fromHome ? 'back to home' : 'back to projects';
+    var csBack = document.querySelector('.cs-back');
+    if (csBack) { csBack.setAttribute('href', backHref); csBack.innerHTML = '<span aria-hidden="true">←</span> ' + backLabel; }
+    var csOutro = document.querySelector('.cs-outro-back');
+    if (csOutro) { csOutro.setAttribute('href', backHref); csOutro.innerHTML = '<span class="bk" aria-hidden="true">←</span> ' + backLabel; }
+
+    /* ---- mobile section bar (design 5a): a persistent bar under the auto-hiding
+       site nav, merging the "back to projects" pill with a section picker ---- */
+    var mbar, mName, mCount, mSheet, mOverlay, mItems = [], mLastTop = null;
+    (function buildMobileBar() {
+      mbar = document.createElement('div');
+      mbar.className = 'cs-mobilebar';
+      mbar.innerHTML =
+        '<a class="csm-back" href="' + backHref + '"><span class="arw" aria-hidden="true">←</span><span class="lbl">' + backLabel + '</span></a>' +
+        '<button class="csm-trigger" type="button" aria-expanded="false" aria-label="Jump to a section">' +
+          '<span class="csm-cur"><span class="dot" aria-hidden="true"></span><span class="csm-name"></span></span>' +
+          '<span class="csm-meta"><span class="csm-count"></span><span class="caret" aria-hidden="true">⌄</span></span>' +
+        '</button>';
+      mOverlay = document.createElement('div'); mOverlay.className = 'csm-overlay';
+      mSheet = document.createElement('div'); mSheet.className = 'csm-sheet'; mSheet.setAttribute('role', 'menu');
+      railLinks.forEach(function (a) {
+        var it = document.createElement('a');
+        it.className = 'csm-item'; it.setAttribute('role', 'menuitem');
+        it.href = a.getAttribute('href');
+        it.innerHTML = '<span class="csm-il">' + a.textContent + '</span><span class="tick" aria-hidden="true">✓</span>';
+        mSheet.appendChild(it); mItems.push(it);
+      });
+      if (csNav && csNav.parentNode) csNav.insertAdjacentElement('afterend', mbar);
+      else document.body.insertBefore(mbar, document.body.firstChild);
+      document.body.appendChild(mOverlay);
+      document.body.appendChild(mSheet);
+      mName = mbar.querySelector('.csm-name');
+      mCount = mbar.querySelector('.csm-count');
+      var trig = mbar.querySelector('.csm-trigger');
+      var closeSheet = function () { trig.setAttribute('aria-expanded', 'false'); mSheet.classList.remove('open'); mOverlay.classList.remove('open'); document.body.style.overflow = ''; };
+      var openSheet = function () { positionSheet(); trig.setAttribute('aria-expanded', 'true'); mSheet.classList.add('open'); mOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; };
+      trig.addEventListener('click', function () { (mSheet.classList.contains('open') ? closeSheet : openSheet)(); });
+      mOverlay.addEventListener('click', closeSheet);
+      mItems.forEach(function (it) { it.addEventListener('click', closeSheet); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+    })();
+
+    function barTopValue() {
+      if (!csNav) return 0;
+      return csNav.classList.contains('nav-hidden') ? 0 : csNav.offsetHeight;
+    }
+    function positionSheet() {
+      mSheet.style.top = (barTopValue() + (mbar.offsetHeight || 54) + 6) + 'px';
+    }
+    function syncMobileBar() {
+      if (!csMq.matches) { mLastTop = null; return; }
+      var t = barTopValue();
+      if (t !== mLastTop) {
+        mbar.style.top = t + 'px';
+        mLastTop = t;
+        if (mSheet.classList.contains('open')) positionSheet();
+      }
+      mbar.classList.toggle('collapsed', (window.scrollY || 0) > 40);
+    }
+    csMq.addEventListener('change', function () { mLastTop = null; syncMobileBar(); });
+
     var setActive = function (idx) {
       railLinks.forEach(function (a, i) { a.classList.toggle('active', i === idx); });
+      if (mName && railLinks[idx]) {
+        mName.textContent = railLinks[idx].textContent;
+        mCount.textContent = (idx + 1) + '/' + railLinks.length;
+        mItems.forEach(function (it, i) { it.classList.toggle('active', i === idx); it.classList.toggle('visited', i < idx); });
+      }
     };
     var clickLock = false, clickTimer = null;
     var onRailScroll = function () {
+      syncMobileBar();
       if (clickLock) return; // don't let scroll override a just-clicked link mid-animation
       var current = 0;
       var line = Math.max(150, window.innerHeight * 0.33);
@@ -222,15 +327,16 @@
       }
       setActive(current);
     };
-    railLinks.forEach(function (a, i) {
-      a.addEventListener('click', function () {
-        setActive(i);              // highlight the clicked section right away
-        clickLock = true;          // hold it while the smooth-scroll settles
-        if (clickTimer) clearTimeout(clickTimer);
-        clickTimer = setTimeout(function () { clickLock = false; }, 700);
-      });
-    });
+    var onRailClick = function (i) {
+      setActive(i);              // highlight the clicked section right away
+      clickLock = true;          // hold it while the smooth-scroll settles
+      if (clickTimer) clearTimeout(clickTimer);
+      clickTimer = setTimeout(function () { clickLock = false; }, 700);
+    };
+    railLinks.forEach(function (a, i) { a.addEventListener('click', function () { onRailClick(i); }); });
+    mItems.forEach(function (a, i) { a.addEventListener('click', function () { onRailClick(i); }); });
     window.addEventListener('scroll', onRailScroll, { passive: true });
+    window.addEventListener('resize', syncMobileBar);
     onRailScroll();
   }
 

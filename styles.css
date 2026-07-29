@@ -1012,3 +1012,236 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 @media (hover: none) {
   .tile .tile-overlay { transform: translateY(0); }
 }
+
+/* ============================================================ ROUND 28 — case-study "materials" link lines ============================================================ */
+.cs-read .cs-materials { font-family: var(--ui); font-size: .86rem; line-height: 1.55; color: rgba(54,49,51,.72); margin: -2px 0 26px; }
+.cs-read .cs-materials strong { color: var(--plum); font-weight: 600; }
+/* hero link pills row wraps neatly on small screens */
+.cs-hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+
+/* ============================================================ ROUND 29 ============================================================ */
+/* home portrait: center it on mobile so the decorative squares/flowers don't
+   trail off into empty space on the right */
+@media (max-width: 920px) {
+  .portrait { justify-self: center; }
+}
+
+/* about: explicit grid so the photo/facts aside sits top-right on desktop, but on
+   mobile the order becomes intro line -> photo + facts -> the chapter text blobs */
+.section.paper .about-grid { grid-template-columns: 1.2fr .8fr; align-items: start; }
+.about-grid .about-lead { grid-column: 1; grid-row: 1; }
+.about-grid .about-side { grid-column: 2; grid-row: 1 / span 2; }
+.about-grid .about-chapters { grid-column: 1; grid-row: 2; }
+@media (max-width: 820px) {
+  .section.paper .about-grid { grid-template-columns: 1fr; row-gap: 30px; }
+  .about-grid .about-lead,
+  .about-grid .about-side,
+  .about-grid .about-chapters { grid-column: 1; grid-row: auto; }
+}
+
+/* mobile nav: slides up out of the way while scrolling down, snaps back on scroll up */
+.nav { transition: transform .32s ease, padding .28s ease, background .28s ease, box-shadow .28s ease; }
+.nav.nav-hidden { transform: translateY(-100%); }
+
+/* ============================================================ ROUND 30 — mobile case-study section bar (design 5a) ============================================================ */
+/* hidden by default; only the mobile @media block below turns it on */
+.cs-mobilebar, .csm-overlay, .csm-sheet { display: none; }
+
+@media (max-width: 820px) {
+  /* the merged section bar replaces the desktop back-pill + rail on phones */
+  .cs-backbar { display: none; }
+  .cs-body .cs-layout .cs-rail { display: none; }
+
+  /* tier 2: the section bar — sticky, sits directly under the (auto-hiding) site nav.
+     JS drives its `top` to the live nav height, or 0 once the nav has tucked away. */
+  .cs-mobilebar {
+    display: flex; align-items: center; gap: 8px;
+    position: sticky; top: 56px; z-index: 90;
+    height: 54px; padding: 0 12px;
+    background: rgba(255,255,255,.93); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(99,40,92,.12); border-bottom: 1px solid var(--hair);
+    transition: top .3s ease;
+  }
+
+  /* back pill: full label at the top of the page, collapses to just the arrow on scroll */
+  .csm-back {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 38px; padding: 0 15px; border-radius: 19px; flex: none;
+    background: var(--plum); color: #fff; text-decoration: none;
+    font-family: var(--ui); font-size: .84rem; white-space: nowrap; overflow: hidden;
+    transition: padding .25s ease, gap .25s ease;
+  }
+  .csm-back .arw { flex: none; font-size: .95rem; }
+  .csm-back .lbl { max-width: 150px; overflow: hidden; white-space: nowrap; transition: max-width .25s ease, opacity .18s ease; }
+  .cs-mobilebar.collapsed .csm-back { padding: 0; width: 38px; gap: 0; }
+  .cs-mobilebar.collapsed .csm-back .lbl { max-width: 0; opacity: 0; }
+
+  /* section trigger: outlined, shows the current section + "n/total" */
+  .csm-trigger {
+    flex: 1; min-width: 0; height: 38px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 0 12px; border: 1.5px solid rgba(99,40,92,.32); border-radius: 19px;
+    background: #fff; font-family: var(--ui); font-size: .95rem; color: var(--ink); cursor: pointer;
+  }
+  .csm-cur { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .csm-cur .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--plum); flex: none; }
+  .csm-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .csm-meta { display: flex; align-items: center; gap: 6px; flex: none; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .66rem; color: rgba(54,49,51,.55); }
+  .csm-meta .caret { transition: transform .22s ease; display: inline-block; }
+  .csm-trigger[aria-expanded="true"] .csm-meta .caret { transform: rotate(180deg); }
+
+  /* the section sheet + dim backdrop */
+  .csm-overlay {
+    display: block; position: fixed; inset: 0; z-index: 88;
+    background: rgba(20,18,19,.34); opacity: 0; pointer-events: none; transition: opacity .2s ease;
+  }
+  .csm-overlay.open { opacity: 1; pointer-events: auto; }
+  .csm-sheet {
+    display: flex; flex-direction: column; gap: 6px;
+    position: fixed; left: 10px; right: 10px; top: 112px; z-index: 89;
+    background: #fff; border: 1px solid var(--hair); border-radius: 16px; padding: 10px;
+    box-shadow: 0 16px 34px -12px rgba(54,49,51,.5);
+    transform: translateY(-8px); opacity: 0; pointer-events: none; transform-origin: top center;
+    transition: transform .2s ease, opacity .2s ease, top .3s ease;
+  }
+  .csm-sheet.open { transform: none; opacity: 1; pointer-events: auto; }
+  .csm-item {
+    height: 44px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; border-radius: 22px; text-decoration: none;
+    font-family: var(--ui); font-size: 1rem; color: var(--ink);
+    border: 1px solid transparent; background: transparent;
+  }
+  .csm-item .tick { font-size: .82rem; color: rgba(99,40,92,.5); opacity: 0; }
+  .csm-item.visited .tick { opacity: 1; }
+  .csm-item.active { background: var(--plum); color: #fff; border-color: var(--plum); }
+  .csm-item.active .tick { opacity: 0; }
+
+  /* section jumps land clear of nav + bar */
+  .cs-read h2[id] { scroll-margin-top: 116px; }
+}
+
+/* ============================================================ ROUND 31 — about regressions from the mobile regrid ============================================================ */
+/* the intro lost its larger size when the wrapper was renamed from .about-intro */
+.about-lead .dropcap { font-size: 1.12rem; }
+/* desktop: kill the grid row-gap so the intro sits close to chapter 01 again
+   (mobile keeps its 30px stacking gap from ROUND 29) */
+@media (min-width: 821px) { .section.paper .about-grid { row-gap: 0; } }
+
+/* ============================================================ ROUND 32 — case-study heuristic table ============================================================ */
+.cs-read .heval-wrap { margin: 1.7em 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.cs-read table.heval { width: 100%; border-collapse: collapse; font-family: var(--read); font-size: .92rem; min-width: 540px; }
+.cs-read table.heval th { text-align: left; font-family: var(--ui); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--plum); border-bottom: 2px solid rgba(99,40,92,.32); padding: 8px 14px 8px 0; }
+.cs-read table.heval td { vertical-align: top; padding: 12px 14px 12px 0; border-bottom: 1px solid var(--hair); line-height: 1.55; color: rgba(54,49,51,.92); }
+.cs-read table.heval .heu { font-weight: 700; color: var(--ink); }
+.cs-read table.heval .heu .num { font-family: 'JetBrains Mono', ui-monospace, monospace; color: rgba(54,49,51,.5); font-weight: 500; margin-right: 6px; }
+.cs-read table.heval .fix { color: var(--plum); font-weight: 600; }
+.cs-read .sev { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 7px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .82rem; font-weight: 600; }
+.cs-read .sev-1 { background: rgba(110,154,79,.22); color: #4d6f33; }
+.cs-read .sev-2 { background: rgba(230,168,23,.24); color: #86610f; }
+.cs-read .sev-3 { background: rgba(255,69,87,.16); color: #b3283a; }
+
+/* ============================================================ ROUND 33 ============================================================ */
+/* about: tighten the intro → chapter 01 gap (it was reading as disjointed) */
+.about-lead .dropcap { margin-bottom: 4px; }
+.about-chapters .chapter:first-child { margin-top: 14px; }
+
+/* mobile case-study back pill: smooth the collapse to the arrow.
+   (it was snapping because collapsed forced a fixed 38px width from auto) */
+.cs-mobilebar.collapsed .csm-back { padding: 0 11px; gap: 0; width: auto; }
+
+/* ============================================================ ROUND 34 ============================================================ */
+/* resume: on mobile, stop forcing content into grid column 2 — that implicit
+   second column is what made the vertical bars misalign per section */
+@media (max-width: 920px) {
+  .res-block > *:not(h2) { grid-column: 1; }
+}
+
+/* ============================================================ ROUND 35 ============================================================ */
+/* resume mobile: more air between a section's underline and its first vertical bar */
+@media (max-width: 920px) { .res-block { row-gap: 22px; } }
+
+/* ---- project cards: tags PINNED in the white body (no hover reveal) ---- */
+/* meta moves to the top-right of the title row */
+.proj-titlerow { align-items: flex-start; }
+.proj-titlerow .proj-meta { margin: 0; padding-top: 4px; white-space: nowrap; flex: none; }
+/* status badge sits on the thumbnail so the title row is free for the meta */
+.proj-thumb .proj-status { position: absolute; top: 10px; left: 10px; z-index: 3; margin: 0;
+  background: rgba(255,255,255,.95); box-shadow: 0 3px 10px rgba(20,18,19,.28); }
+/* footer row: tag pills (left) + view link (right), both always visible */
+.proj-footrow { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px 14px; padding-top: 12px; min-height: 0; flex-wrap: wrap; }
+.proj-footrow .chip-row { flex: 1 1 auto; }
+.proj-footrow .proj-view { flex: none; margin: 0; }
+.proj-body .desc { min-height: 0; margin-bottom: 12px; }
+.proj-footrow .chip { font-size: .72rem; padding: 4px 10px; }
+
+/* ---- gallery tiles: caption ALWAYS on, below the image (no hover reveal) ---- */
+.masonry .tile { background: #fff; cursor: pointer; }
+.tile .tile-caption { display: block; padding: 11px 13px 13px; }
+.tile .tile-caption .t-title { display: block; font-family: var(--ui); font-weight: 700; font-size: .92rem; line-height: 1.28; color: var(--ink); }
+.tile .tile-caption .t-for { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .68rem; letter-spacing: .02em; color: rgba(54,49,51,.6); margin-top: 5px; }
+.tile:hover .tile-img, .tile:hover .tile-ph { transform: none; }
+.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); transition: transform .2s ease, box-shadow .2s ease; }
+/* destination badge: pill with an icon + where it goes */
+.tile .tile-flag { top: 10px; right: 10px; width: auto; height: auto; padding: 4px 9px; border-radius: 8px; gap: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .66rem; letter-spacing: .02em; color: #fff; }
+.tile .tile-flag .fl { line-height: 1; }
+
+/* ============================================================ ROUND 36 ============================================================ */
+/* nav pseudo-logo (JS-injected), takes you home */
+.nav-inner { justify-content: space-between; }
+.nav-logo { font-family: var(--serif); font-weight: 400; font-size: 1.55rem; line-height: 1; color: var(--plum); text-decoration: none; letter-spacing: .02em; margin-right: auto; transition: opacity .2s ease, font-size .28s ease; }
+.nav-logo:hover, .nav-logo:focus-visible { opacity: .72; }
+.nav-inner a.nav-logo::after { content: none; display: none; }
+.nav.scrolled .nav-logo { font-size: 1.38rem; }
+
+/* project-card CTAs: bigger + Karla (matching the featured "read the research" link) */
+.proj-footrow .proj-view, .proj-view { font-family: var(--ui); font-weight: 600; font-size: .92rem; letter-spacing: 0; text-transform: none; }
+.proj-footrow .proj-view .arw { font-size: 1em; }
+
+/* gallery: readable caption + softer, non-mono badges */
+.tile .tile-caption .t-for { font-family: var(--ui); font-size: .78rem; letter-spacing: 0; color: rgba(54,49,51,.78); }
+.tile .tile-flag { background: var(--olive); color: var(--ink); border: none; font-family: var(--ui); font-weight: 600; font-size: .68rem; box-shadow: 0 2px 8px rgba(20,18,19,.22); }
+.tile .badge { background: var(--blush); color: var(--ink); border: none; box-shadow: 0 2px 8px rgba(20,18,19,.22); }
+
+/* ROUND 36 fix — logo needs the display serif (nav-link rule was overriding it) */
+.nav-inner a.nav-logo { font-family: var(--serif); }
+
+/* ============================================================ ROUND 37 ============================================================ */
+/* gallery captions: tighter two-line spacing, slightly larger body */
+.tile .tile-caption .t-for { font-size: .82rem; margin-top: 2px; }
+/* destination pill: white at 90%, dark text; "animated" badge goes green */
+.tile .tile-flag { background: rgba(255,255,255,.9); color: var(--ink); }
+.tile .tile-flag svg { color: var(--ink); }
+.tile .badge { background: var(--olive); color: var(--ink); }
+
+/* pfp (mobile): the 1a "contained collage" — a bigger, centered photo with the
+   flower/blob/dot collage kept inside a padded stage so nothing crops, and
+   "hello," already stacks below it (never across the face) */
+@media (max-width: 920px) {
+  .portrait { justify-self: center; --pf: clamp(216px, 60vw, 262px); margin: 4px auto 6px; }
+}
+
+/* ============================================================ ROUND 38 — project card layout ============================================================ */
+/* date/project-type meta stacks to two right-aligned lines (JS splits it), giving the title more room */
+.proj-titlerow { align-items: flex-start; min-height: 3rem; }
+.proj-titlerow h3 { flex: 1 1 auto; }
+.proj-titlerow .proj-meta { display: inline-flex; flex-direction: column; align-items: flex-end; text-align: right; line-height: 1.35; white-space: normal; flex: 0 0 auto; padding-top: 4px; }
+/* keep body height consistent so title / body / buttons line up across cards */
+.proj-body .desc { min-height: 3.8rem; }
+/* tags on their own row, then the CTA right-aligned with a bit of air above it */
+.proj-footrow { flex-direction: column; align-items: flex-start; gap: 15px; }
+.proj-footrow .chip-row { flex: 0 0 auto; }
+.proj-footrow .proj-view { align-self: flex-end; }
+
+/* ============================================================ ROUND 40 ============================================================ */
+/* title vertically centers in its reserved space (a 1-line title sits mid-height,
+   lining up nicely against 2-line titles); the meta stays pinned top-right */
+.proj-titlerow h3 { align-self: center; }
+/* date becomes a small outlined pill; project type stays as plain text below */
+.proj-meta .pm-date {
+  display: inline-block; padding: 2px 9px; border: 1px solid rgba(99,40,92,.42);
+  border-radius: 999px; color: var(--ink); margin-bottom: 6px;
+}
+.proj-meta .pm-date::after { content: none; }
+/* card tag pills go shaded light pink instead of outlined */
+.proj .chip { background: var(--blush); border: none; color: var(--ink); }
