@@ -30,9 +30,11 @@
   </nav>
 
   <main id="main">
+    <div class="cs-backbar">
+      <div class="wrap"><a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a></div>
+    </div>
     <header class="cs-hero">
       <div class="wrap">
-        <a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a>
         <h1><span class="h-print">Latino Climate &amp; Health Dashboard</span></h1>
         <p class="cs-tagline">The first-of-its-kind public dashboard that turns dense, neighborhood-level climate-and-health research into county factsheets advocates and policymakers can actually use.</p>
         <div class="cs-meta">
@@ -42,7 +44,7 @@
           <div><div class="k">Team</div><div class="v">8 (me + developer + 6 research/leadership)</div></div>
           <div><div class="k">Tools</div><div class="v">Figma, Qualtrics</div></div>
         </div>
-        <div style="margin-top:22px;"><a class="pill" href="https://latinoclimatehealth.org/" target="_blank" rel="noopener">view the live dashboard ↗</a></div>
+        <div style="margin-top:22px;"><a class="pill ghost" href="https://latinoclimatehealth.org/" target="_blank" rel="noopener">view the live dashboard ↗</a></div>
       </div>
     </header>
 
@@ -50,25 +52,33 @@
     <section class="section cs-snapshot" style="padding:38px 0;">
       <div class="wrap">
         <div class="cs-stats">
-          <div class="cs-stat text"><span class="n">Featured in Health Affairs</span><span class="l">Peer-reviewed analysis, 2026 (45:5)</span></div>
-          <div class="cs-stat text"><span class="n">Presented at NALEO</span><span class="l">43rd Annual Conference</span></div>
-          <div class="cs-stat text"><span class="n">6,000+ users</span><span class="l">in the first year after launch</span></div>
-          <div class="cs-stat text"><span class="n">Credited by name</span><span class="l">in the official Technical Documentation</span></div>
+          <div class="cs-stat text reveal"><span class="n">Health Affairs</span><span class="l">featured in a peer-reviewed 2026 article (45:5)</span></div>
+          <div class="cs-stat text reveal"><span class="n">NALEO</span><span class="l">presented at the 43rd Annual Conference</span></div>
+          <div class="cs-stat reveal"><span class="n">6,000+</span><span class="l">users in the first year after launch</span></div>
+          <div class="cs-stat text reveal"><span class="n">By name</span><span class="l">credited in the official Technical Documentation</span></div>
         </div>
       </div>
     </section>
 
     <article class="cs-body">
       <div class="wrap">
-        <div class="cs-read">
-          <h2>Context</h2>
+        <div class="cs-layout">
+          <nav class="cs-rail" aria-label="Case study sections">
+            <a href="#context">Context</a>
+            <a href="#role">Role</a>
+            <a href="#process">Process</a>
+            <a href="#outcome">Outcome</a>
+            <a href="#reflection">Reflection</a>
+          </nav>
+          <div class="cs-read">
+          <h2 id="context">Context</h2>
           <p>LPPI had rigorous data on how climate and health risks — extreme heat and air pollution — fall unevenly on California's Latino neighborhoods. But rigorous data doesn't move policy on its own. Researchers can parse dense tables; the advocates, organizers, and legislative staff who actually drive change usually can't, and won't.</p>
           <p>The design challenge was legibility under pressure: <strong>make a neighborhood's disparities clear to a non-researcher in under a minute, without diluting the research.</strong></p>
 
-          <h2>My role</h2>
+          <h2 id="role">My role</h2>
           <p>I was the sole designer on an eight-person team, owning the interaction and visual design of both the interactive California county map and every county factsheet. I worked closely with our developer through design handoff, contributed to the survey design used to validate the factsheets, and led the integration of stakeholder and user feedback across every iteration.</p>
 
-          <h2>Process</h2>
+          <h2 id="process">Process</h2>
           <p><strong>The experience.</strong> An interactive map of California counties. Selecting a county surfaces an infographic-style factsheet with that county's data, deliberately contrasting Latino and non-Latino White populations on the chosen metric — extreme heat or air pollution. Final scope: 24 factsheets (23 counties plus a statewide sheet), each produced for both topics.</p>
 
           <div class="figph">[ Add: interactive map + a sample county factsheet ]</div>
@@ -83,7 +93,7 @@
 
           <p><strong>A stakeholder curveball.</strong> One director approved a color scheme, then about six revisions later wanted a more monochromatic palette — which forced significant rework. It was a clean lesson in locking visual direction earlier and, more importantly, building with reusable color styles so a global change costs minutes instead of a redo. I carried that lesson directly into later work.</p>
 
-          <h2>Outcome</h2>
+          <h2 id="outcome">Outcome</h2>
           <p>The dashboard launched publicly on June 24, 2025, billed as the first tool of its kind to provide Latino neighborhood-level climate-and-health data across California. It surfaced stark, actionable disparities — for example, that Latino neighborhoods are roughly <strong>twice as likely</strong> to face poor air quality and asthma-related ER visits compared with non-Latino White neighborhoods.</p>
           <ul>
             <li>Analyzed in a peer-reviewed <strong>Health Affairs</strong> article (2026; 45(5): 570–579).</li>
@@ -94,13 +104,14 @@
           </ul>
           <p>Follow-on work included a mobile prototype, event stickers, and a vertical conference banner.</p>
 
-          <h2>Reflection</h2>
+          <h2 id="reflection">Reflection</h2>
           <p><strong>Design systems from day one.</strong> I'd establish a proper Figma component and color-token system at the start. I only did this well on the later mobile prototype — after completing Google's UX Design Certificate — and the color-scheme rework is exactly the kind of pain a token system prevents.</p>
           <p><strong>Test the whole product, not just the artifact.</strong> I'd run usability research on the website and map interaction, not only the factsheets, since users engage with both. Budget and timeline didn't allow it this round.</p>
           <p><strong>Facilitation is design work.</strong> Managing the tension between researchers' desire to preserve their writing and the constraints of a legible page was as consequential as any single visual decision — and something I got measurably better at with each round.</p>
 
-          <div class="resume-actions" style="margin-top:36px;">
-            <a class="pill ghost" href="projects.html">back to projects</a>
+          <div style="margin-top:36px;">
+            <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
+          </div>
           </div>
         </div>
       </div>
