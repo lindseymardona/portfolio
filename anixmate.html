@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>aniXmate — Lindsey Mardona</title>
-  <meta name="description" content="aniXmate — an anime recommendation site. UX/UI case study by Lindsey Mardona." />
+  <meta name="description" content="UX case study: aniXmate — an anime recommendation app that works like a dating app. Type in a show you love and swipe through recommendations. Designed solo for Hack at UCI 2023." />
   <link rel="canonical" href="https://lindseymardona.com/anixmate.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Borel&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet" />
   <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -30,39 +30,98 @@
   </nav>
 
   <main id="main">
+    <div class="cs-backbar">
+      <div class="wrap"><a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a></div>
+    </div>
     <header class="cs-hero">
       <div class="wrap">
-        <a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a>
         <h1><span class="h-print">aniXmate</span></h1>
-        <p class="cs-tagline">An anime recommendation site that suggests your next watch based on the ones you already loved — playful, fast, and built around search.</p>
+        <p class="cs-tagline">Match with your new favorite anime — a recommendation app that works like a dating app: type in a show you love and swipe through recommendations, right to save and left to skip.</p>
         <div class="cs-meta">
-          <div><div class="k">Role</div><div class="v">UX / UI Designer</div></div>
-          <div><div class="k">Type</div><div class="v">Web app concept</div></div>
-          <div><div class="k">Timeline</div><div class="v">[add]</div></div>
-          <div><div class="k">Tools</div><div class="v">Figma</div></div>
+          <div><div class="k">Date</div><div class="v">February 2023</div></div>
+          <div><div class="k">Context</div><div class="v">Hackathon — Hack at UCI 2023</div></div>
+          <div><div class="k">Team</div><div class="v">Simon Lee, Alex Espejo, James San (eng) + me (design)</div></div>
+          <div><div class="k">My role</div><div class="v">Sole UX &amp; visual designer</div></div>
+          <div><div class="k">Tools</div><div class="v">Figma, Photoshop</div></div>
         </div>
-        <div class="cs-hero-img reveal"><img src="assets/anixmate-1.jpg" alt="aniXmate home screen with search" loading="lazy" /></div>
+        <div style="margin-top:22px;"><a class="pill ghost" href="https://www.figma.com/proto/xiFXTU8Pfx9SmiiVkgFGTQ/Ani-x-Mate?page-id=0%3A1&amp;node-id=23-24&amp;p=f" target="_blank" rel="noopener">view the Figma prototype ↗</a></div>
       </div>
     </header>
 
     <article class="cs-body">
       <div class="wrap">
-        <p style="color:var(--accent);font-weight:600;">✎ This page is scaffolded with placeholder copy — send me the details and I'll write it up properly.</p>
+        <div class="cs-layout">
+          <nav class="cs-rail" aria-label="Case study sections">
+            <a href="#context">Context</a>
+            <a href="#role">Role</a>
+            <a href="#process">Process</a>
+            <a href="#outcome">Outcome</a>
+            <a href="#reflection">Reflection</a>
+          </nav>
+          <div class="cs-read">
+            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">aniXmate recommends anime the way a dating app recommends people. You type in a show you already like, and it hands you recommendations one card at a time: swipe right to save, left to skip.</p>
 
-        <h2>Overview</h2>
-        <p>[Placeholder] aniXmate takes an anime you loved and recommends what to watch next — leaning on a clean search-first interface and a fun, personable visual identity.</p>
+            <figure>
+              <img src="assets/anixmate-1.jpg" alt="aniXmate landing screen — the bubbly aniXmate logo over a dimmed grid of anime posters, with a search bar reading 'Search for an anime you liked'" loading="lazy" />
+              <figcaption>The landing screen: type in a show you already love to get started.</figcaption>
+            </figure>
 
-        <h2>The problem</h2>
-        <p>[Placeholder — what makes finding your next anime hard, and who this is for.]</p>
+            <h2 id="context">Context</h2>
+            <p>aniXmate recommends anime the way a dating app recommends people. You type in a show you already like, and it hands you recommendations one card at a time: swipe right to save, left to skip. The recs come from MyAnimeList's community "if you liked this, try this" lists for whatever title you enter.</p>
+            <p>I'll be honest about what it is. Those recommendations already live on MAL, so you could get the same list by looking the show up and scrolling it yourself. aniXmate doesn't do anything smarter than that. What it does is make the list fun to get through: one card at a time, a quick yes or no, instead of a wall of thumbnails you skim and forget. For a weekend hackathon, making the boring part enjoyable seemed like a better use of our time than starting a real recommendation engine we'd never finish.</p>
 
-        <h2>Process</h2>
-        <p>[Placeholder — branding, the search flow, results/recommendation UI, and key design decisions.]</p>
+            <h2 id="role">My role</h2>
+            <p>I was the only designer on a team of three engineers, so I handled all of it: how the app worked, how it looked, the branding, and the prototype the team built and demoed from. The idea came in vague ("anime recs, but swiping"), and my job was to turn it into something concrete enough to build and show.</p>
 
-        <h2>Outcome &amp; reflection</h2>
-        <p>[Placeholder — what you built, what worked, what you'd iterate on.]</p>
+            <h2 id="process">Process</h2>
+            <p>The swipe interaction did a lot of work for free. Everyone already knows how to swipe left and right, so there was nothing to teach, and we could spend the time making the cards feel good instead of explaining how they worked.</p>
+            <p>Since I was the only designer and we were short on time, I built a small design system in Figma (type, colors, buttons, cards) so the screens stayed consistent as they grew and the engineers had one clear thing to build against.</p>
 
-        <div class="resume-actions" style="margin-top:36px;">
-          <a class="pill ghost" href="projects.html">back to projects</a>
+            <figure>
+              <img src="assets/anixmate-designsystem.jpg" alt="aniXmate design system — Montserrat type scale (sizes XL through S) alongside a labeled color palette with hex values for backgrounds, accents, and text" loading="lazy" />
+              <figcaption>A small Figma design system — one type scale and a set of color roles — so the screens stayed consistent as they grew.</figcaption>
+            </figure>
+
+            <p>I kept the color contrast accessible from the start. It's easy to handle early and a pain to fix later, so I'd rather just do it up front. I also designed the logo and branding so the thing looked like a real product in the demo instead of a wireframe.</p>
+
+            <figure>
+              <img src="assets/anixmate-contrast.jpg" alt="Three contrast-checker cards pairing aniXmate's text and background colors, each passing with ratios of 4.6:1 and up" loading="lazy" />
+              <figcaption>Checking each text-on-background pairing early, so nothing in the palette failed for legibility.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="assets/anixmate-logo.jpg" alt="The aniXmate logo — a rounded, bubbly wordmark in teal and coral with a stylized X" loading="lazy" />
+              <figcaption>The logo and wordmark — enough of a brand to make the demo read as a real product, not a wireframe.</figcaption>
+            </figure>
+
+            <h2 id="outcome">Outcome</h2>
+            <ul>
+              <li>A reusable Figma design system (type, color, buttons, cards) with contrast handled.</li>
+              <li>A logo and brand that gave it a consistent identity.</li>
+              <li>A working interactive prototype the engineers built from and the judges could pick up and try.</li>
+            </ul>
+
+            <figure>
+              <img src="assets/anixmate-swipe.jpg" alt="aniXmate recommendation screen — a single anime (Gabriel DropOut) shown as a card with its poster, synopsis, and score, plus a coral skip button and a teal save button" loading="lazy" />
+              <figcaption>The core loop: one recommendation at a time, with its synopsis and score — swipe right to save, left to skip.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="assets/anixmate-saved.jpg" alt="aniXmate saved screen — a grid of the anime the user swiped right on, each with its title and a remove button" loading="lazy" />
+              <figcaption>Saved matches: everything you swiped right on, collected in one place to pick from later.</figcaption>
+            </figure>
+
+            <p><strong>What I'd build with more time.</strong> If I'd had longer than a weekend, aniXmate would pull from your actual MAL watchlist and recommend based on what you've already watched and rated, instead of keying off one title you typed in. And swiping right would add a show to your watchlist automatically, so you don't have to go do it yourself.</p>
+            <p>We left both out on purpose. They need real account login and a lot more backend than a weekend allows, so we shipped the version we could finish. Figuring out what to cut was most of the work.</p>
+
+            <h2 id="reflection">Reflection</h2>
+            <p>What I actually took away from this: hackathons are full of engineers and short on designers. There are a lot of people who can build and almost no one who wants to figure out what to build or how it should feel. So a lot of projects end up working fine and being impossible to read. You can't tell what they are in the few seconds a judge spends on them.</p>
+            <p>Handling that side made a real difference to what we could show. I took a vague idea and gave it a shape, a look, and a demo people understood right away. That's around when I realized design was the part I actually wanted to do.</p>
+
+            <div style="margin-top:36px;">
+              <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -70,22 +129,14 @@
 
   <footer>
     <div class="wrap foot">
-      <a class="to-top" href="#top">
-        <span class="circle" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
-        </span>
-        return to top
-      </a>
+      <a class="to-top" href="#top"><span class="up" aria-hidden="true">↑</span> return to top</a>
       <div class="quick">
-        <span class="label">quick nav |</span>
+        <span class="label">quick nav</span>
         <a href="index.html">home</a>
         <a href="resume.html">resume</a>
         <a href="projects.html">projects</a>
         <a href="gallery.html">gallery</a>
         <a href="about.html">about</a>
-      </div>
-      <div class="foot-email">
-        <a href="mailto:lindseymardona@gmail.com">lindseymardona(at)gmail(dot)com</a>
       </div>
     </div>
   </footer>

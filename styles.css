@@ -919,3 +919,67 @@ body { animation: pagefade .18s ease both; }
 /* corgi: JS-driven one-shot hop that always finishes (no snap-to-ground when the mouse leaves) */
 .corgi-walk:hover .corgi-bob { animation: bob .5s ease-in-out infinite; }
 .corgi-bob.jump { animation: corgiJump .62s cubic-bezier(.25,.85,.35,1) !important; }
+
+/* ============================================================ ROUND 22 ============================================================ */
+
+/* footer: balanced 3-part row — return-to-top (left), quick nav (centered), email (right) */
+.foot { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.foot .to-top { justify-self: start; }
+.foot .quick { justify-self: center; }
+.foot .foot-email { justify-self: end; text-align: right; }
+@media (max-width: 720px) {
+  .foot { grid-template-columns: 1fr; }
+  .foot .to-top, .foot .quick, .foot .foot-email { justify-self: center; text-align: center; }
+}
+
+/* résumé: a bit more air above the hero buttons */
+.resume-actions { margin-top: 26px; }
+
+/* ============================================================ ROUND 23 ============================================================ */
+/* home featured spotlight is now a link */
+a.cs-card { text-decoration: none; color: inherit; transition: transform .2s ease, box-shadow .2s ease; }
+a.cs-card:hover, a.cs-card:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.cs-card-go { display: block; margin-top: 12px; font-family: var(--ui); font-weight: 600; color: var(--plum); }
+a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ============================================================ ROUND 24 ============================================================ */
+/* real figures inside case-study bodies (image + caption) */
+.cs-read figure { margin: 1.9em 0; }
+.cs-read figure img { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--hair); box-shadow: var(--shadow); }
+.cs-read figcaption { font-family: var(--ui); font-size: .82rem; color: rgba(54,49,51,.6); margin-top: 9px; text-align: center; }
+
+/* ============================================================ ROUND 25 — mobile fixes ============================================================ */
+
+/* stat snapshots: more air between the number and its caption.
+   (.l was an inline span, so margin-top did nothing — make it a block first.) */
+.cs-stat .l { display: block; margin-top: 16px; }
+
+/* ABOUT: the intro + photo must actually collapse to one column on phones.
+   ROUND 11's `.section.paper .cols` (higher specificity) had been beating the
+   low-specificity mobile rule, so the layout never stacked — the intro text got
+   crushed into a narrow strip and the graduation photo overflowed off-screen. */
+@media (max-width: 820px) {
+  .section.paper .cols { grid-template-columns: 1fr; gap: 34px; align-items: start; }
+  .about-photo { width: 100%; max-width: 300px; margin-left: auto; margin-right: auto; }
+}
+
+/* touch devices: the project-card tech tags slide up on hover, which never fires
+   on a phone — so pin them visible over the thumbnail there */
+@media (hover: none) {
+  .proj .thumb-chips { transform: translateY(0); }
+}
+
+/* reduced motion (e.g. a phone with "Reduce Motion" on): a frozen auto-marquee
+   just shows 2–3 cut-off photos and looks broken. Turn it into a swipeable strip
+   instead — no auto-scroll (setting respected), but the whole gallery stays reachable. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; -webkit-overflow-scrolling: touch; -webkit-mask-image: none; mask-image: none; }
+  .marquee-track { animation: none !important; }
+  .marquee-track img[aria-hidden="true"] { display: none; }
+}
+
+/* ============================================================ ROUND 26 — case-study figures ============================================================ */
+/* single phone-screen mockups shouldn't stretch to the full text column */
+.cs-read figure.fig-phone img { max-width: 340px; margin-left: auto; margin-right: auto; }
+/* persona / journey / wireframe artifacts read best at full column width (already default) */
+.cs-read figure.fig-wide img { width: 100%; }

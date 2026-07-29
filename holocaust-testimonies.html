@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geographies of Affect — Lindsey Mardona</title>
+  <meta name="description" content="Research: Geographies of Affect — a UCLA Digital Humanities capstone mapping emotion across place in Holocaust survivor testimonies using sentiment analysis, NLP, and geocoding." />
+  <link rel="canonical" href="https://lindseymardona.com/holocaust-testimonies.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">skip to content</a>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="index.html">home</a>
+        <a href="resume.html">resume</a>
+        <a href="projects.html" aria-current="page">projects</a>
+        <a href="gallery.html">gallery</a>
+        <a href="about.html">about</a>
+      </div>
+    </div>
+    <div class="nav-rule" role="presentation"></div>
+  </nav>
+
+  <main id="main">
+    <div class="cs-backbar">
+      <div class="wrap"><a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a></div>
+    </div>
+    <header class="cs-hero">
+      <div class="wrap">
+        <h1><span class="h-print">Geographies of Affect</span></h1>
+        <p class="cs-tagline">A digital-humanities capstone mapping how emotion shifts across place in Holocaust survivor testimonies — and a close, honest look at where computation meets the limits of human memory.</p>
+        <div class="cs-meta">
+          <div><div class="k">Role</div><div class="v">Sentiment analysis (3-person team)</div></div>
+          <div><div class="k">Context</div><div class="v">UCLA Digital Humanities capstone</div></div>
+          <div><div class="k">Timeline</div><div class="v">2022</div></div>
+          <div><div class="k">Methods</div><div class="v">NLP · sentiment analysis · geocoding</div></div>
+          <div><div class="k">Tools</div><div class="v">Python (NLTK, spaCy, scikit-learn), GPT-2/3</div></div>
+        </div>
+        <div style="margin-top:22px;"><a class="pill ghost" href="https://github.com/lindseymardona/ucsc-mhcid-portfolio/blob/main/writings/holocaust-testimonies.md" target="_blank" rel="noopener">read the full write-up ↗</a></div>
+      </div>
+    </header>
+
+    <!-- data snapshot -->
+    <section class="section cs-snapshot" style="padding:38px 0;">
+      <div class="wrap">
+        <div class="cs-stats">
+          <div class="cs-stat reveal"><span class="n">~1,000</span><span class="l">oral histories drawn from the Shoah Foundation's Visual History Archive</span></div>
+          <div class="cs-stat reveal"><span class="n">864</span><span class="l">testimony segments hand-annotated for sentiment</span></div>
+          <div class="cs-stat reveal"><span class="n">144K+</span><span class="l">place entities extracted and geocoded</span></div>
+          <div class="cs-stat reveal"><span class="n">3</span><span class="l">model families compared — dictionary, linear, transformer</span></div>
+        </div>
+      </div>
+    </section>
+
+    <article class="cs-body">
+      <div class="wrap">
+        <div class="cs-layout">
+          <nav class="cs-rail" aria-label="Case study sections">
+            <a href="#context">Context</a>
+            <a href="#role">Role</a>
+            <a href="#approach">Approach</a>
+            <a href="#findings">Findings</a>
+            <a href="#reflection">Reflection</a>
+          </nav>
+          <div class="cs-read">
+            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">Geographies of Affect was a UCLA Digital Humanities capstone that asked a hard question: could computational tools trace how survivors' emotions shift across the places in their stories — the camps, the routes of flight, the postwar homes — without flattening memory into a single number? It drew on nearly 1,000 English-language oral histories from the USC Shoah Foundation's Visual History Archive.</p>
+
+            <h2 id="context">Context</h2>
+            <p>Holocaust testimony is some of the most emotionally layered material there is. A survivor recalling a single place might hold grief, defiance, tenderness, and numbness in the same breath. The premise of the project — and its risk — was to bring sentiment analysis and mapping to exactly that kind of material: to ask what patterns emerge when you track emotion across narrative time and geographic space, while staying honest about what those tools can and cannot see.</p>
+
+            <h2 id="role">My role</h2>
+            <p>I focused on the sentiment-analysis side of a three-person team — Laurel Woods led the data visualization and Ulysses Pascal led the mapping. I helped shape the research framework, did a large share of the manual annotation, evaluated and compared the NLP approaches, fine-tuned a GPT-2 model, and contributed to the geocoding pipeline.</p>
+
+            <h2 id="approach">Approach</h2>
+            <p>We paired close, manual annotation with computational methods in Python (NLTK, spaCy, scikit-learn), plus GPT-2/GPT-3 and named-entity recognition to extract and geocode the places named in each testimony.</p>
+            <p>To choose a sentiment method rather than assume one, we compared three families head-to-head: <strong>dictionary-based tools</strong> (VADER, TextBlob), <strong>linear classifiers</strong> (Naive Bayes, Logistic Regression), and <strong>transformer models</strong>. I hand-annotated 864 testimony segments for sentiment to build a grounded evaluation set, and we extracted and geocoded 144,000+ place entities to anchor emotion to geography.</p>
+
+            <h2 id="findings">Findings</h2>
+            <p>Transformer models substantially outperformed the traditional methods — but the more important finding was about limits. Sentiment in Holocaust testimonies is often ambiguous, multidimensional, and resistant to categorical classification: memories of camps, refuge, and postwar life carried layered, contradictory emotions that no single label captured well.</p>
+            <p>We built visualizations that tracked those emotional shifts across narrative time and across the geography of each testimony — a way to <em>see</em>, not just measure, how affect moves through a story.</p>
+
+            <figure>
+              <img src="assets/research-map.jpg" alt="World map plotting the sentiment of testimony segments during the post-war period, each geocoded place colored on a sentiment scale from -1 to 1" loading="lazy" />
+              <figcaption>Sentiment of testimony segments in the post-war period, mapped to the places survivors named — points colored from −1 to 1.</figcaption>
+            </figure>
+
+            <h2 id="reflection">Reflection</h2>
+            <p>This project taught me as much about the limits of computational tools on historically complex, human material as about the methods themselves. It made me careful about what a metric can quietly erase — and that instinct, to design for meaning and not just measurement, is a big part of what pulled me toward HCI.</p>
+
+            <div style="margin-top:36px;">
+              <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <a class="to-top" href="#top"><span class="up" aria-hidden="true">↑</span> return to top</a>
+      <div class="quick">
+        <span class="label">quick nav</span>
+        <a href="index.html">home</a>
+        <a href="resume.html">resume</a>
+        <a href="projects.html">projects</a>
+        <a href="gallery.html">gallery</a>
+        <a href="about.html">about</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

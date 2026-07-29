@@ -73,14 +73,15 @@
           <div class="cs-read">
             <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">Gingko is a mobile app that helps Asian Americans find therapists who actually get them. It pairs a culturally-aware therapist directory with a "find your match" quiz that recommends providers based on language, cultural values, and therapy style — so instead of scrolling an overwhelming list and hoping, you get pointed somewhere that fits. I designed the whole thing solo, from research and personas all the way to a high-fidelity, clickable Figma prototype.</p>
 
-            <div class="figph">[ Add: title / brand — the ginkgo-leaf wordmark on sage green ]</div>
+            <figure class="fig-phone">
+              <img src="assets/gingko-home.jpg" alt="Gingko home screen — a calm sage landing with a ginkgo-leaf wordmark, the headline 'your space to begin,' and buttons for Explore Therapists and Find Your Match" loading="lazy" />
+              <figcaption>The landing screen — “your space to begin.” Calm and welcoming on purpose, not like filling out a medical form.</figcaption>
+            </figure>
 
             <h2 id="context">Context</h2>
             <p>Finding a therapist is hard for anyone. Finding one who understands your cultural context — not just your symptoms — is a lot harder if you're Asian American. There's stigma, language barriers, a shortage of culturally competent providers, and honestly, not a lot of awareness that better options even exist. So a lot of people just… don't go.</p>
             <p>The data made that painfully concrete. Asian Americans are about 6% of the U.S. population, but in 2022 they were only 1.4% of kids and 1.7% of adults who actually received mental health treatment. Only 4.37% of U.S. psychologists identify as Asian — a tiny pool of people likely to understand values like filial piety, emotional restraint, or collectivism without needing them explained first. And around 72.5% of Asian Americans speak a language other than English at home, which matters a lot in something as vulnerable as therapy.</p>
             <p><strong>The challenge I set for myself: make it genuinely easier to find a therapist who fits — and do it in a way that lowers the stigma instead of adding to it.</strong></p>
-
-            <div class="figph">[ Add: "project overview" slide — the problem / the goal ]</div>
 
             <h2 id="role">My role</h2>
             <p>Solo capstone, so… all of it. I owned the full human-centered process: research and data synthesis, the competitive audit, personas and journey maps, the ethical risk work, and prototyping from scrappy wireframes to a polished interactive prototype.</p>
@@ -89,8 +90,6 @@
             <p><strong>Digging into the research.</strong> I pulled together data from national health databases, workforce registries, and census estimates (I leaned on 5-year ACS estimates for the smaller population segments, since they're more reliable) so the whole thing was grounded in evidence and not just my assumptions. Then I audited four platforms already in the space — Psychology Today, the Asian Mental Health Collective directory, Anise Health, and Mental Health Match — to see what existed.</p>
             <p>The gap jumped out fast: none of them really let you filter for cultural values, generational experience, or language fluency beyond a basic "speaks X" tag, and they were all English-only. Only Anise Health leaned into cultural relevance at all. That gap — actual cultural fit and emotional safety, designed in on purpose — became the reason Gingko should exist.</p>
 
-            <div class="figph">[ Add: "user research: summary" slide — competitive audit table + persona ]</div>
-
             <p><strong>Turning that into priorities.</strong> Three things fell out of the research and drove every decision after:</p>
             <ol>
               <li><strong>Accessibility &amp; language matching</strong> — you should be able to filter by language fluency and cultural background, with multilingual support baked in.</li>
@@ -98,9 +97,24 @@
               <li><strong>Simplicity for multilingual audiences</strong> — plain language and visual cues so people don't drop off, especially ESL and older users.</li>
             </ol>
 
-            <div class="figph">[ Add: "accessibility considerations" slide ]</div>
-
             <p><strong>The people I was designing for.</strong> I built three research-grounded personas so I wasn't secretly designing for one imaginary version of "an Asian American user": Emily, a 23-year-old burnt-out achiever navigating high-achieving-immigrant-family stuff; Kevin, 28, trying to find a therapist who can actually talk to his immigrant mom in her language; and Arjun, a 15-year-old therapy skeptic who needs a way in that doesn't feel cold or clinical. Empathy maps and journey maps followed each of them from "maybe I need help" to "matched," flagging every spot it got emotionally or practically hard.</p>
+
+            <figure class="fig-wide">
+              <img src="assets/gingko-persona-emily.jpg" alt="Persona: Emily Kang, 23, a software engineer and child of high-achieving immigrant parents, dealing with burnout and internalized stigma around therapy" loading="lazy" />
+              <figcaption>Emily — the burnt-out high achiever, wary of being seen as “weak.”</figcaption>
+            </figure>
+            <figure class="fig-wide">
+              <img src="assets/gingko-persona-kevin.jpg" alt="Persona: Kevin Truong, 28, an auto mechanic looking for a Vietnamese-speaking therapist for his immigrant mother who distrusts therapy" loading="lazy" />
+              <figcaption>Kevin — looking for care for his mom, in a language and worldview she trusts.</figcaption>
+            </figure>
+            <figure class="fig-wide">
+              <img src="assets/gingko-persona-arjun.jpg" alt="Persona: Arjun Mehta, 15, a recent immigrant and student who wants a non-judgmental, visual-first way into therapy that his religious parents will allow" loading="lazy" />
+              <figcaption>Arjun — the teen skeptic who needs a way in that doesn’t feel cold or clinical.</figcaption>
+            </figure>
+            <figure class="fig-wide">
+              <img src="assets/gingko-journey.jpg" alt="A user journey map tracking a user's actions, tasks, feelings, and improvement opportunities across five stages: discover the app, read reviews, filter therapists, browse profiles, and reach out" loading="lazy" />
+              <figcaption>A journey map from “maybe I need help” to “matched,” flagging where it gets emotionally or practically hard — and where the design could help.</figcaption>
+            </figure>
 
             <p><strong>Designing responsibly (the part I'm proudest of).</strong> Because this touches identity, culture, and stigma, I treated the ethical risks as an actual design problem instead of a footnote:</p>
             <ul>
@@ -117,13 +131,31 @@
             </ul>
             <p>I went with a ginkgo leaf, a soft sage palette, and copy like "your space to begin" on purpose — I wanted it to feel calm and welcoming, not like filling out a medical form.</p>
 
-            <div class="figph">[ Add: wireframes → mockups (home, directory, profile, quiz) → high-fidelity prototype ]</div>
+            <figure class="fig-wide">
+              <img src="assets/gingko-wireframes.jpg" alt="An overview board of low-fidelity wireframes for Gingko — home, explore therapists, filter menus, therapist profile, and an active sidebar" loading="lazy" />
+              <figcaption>Low-fi wireframes first — mapping the two flows and the filter menus before any color went in.</figcaption>
+            </figure>
+
+            <p>The two flows I built out:</p>
+
+            <figure class="fig-wide">
+              <img src="assets/gingko-flow-explore.jpg" alt="Two Gingko screens: an Explore Therapists directory with culturally-detailed therapist cards, and a filter panel with real cultural filters including a 'Cultural Perspectives and Values' section with selected chips" loading="lazy" />
+              <figcaption><strong>Explore therapists</strong> — a directory that leads with cultural strengths, and filters for language, values, therapy style, session type, and price.</figcaption>
+            </figure>
+
+            <figure class="fig-wide">
+              <img src="assets/gingko-flow-match.jpg" alt="Two Gingko screens: a 'Find Your Match' intro with a potted-plant illustration, and the first question of a matching quiz asking who is seeking support" loading="lazy" />
+              <figcaption><strong>Find your match</strong> — a short quiz that turns an overwhelming open search into a few gentle questions.</figcaption>
+            </figure>
+
+            <figure class="fig-wide">
+              <img src="assets/gingko-stickersheet.jpg" alt="Gingko's component sheet — buttons, cards, a language toggle, a therapist card, testimonial cards, form fields, icons, and the sage footer" loading="lazy" />
+              <figcaption>The component sheet that kept it consistent — buttons, cards, the language toggle, and the sage system underneath it all.</figcaption>
+            </figure>
 
             <h2 id="outcome">Outcome</h2>
             <p>I delivered a full, clickable high-fidelity prototype that put those three priorities into practice: deep cultural and language filtering, the find-your-match quiz, a multilingual toggle, and a deliberately simple, image-supported UI that keeps things from feeling heavy. I presented it as my capstone for the Grow with Google × Mentor Me Collective cohort.</p>
             <p><strong>Where I'd take it next.</strong> Stuff I scoped but ran out of time for: account creation and a stronger responsive web version; a rolling pipeline of more cultural filters plus a resource library that stays updated; and a youth "start here" flow for minors — anonymous resources, plain-language minor-consent info by state, and honest explainers of what therapy even is — to build trust before anyone has to commit. Longer term, partnering with existing orgs could extend the whole ecosystem, and the culturally-inclusive framework could adapt for other communities.</p>
-
-            <div class="figph">[ Add: "next steps" slide ]</div>
 
             <h2 id="reflection">Reflection</h2>
             <p>Designing for something this stigmatized and high-stakes changed what "good UX" even meant to me — tone and language basically became safety features. The words, the framing, deciding when to reveal what: all of that did as much work as any screen. The ethical risk-mapping especially — trying hard not to flatten culture into fixed boxes — pushed me toward flexible, values-based personalization, which is a principle I'll carry into anything that touches identity.</p>

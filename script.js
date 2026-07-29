@@ -14,7 +14,15 @@
     });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        if (!e.isIntersecting) return;
+        // a [data-reveal-group] cascades all its items together the moment the group
+        // enters view, so the bottom one staggers in regardless of scroll position
+        var group = e.target.closest('[data-reveal-group]');
+        if (group) {
+          [].slice.call(group.querySelectorAll('.reveal')).forEach(function (c) { c.classList.add('in'); io.unobserve(c); });
+        } else {
+          e.target.classList.add('in'); io.unobserve(e.target);
+        }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     reveals.forEach(function (el) { io.observe(el); });
@@ -144,7 +152,8 @@
       '<div class="quick"><span class="label">quick nav</span>' +
       '<a href="index.html">home</a><a href="resume.html">resume</a>' +
       '<a href="projects.html">projects</a><a href="gallery.html">gallery</a>' +
-      '<a href="about.html">about</a></div>';
+      '<a href="about.html">about</a></div>' +
+      '<div class="foot-email"><a href="mailto:lindseymardona@gmail.com">lindseymardona(at)gmail(dot)com</a></div>';
   }
 
   /* ---- sticky nav: shrink + blur after the hero, with a read-progress bar ---- */
@@ -234,14 +243,14 @@
     walk.innerHTML =
       '<div class="corgi-bob"><svg viewBox="0 0 68 46" xmlns="http://www.w3.org/2000/svg" width="56">' +
       '<g class="legs-a">' +
-        '<rect x="16" y="32" width="4" height="10" fill="#F7EBD3"/><rect x="27" y="32" width="4" height="10" fill="#F7EBD3"/>' +
-        '<rect x="35" y="32" width="4" height="10" fill="#F7EBD3"/><rect x="45" y="32" width="4" height="10" fill="#F7EBD3"/>' +
+        '<rect x="16" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="27" y="32" width="4" height="10" fill="#FFFFFF"/>' +
+        '<rect x="35" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="45" y="32" width="4" height="10" fill="#FFFFFF"/>' +
         '<rect x="16" y="40" width="4" height="2" fill="#3a2f28"/><rect x="27" y="40" width="4" height="2" fill="#3a2f28"/>' +
         '<rect x="35" y="40" width="4" height="2" fill="#3a2f28"/><rect x="45" y="40" width="4" height="2" fill="#3a2f28"/>' +
       '</g>' +
       '<g class="legs-b">' +
-        '<rect x="20" y="32" width="4" height="10" fill="#F7EBD3"/><rect x="24" y="32" width="4" height="10" fill="#F7EBD3"/>' +
-        '<rect x="39" y="32" width="4" height="10" fill="#F7EBD3"/><rect x="43" y="32" width="4" height="10" fill="#F7EBD3"/>' +
+        '<rect x="20" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="24" y="32" width="4" height="10" fill="#FFFFFF"/>' +
+        '<rect x="39" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="43" y="32" width="4" height="10" fill="#FFFFFF"/>' +
         '<rect x="20" y="40" width="4" height="2" fill="#3a2f28"/><rect x="24" y="40" width="4" height="2" fill="#3a2f28"/>' +
         '<rect x="39" y="40" width="4" height="2" fill="#3a2f28"/><rect x="43" y="40" width="4" height="2" fill="#3a2f28"/>' +
       '</g>' +
@@ -251,7 +260,7 @@
       '<rect x="44" y="3" width="7" height="11" rx="2" fill="#E0A46A"/>' +        /* ear */
       '<rect x="45.6" y="5" width="4" height="6" rx="1" fill="#E79FA0"/>' +       /* ear inner */
       '<rect x="49.5" y="12" width="3.6" height="7" rx="1.5" fill="#F7EBD3"/>' +  /* small head stripe */
-      '<rect x="46" y="18" width="4.5" height="16" rx="1.5" fill="#FFFFFF"/>' +   /* white collar */
+      '<rect x="46" y="23" width="4.5" height="12" rx="1.5" fill="#FFFFFF"/>' +   /* white chest blaze (lowered) */
       '<rect x="46.4" y="30.5" width="3.6" height="3.4" rx="1" fill="#E79FA0"/>' + /* pink tag */
       '<rect x="57" y="20" width="8" height="7" rx="2" fill="#F7EBD3"/>' +        /* snout */
       '<rect x="61.6" y="21" width="3" height="3" rx="1" fill="#3a2f28"/>' +      /* nose */
@@ -259,24 +268,21 @@
       '</svg></div>';
     footEl.appendChild(walk);
 
-    /* hop once when the cursor is over the corgi — hit-tested every frame so it
-       also fires when the WALKING corgi moves onto a still cursor; always finishes
-       the arc, and can't hop again until the pointer leaves and returns */
+    /* hop while the cursor is over the corgi. Keyed off the browser's own :hover
+       state (the exact thing that shows the hand cursor), checked every frame, with
+       a time-based cooldown — so it can't get stuck and there's no rect/hover
+       mismatch. Each hop finishes, then it can hop again once it's back down. */
     var bobEl = walk.querySelector('.corgi-bob');
     if (bobEl && !reduce) {
-      var jumping = false, wasOver = false, px = -1, py = -1;
-      document.addEventListener('mousemove', function (e) { px = e.clientX; py = e.clientY; }, { passive: true });
-      bobEl.addEventListener('animationend', function (e) {
-        if (e.animationName === 'corgiJump') { bobEl.classList.remove('jump'); jumping = false; }
-      });
-      (function watch() {
-        if (px >= 0) {
-          var r = walk.getBoundingClientRect();
-          var over = px >= r.left && px <= r.right && py >= r.top && py <= r.bottom;
-          if (over && !wasOver && !jumping) { jumping = true; bobEl.classList.add('jump'); }
-          wasOver = over;
+      var lastJump = 0;
+      (function hop() {
+        var now = Date.now();
+        if (now - lastJump > 720 && walk.matches(':hover')) {
+          lastJump = now;
+          bobEl.classList.add('jump');
+          setTimeout(function () { bobEl.classList.remove('jump'); }, 640);
         }
-        requestAnimationFrame(watch);
+        requestAnimationFrame(hop);
       })();
     }
   }
