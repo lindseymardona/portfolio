@@ -983,3 +983,32 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .cs-read figure.fig-phone img { max-width: 340px; margin-left: auto; margin-right: auto; }
 /* persona / journey / wireframe artifacts read best at full column width (already default) */
 .cs-read figure.fig-wide img { width: 100%; }
+
+/* ============================================================ ROUND 27 ============================================================ */
+/* résumé: technical skill pills in light green (design & research stay pink) */
+.skills-groups .tech-skills .chip { background: #E3E9C4; border: none; color: var(--ink); }
+
+/* gallery captions read like the project-card tag strip: a solid plum band that
+   slides up from the bottom on hover, instead of a dark gradient over a busy image */
+.tile .tile-overlay {
+  inset: auto 0 0 0; top: auto; height: auto;
+  background: var(--plum); opacity: 1;
+  transform: translateY(101%);
+  transition: transform .32s cubic-bezier(.2,.7,.3,1);
+  padding: 13px 16px 14px;
+}
+.tile:hover .tile-overlay, .tile:focus-visible .tile-overlay { transform: translateY(0); opacity: 1; }
+.tile .tile-overlay .t-for { opacity: .9; }
+
+/* corner chips (external-link / gallery flag, "animated" badge): solid plum + a
+   hairline ring + shadow so they stay legible over any image */
+.tile .tile-flag, .tile .badge {
+  background: var(--plum);
+  border: 1px solid rgba(255,255,255,.28);
+  box-shadow: 0 3px 10px rgba(20,18,19,.45);
+}
+
+/* touch devices (no hover): pin the caption band so labels are always readable */
+@media (hover: none) {
+  .tile .tile-overlay { transform: translateY(0); }
+}
