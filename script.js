@@ -133,16 +133,24 @@
     navInner.insertBefore(logo, navInner.firstChild);
   }
 
-  /* tech chips now live pinned in the card body (no hover-to-reveal) — nothing to move */
+  /* project-card meta now lives in a fixed markup row (type + year pill) — nothing to split */
 
-  /* project-card meta: split "date · type" onto two right-aligned lines */
-  [].slice.call(document.querySelectorAll('.proj-meta')).forEach(function (m) {
-    if (m.querySelector('.pm-type')) return;
-    var parts = m.textContent.split(' · ');
-    if (parts.length < 2) return;
-    var date = parts.shift();
-    m.innerHTML = '<span class="pm-date">' + date + '</span><span class="pm-type">' + parts.join(' · ') + '</span>';
-  });
+  /* ---- gallery filter chips (all / client work / motion & for fun) ---- */
+  var galFilters = document.querySelector('.gal-filters');
+  if (galFilters) {
+    var galChips = [].slice.call(galFilters.querySelectorAll('.gal-chip'));
+    var galTiles = [].slice.call(document.querySelectorAll('.masonry .tile'));
+    var applyFilter = function (f) {
+      galChips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-filter') === f)); });
+      galTiles.forEach(function (t) {
+        var cat = t.getAttribute('data-cat');
+        t.hidden = !(f === 'all' || cat === f);
+      });
+    };
+    galChips.forEach(function (c) {
+      c.addEventListener('click', function () { applyFilter(c.getAttribute('data-filter')); });
+    });
+  }
 
   /* ---- light deterrents against casual image saving (not foolproof) ---- */
   [].slice.call(document.querySelectorAll('.tile img, .tile video, .tile-img, .marquee img')).forEach(function (el) {
@@ -168,7 +176,7 @@
       '<a href="index.html">home</a><a href="resume.html">resume</a>' +
       '<a href="projects.html">projects</a><a href="gallery.html">gallery</a>' +
       '<a href="about.html">about</a></div>' +
-      '<div class="foot-email"><a href="mailto:lindseymardona@gmail.com">lindseymardona(at)gmail(dot)com</a></div>';
+      '<div class="foot-email"><a href="mailto:lindseymardona@gmail.com">lindseymardona@gmail.com</a></div>';
   }
 
   /* ---- sticky nav: shrink + blur after the hero, with a read-progress bar ---- */

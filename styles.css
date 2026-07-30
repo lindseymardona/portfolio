@@ -12,7 +12,7 @@
   --ink: #363133;              /* all text */
   --accent: #7A3F45;           /* dark rose — small accent text (WCAG-safe on pink) */
   --accent-script: #99585E;    /* rose — large cursive heading accents */
-  --card: #F8F8F8;             /* card backgrounds */
+  --card: #FDFCFB;             /* card backgrounds (light, warm near-white) */
   --btn-text: #F8F8F8;         /* text/symbols on dark buttons */
   --paper: #FFFFFF;
   --gray: #EFEEEC;
@@ -1245,3 +1245,93 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .proj-meta .pm-date::after { content: none; }
 /* card tag pills go shaded light pink instead of outlined */
 .proj .chip { background: var(--blush); border: none; color: var(--ink); }
+
+/* ============================================================ ROUND 41 — card system rework (design-doc pass) ============================================================ */
+/* -- ONE hover language everywhere: 3px lift + soft shadow, <200ms, reduced-motion safe, visible focus ring -- */
+.proj, .masonry .tile, .cs-card {
+  box-shadow: none;
+  border: 1px solid #E7DCD3;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.proj:hover, .proj:focus-visible,
+.masonry .tile:hover, .masonry .tile:focus-visible,
+.cs-card:hover, .cs-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(99,40,92,.16);
+}
+.proj:focus-visible, .masonry .tile:focus-visible, .cs-card:focus-visible {
+  outline: 3px solid rgba(99,40,92,.6); outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .proj, .masonry .tile, .cs-card { transition: box-shadow .18s ease; }
+  .proj:hover, .proj:focus-visible,
+  .masonry .tile:hover, .masonry .tile:focus-visible,
+  .cs-card:hover, .cs-card:focus-visible { transform: none; }
+}
+
+/* -- project card body: fixed meta row above the title, quiet mono tags, credibility line -- */
+.proj-metarow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 2px 0 9px; }
+.proj-metarow .pm-type { font-family: var(--ui); font-size: .82rem; letter-spacing: .01em; color: #6E645C; }
+.proj-metarow .pm-year { font-family: var(--ui); font-size: .76rem; color: #6E645C; border: 1px solid rgba(99,40,92,.32); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.proj-title { font-family: var(--serif); font-weight: 400; font-size: 1.3rem; line-height: 1.22; letter-spacing: -0.01em; margin: 0 0 9px; min-height: 2.44em; }
+.proj-body .desc { font-size: .93rem; line-height: 1.55; color: rgba(54,49,51,.86); margin: 0 0 12px; min-height: 0; }
+.proj-metric { display: flex; align-items: center; gap: 7px; font-family: var(--ui); font-weight: 600; font-size: .8rem; color: #5C6B3E; margin: 0 0 11px; }
+.proj-metric .dot { width: 6px; height: 6px; border-radius: 50%; background: #5C6B3E; display: inline-block; flex: none; }
+.proj-footrow { margin-top: auto; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid #F0E7DF; flex-wrap: nowrap; }
+.proj-tags { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: .7rem; letter-spacing: .01em; color: #6E645C; line-height: 1.3; }
+.proj-footrow .proj-view { flex: none; margin: 0; align-self: center; white-space: nowrap; }
+.proj.disabled .proj-footrow { border-top: none; padding-top: 0; }
+
+/* -- badge only when informative (e.g. "write-up coming soon"); Karla, sentence case, no dot -- */
+.proj-thumb .proj-status {
+  position: absolute; top: 10px; left: 10px; z-index: 3; margin: 0;
+  font-family: var(--ui); font-weight: 600; font-size: .68rem; letter-spacing: .01em; text-transform: none;
+  color: var(--ink); background: rgba(255,255,255,.94); border: 1px solid #E7DCD3;
+  border-radius: 999px; padding: 4px 11px; box-shadow: 0 2px 10px rgba(20,18,19,.16);
+}
+.proj-thumb .proj-status::before { content: none; }
+
+/* -- gallery: one destination system in the caption footer, off the artwork -- */
+.tile .tile-flag, .tile .badge { display: none !important; }
+.masonry .tile { background: #fff; }
+.tile .tile-caption { display: block; padding: 13px 15px 14px; }
+.tile .t-title { display: block; font-family: var(--ui); font-weight: 700; font-size: .95rem; line-height: 1.28; color: var(--ink); }
+.tile .t-for { display: block; font-family: var(--ui); font-size: .82rem; color: #6E645C; margin-top: 3px; line-height: 1.42; }
+.tile-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F0E7DF; }
+.tile-foot .t-kind { font-family: var(--ui); font-size: .75rem; letter-spacing: .01em; color: #6E645C; }
+.tile-foot .t-dest { display: inline-flex; align-items: center; gap: 5px; font-family: var(--ui); font-weight: 600; font-size: .75rem; color: var(--plum); white-space: nowrap; }
+.tile-foot .t-dest svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+
+/* -- gallery filter chips (Karla, not mono) -- */
+.gal-filters { display: flex; flex-wrap: wrap; gap: 9px; margin: 0 0 26px; }
+.gal-chip { font-family: var(--ui); font-weight: 600; font-size: .86rem; letter-spacing: .01em; padding: 7px 16px; border-radius: 999px; border: 1px solid rgba(99,40,92,.28); background: #fff; color: #5A534F; cursor: pointer; transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease; }
+.gal-chip:hover { border-color: var(--plum); transform: translateY(-1px); }
+.gal-chip[aria-pressed="true"] { background: var(--plum); color: #fff; border-color: var(--plum); }
+.tile[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .gal-chip:hover { transform: none; } }
+
+/* ============================================================ ROUND 42 — polish pass ============================================================ */
+/* monogram: force plum (nav-link rule was overriding the colour) + a touch bigger */
+.nav-inner a.nav-logo { color: var(--plum); font-size: 1.82rem; }
+.nav.scrolled .nav-inner a.nav-logo { font-size: 1.6rem; }
+
+/* LCHD credibility line as a labelled row ("IMPACT  6,000+ users · cited in Health Affairs") */
+.proj-metric { display: flex; align-items: baseline; gap: 10px; font-family: var(--ui); font-size: .82rem; line-height: 1.4; color: rgba(54,49,51,.9); margin: 0 0 12px; }
+.proj-metric .pm-label { flex: none; font-size: .64rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #6E645C; }
+.proj-metric .pm-val { color: rgba(54,49,51,.92); }
+.proj-metric .pm-val em { font-family: var(--serif); font-style: italic; font-size: .96em; }
+
+/* resume: un-stick the side section headings (education / experience / …) */
+.res-block > h2 { position: static; top: auto; }
+
+/* resume skills: outlined chips — soft skills in pink, tech skills in green (pink dialled back ~25%) */
+.skills-groups .chip { background: transparent; border: 1px solid rgba(153,88,94,.42); color: var(--ink); }
+.skills-groups .tech-skills .chip { background: transparent; border: 1px solid rgba(89,107,58,.6); color: var(--ink); }
+
+/* about quick-facts: soften the pink fill by ~28% */
+.about-facts .chip { background: rgba(239,206,204,.72); border: none; color: var(--ink); }
+.about-facts .chip:hover { background: rgba(231,190,187,.85); }
+
+/* gallery filter: active + hover go green instead of plum */
+.gal-chip:hover { border-color: #5C6B3E; }
+.gal-chip[aria-pressed="true"] { background: #5C6B3E; border-color: #5C6B3E; color: #fff; }
