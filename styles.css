@@ -1711,3 +1711,115 @@ footer { border-top: 5px solid var(--plum); }
 .daw-thead .tname { flex: 1 1 auto; min-width: 0; margin-right: 0; }
 .daw-thead .ms.m { margin-left: 0; }
 .ms-group { flex: none; display: inline-flex; align-items: center; gap: 5px; margin-right: 6px; }
+
+/* ============================================================ ROUND 58 — gallery filter gap, mobile nav one-line, M/S nudge ============================================================ */
+/* gallery filter chips a touch closer */
+.gal-filterbar .wrap { gap: 7px; }
+.gf-label { margin-right: 4px; }
+/* filter chips fade in with the page */
+.gal-filterbar .gal-chip.reveal, .gf-label.reveal { will-change: opacity, transform; }
+
+/* mobile nav: keep on one line — hide the monogram on small screens so the links fit */
+@media (max-width: 600px) {
+  .nav-logo { display: none; }
+  .nav-inner { flex-wrap: nowrap; justify-content: center; gap: 13px; }
+  .nav-inner a { font-size: .92rem; }
+}
+@media (max-width: 400px) {
+  .nav-inner { gap: 9px; }
+  .nav-inner a { font-size: .82rem; }
+}
+
+/* DAW: pull the M/S group closer to the divider on the right */
+.daw-thead { padding-right: 10px; }
+.ms-group { margin-right: 0; }
+
+/* ============================================================ ROUND 59 — interactive "new collab" track ============================================================ */
+/* the "+ new track" row now reads as a button */
+.newtrack .daw-thead { cursor: pointer; }
+.newtrack .daw-thead:hover .tname.dim { color: var(--plum); }
+.newtrack .daw-thead:hover .sw.dim { background: rgba(99,40,92,.4); }
+.newtrack .daw-thead:focus-visible { outline: 2px solid var(--plum); outline-offset: -2px; }
+
+/* the drawable lane — 8 faint block guides, aligned with the ruler */
+.collab-lane { position: relative; display: block; padding: 10px 0; min-height: 50px; cursor: crosshair;
+  background-image: repeating-linear-gradient(to right, rgba(54,49,51,.09) 0 1px, transparent 1px 12.5%); }
+.collab-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #a89f95; pointer-events: none; }
+.collab-lane.has-blob .collab-hint { display: none; }
+
+/* a laid-down clip — links to LinkedIn, waveform fills it end to end */
+.collab-blob { position: absolute; top: 10px; bottom: 10px; display: flex; align-items: center; gap: 10px;
+  padding: 0 4px; border-radius: 4px; overflow: hidden; text-decoration: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--plum), #8E4E64); box-shadow: 0 1px 3px rgba(54,49,51,.22);
+  transition: filter .18s ease; }
+.collab-blob:hover { filter: brightness(1.06); }
+.collab-blob .clip-info { display: none; flex-direction: column; gap: 2px; flex: none; max-width: 70%; padding-left: 8px; }
+.collab-blob.has-text .clip-info { display: flex; }
+.collab-blob .clip-name { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.collab-blob .clip-sub { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(239,206,204,.9); white-space: nowrap; }
+.collab-blob .wave { display: flex; align-items: center; gap: 2px; flex: 1; height: 70%; min-width: 0; overflow: hidden; }
+.collab-blob .wave i { width: 3px; border-radius: 1px; flex: none; background: rgba(239,206,204,.5); }
+
+/* drag edges to resize */
+.collab-resize { position: absolute; top: 0; bottom: 0; width: 10px; z-index: 2; cursor: ew-resize; }
+.collab-resize.l { left: 0; } .collab-resize.r { right: 0; }
+
+/* live preview while drawing */
+.collab-preview { position: absolute; top: 10px; bottom: 10px; border-radius: 4px; pointer-events: none;
+  background: rgba(99,40,92,.2); border: 1px dashed rgba(99,40,92,.55); }
+
+/* mute / solo dim the collab clips like every other track */
+.daw-track.muted .collab-blob,
+.daw-timeline.has-solo .daw-track:not(.soloed):not(.newtrack) .collab-blob { pointer-events: none; }
+
+/* ============================================================ ROUND 60 — gallery fade-only, green collab clips, remove buttons ============================================================ */
+/* gallery filter chips: fade in only, no upward push */
+@keyframes revealFade { from { opacity: 0; } to { opacity: 1; } }
+.gal-filterbar .reveal.in { animation: revealFade .5s ease backwards; }
+
+/* collab clips go green instead of plum */
+.collab-blob { background: linear-gradient(135deg, #6B7A40, #46512A); }
+.collab-blob .clip-sub { color: rgba(255,255,255,.85); }
+.collab-blob .wave i { background: rgba(240,243,220,.5); }
+
+/* remove-clip × (top-right of each clip) */
+.collab-x { position: absolute; top: 3px; right: 4px; z-index: 3; width: 15px; height: 15px;
+  display: flex; align-items: center; justify-content: center; border-radius: 50%;
+  font-size: 13px; line-height: 1; color: rgba(255,255,255,.8); background: rgba(0,0,0,.16);
+  cursor: pointer; opacity: .55; transition: opacity .15s ease, background .15s ease, color .15s ease; }
+.collab-blob:hover .collab-x, .collab-x:focus-visible { opacity: 1; outline: none; }
+.collab-x:hover { background: rgba(0,0,0,.32); color: #fff; }
+
+/* remove-track × (top-right of the collab track head) */
+.collab-track .daw-thead { position: relative; }
+.collab-trackx { position: absolute; top: 5px; right: 6px; width: 16px; height: 16px; padding: 0;
+  display: flex; align-items: center; justify-content: center; border: none; border-radius: 50%;
+  background: rgba(54,49,51,.1); color: #6E645C; font-size: 14px; line-height: 1; cursor: pointer;
+  opacity: .55; transition: opacity .15s ease, background .15s ease, color .15s ease; }
+.collab-track .daw-thead:hover .collab-trackx, .collab-trackx:focus-visible { opacity: 1; outline: none; }
+.collab-trackx:hover { background: rgba(142,78,100,.9); color: #fff; }
+
+/* ============================================================ ROUND 61 — mobile hero stacking fix, continuous pink collab gradient ============================================================ */
+/* the hero must stack on phones — later unconditional 2-col rules were overriding the responsive rule */
+@media (max-width: 920px) {
+  .hero-grid { grid-template-columns: 1fr; align-items: start; }
+  .hero-left { justify-content: flex-start; }
+  .portrait { order: -1; justify-self: center; transform: none; margin: 0 auto 4px; --pf: clamp(200px, 60vw, 264px); }
+}
+
+/* collab clips share ONE soft-pink→white gradient across the track; dark text like the a cappella clip */
+.collab-blob { background-image: linear-gradient(to right, #EFC7C4, #FFFFFF); background-repeat: no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(54,49,51,.12), 0 1px 3px rgba(54,49,51,.14); }
+.collab-blob:hover { filter: brightness(1.02); }
+.collab-blob .clip-name { color: var(--ink); text-decoration-color: rgba(54,49,51,.4); }
+.collab-blob .clip-sub { color: rgba(54,49,51,.66); }
+.collab-blob .wave i { background: rgba(54,49,51,.34); }
+/* remove-clip × now dark on the light clip */
+.collab-x { color: rgba(54,49,51,.6); background: rgba(255,255,255,.55); }
+.collab-x:hover { background: rgba(54,49,51,.22); color: var(--ink); }
+
+/* resume actions: email + LinkedIn stay together, dropping to their own line as a pair
+   (flex:0 0 auto so the pair never shrinks to squeeze beside "download") */
+.ra-group { display: flex; gap: 14px; flex-wrap: wrap; flex: 0 0 auto; }

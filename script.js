@@ -197,16 +197,16 @@
     var rzT;
     window.addEventListener('resize', function () {
       clearTimeout(rzT);
-      rzT = setTimeout(function () { waves.forEach(buildWave); }, 200);
+      rzT = setTimeout(function () { waves.forEach(buildWave); collabRefreshers.forEach(function (f) { f(); }); }, 200);
     });
 
     // mute (M) grays that track; solo (S) grays the others
     var timeline = daw.querySelector('.daw-timeline');
-    var tracks = [].slice.call(daw.querySelectorAll('.daw-track[data-track]'));
+    var allTracks = function () { return [].slice.call(timeline.querySelectorAll('.daw-track[data-track]')); };
     var syncSolo = function () {
-      timeline.classList.toggle('has-solo', tracks.some(function (t) { return t.classList.contains('soloed'); }));
+      timeline.classList.toggle('has-solo', allTracks().some(function (t) { return t.classList.contains('soloed'); }));
     };
-    tracks.forEach(function (t) {
+    var wireMS = function (t) {
       var mBtn = t.querySelector('.ms.m'), sBtn = t.querySelector('.ms.s');
       if (mBtn) mBtn.addEventListener('click', function () {
         mBtn.setAttribute('aria-pressed', String(t.classList.toggle('muted')));
@@ -215,7 +215,7 @@
         sBtn.setAttribute('aria-pressed', String(t.classList.toggle('soloed')));
         syncSolo();
       });
-    });
+    };
 
     // drag a track by its name column to reorder — it lifts out and follows the
     // pointer, and a highlight zone marks where it will land (no rotation)
@@ -245,11 +245,11 @@
       document.removeEventListener('pointerup', onDragEnd);
       document.removeEventListener('pointercancel', onDragEnd);
     };
-    tracks.forEach(function (t) {
+    var wireDrag = function (t) {
       var head = t.querySelector('.daw-thead');
       if (!head) return;
       head.addEventListener('pointerdown', function (e) {
-        if (e.target.closest('.ms')) return;            // let M / S buttons do their thing
+        if (e.target.closest('.ms') || e.target.closest('.collab-trackx')) return; // let the buttons do their thing
         if (e.button != null && e.button !== 0) return; // primary button only
         e.preventDefault();
         var r = t.getBoundingClientRect();
@@ -269,7 +269,203 @@
         document.addEventListener('pointerup', onDragEnd);
         document.addEventListener('pointercancel', onDragEnd);
       });
-    });
+    };
+    allTracks().forEach(function (t) { wireMS(t); wireDrag(t); });
+
+    // ---- the "new collab" gimmick: "+ new track" spawns an empty track you can
+    // draw clips onto (click + drag to lay one down, drag the edges to resize) ----
+    var LINKEDIN = 'https://www.linkedin.com/in/lindseymardona/';
+    var NAMES = ['heyyy ;)', 'could be us', "but you playin'", 'so...'];
+    var newRow = timeline.querySelector('.daw-track.newtrack');
+    var collabSeed = 200;
+    var collabRefreshers = [];
+
+    var wireCollabLane = function (lane) {
+      var blobs = [];                       // { el, start, span }  (blocks 0..7)
+      var blockAt = function (clientX) {
+        var r = lane.getBoundingClientRect();
+        return Math.max(0, Math.min(7, Math.floor((clientX - r.left) / (r.width / 8))));
+      };
+      var occupied = function (excl) {      // map of occupied block indices
+        var occ = {};
+        blobs.forEach(function (bl) {
+          if (bl === excl) return;
+          for (var i = bl.start; i < bl.start + bl.span; i++) occ[i] = true;
+        });
+        return occ;
+      };
+      var relabel = function () {           // labels follow left-to-right order; ↗ marks the link
+        blobs.slice().sort(function (a, b) { return a.start - b.start; }).forEach(function (bl, i) {
+          bl.el.querySelector('.clip-name').textContent = NAMES[Math.min(i, NAMES.length - 1)] + ' ↗';
+        });
+      };
+      var place = function (bl) {
+        bl.el.style.left = (bl.start / 8 * 100) + '%';
+        bl.el.style.width = (bl.span / 8 * 100) + '%';
+        // one continuous pink→white gradient across the whole lane: scale the gradient
+        // to the full 8 blocks and offset it so each clip shows its slice of the sweep
+        bl.el.style.backgroundSize = (8 / bl.span * 100) + '% 100%';
+        bl.el.style.backgroundPosition = (bl.span >= 8 ? 0 : bl.start / (8 - bl.span) * 100) + '% 0';
+        bl.el.classList.toggle('has-text', bl.span >= 2);   // too short → waveform only
+      };
+      var refreshBlob = function (bl) { place(bl); buildWave(bl.el.querySelector('.wave'), collabSeed++); };
+      collabRefreshers.push(function () { if (document.contains(lane)) blobs.forEach(refreshBlob); });
+
+      var removeBlob = function (bl) {
+        if (bl.el.parentNode) bl.el.parentNode.removeChild(bl.el);
+        var idx = blobs.indexOf(bl); if (idx >= 0) blobs.splice(idx, 1);
+        if (!blobs.length) lane.classList.remove('has-blob');
+        relabel();
+      };
+
+      var makeBlob = function (start, span) {
+        var el = document.createElement('a');
+        el.className = 'collab-blob';
+        el.href = LINKEDIN; el.target = '_blank'; el.rel = 'noopener'; el.draggable = false;
+        el.innerHTML =
+          '<span class="collab-resize l" aria-hidden="true"></span>' +
+          '<span class="clip-info"><span class="clip-name">collaboration ↗</span><span class="clip-sub">collaboration</span></span>' +
+          '<span class="wave" data-wave aria-hidden="true"></span>' +
+          '<span class="collab-resize r" aria-hidden="true"></span>' +
+          '<span class="collab-x" role="button" tabindex="0" aria-label="Remove this clip">×</span>';
+        lane.appendChild(el);
+        var bl = { el: el, start: start, span: span };
+        blobs.push(bl);
+        lane.classList.add('has-blob');
+
+        var suppressClick = false;
+        el.addEventListener('click', function (e) { if (suppressClick) { e.preventDefault(); e.stopPropagation(); } });
+
+        // remove-clip ×
+        var xb = el.querySelector('.collab-x');
+        xb.addEventListener('pointerdown', function (e) { e.stopPropagation(); e.preventDefault(); });
+        xb.addEventListener('click', function (e) { e.stopPropagation(); e.preventDefault(); removeBlob(bl); });
+        xb.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); removeBlob(bl); } });
+
+        // drag the edges to resize
+        [].slice.call(el.querySelectorAll('.collab-resize')).forEach(function (h) {
+          var isLeft = h.classList.contains('l');
+          h.addEventListener('pointerdown', function (e) {
+            if (e.button != null && e.button !== 0) return;
+            e.preventDefault(); e.stopPropagation();
+            var occ = occupied(bl), origStart = bl.start, origEnd = bl.start + bl.span, moved = false;
+            var move = function (ev) {
+              moved = true; suppressClick = true;
+              var edge = blockAt(ev.clientX);
+              if (isLeft) {
+                var lb = 0, i; for (i = origStart - 1; i >= 0; i--) { if (occ[i]) { lb = i + 1; break; } }
+                var a = Math.max(lb, Math.min(edge, origEnd - 1));
+                bl.start = a; bl.span = origEnd - a;
+              } else {
+                var rb = 8, j; for (j = origEnd; j < 8; j++) { if (occ[j]) { rb = j; break; } }
+                var b = Math.min(rb, Math.max(edge + 1, origStart + 1));
+                bl.span = b - origStart;
+              }
+              place(bl);
+            };
+            var up = function () {
+              document.removeEventListener('pointermove', move);
+              document.removeEventListener('pointerup', up);
+              if (moved) { refreshBlob(bl); relabel(); }
+              setTimeout(function () { suppressClick = false; }, 0);
+            };
+            document.addEventListener('pointermove', move);
+            document.addEventListener('pointerup', up);
+          });
+        });
+
+        // drag the body to slide the clip along the lane (if nothing's in the way)
+        el.addEventListener('pointerdown', function (e) {
+          if (e.target.closest('.collab-resize') || e.target.closest('.collab-x')) return;
+          if (e.button != null && e.button !== 0) return;
+          var occ = occupied(bl), grabOff = blockAt(e.clientX) - bl.start;
+          var minStart = 0, maxStart = 8 - bl.span, i;
+          for (i = bl.start - 1; i >= 0; i--) { if (occ[i]) { minStart = i + 1; break; } }
+          for (i = bl.start + bl.span; i < 8; i++) { if (occ[i]) { maxStart = i - bl.span; break; } }
+          var moved = false;
+          var move = function (ev) {
+            var ns = Math.max(minStart, Math.min(maxStart, blockAt(ev.clientX) - grabOff));
+            if (ns !== bl.start) { moved = true; suppressClick = true; bl.start = ns; place(bl); }
+          };
+          var up = function () {
+            document.removeEventListener('pointermove', move);
+            document.removeEventListener('pointerup', up);
+            if (moved) relabel();
+            setTimeout(function () { suppressClick = false; }, 0);
+          };
+          document.addEventListener('pointermove', move);
+          document.addEventListener('pointerup', up);
+        });
+
+        refreshBlob(bl); relabel();
+        return bl;
+      };
+
+      // click + drag on empty lane to lay down a new clip
+      lane.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('.collab-blob')) return;     // blobs handle themselves
+        if (e.button != null && e.button !== 0) return;
+        if (blobs.length >= 8) return;                    // 8 clips max
+        var occ = occupied(null), start = blockAt(e.clientX);
+        if (occ[start]) return;                           // started on a filled block
+        e.preventDefault();
+        var freeLeft = 0, freeRight = 8, i;
+        for (i = start - 1; i >= 0; i--) { if (occ[i]) { freeLeft = i + 1; break; } }
+        for (i = start + 1; i < 8; i++) { if (occ[i]) { freeRight = i; break; } }
+        var preview = document.createElement('span');
+        preview.className = 'collab-preview';
+        lane.appendChild(preview);
+        var a = start, b = start + 1;
+        var draw = function (span) {
+          a = Math.max(freeLeft, Math.min(start, span));
+          b = Math.min(freeRight, Math.max(start + 1, span + 1));
+          preview.style.left = (a / 8 * 100) + '%';
+          preview.style.width = ((b - a) / 8 * 100) + '%';
+        };
+        draw(start);
+        var move = function (ev) { draw(blockAt(ev.clientX)); };
+        var up = function () {
+          document.removeEventListener('pointermove', move);
+          document.removeEventListener('pointerup', up);
+          if (preview.parentNode) preview.parentNode.removeChild(preview);
+          makeBlob(a, b - a);
+        };
+        document.addEventListener('pointermove', move);
+        document.addEventListener('pointerup', up);
+      });
+    };
+
+    var buildCollabTrack = function () {
+      var track = document.createElement('div');
+      track.className = 'daw-track collab-track';
+      track.setAttribute('data-track', 'new collab');
+      track.innerHTML =
+        '<div class="daw-thead">' +
+          '<span class="sw" style="background:#7C8A4E"></span>' +
+          '<span class="tname">new collab</span>' +
+          '<span class="ms-group"><button class="ms m" type="button" aria-pressed="false" title="Mute this track">M</button><button class="ms s" type="button" aria-pressed="false" title="Solo this track">S</button></span>' +
+          '<button class="collab-trackx" type="button" aria-label="Remove this track">×</button>' +
+        '</div>' +
+        '<div class="daw-lane collab-lane"><span class="collab-hint">click + drag to lay down a clip</span></div>';
+      timeline.insertBefore(track, newRow);
+      wireMS(track); wireDrag(track);
+      wireCollabLane(track.querySelector('.collab-lane'));
+      var tx = track.querySelector('.collab-trackx');
+      if (tx) {
+        tx.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+        tx.addEventListener('click', function (e) { e.stopPropagation(); if (track.parentNode) track.parentNode.removeChild(track); });
+      }
+      return track;
+    };
+
+    if (newRow) {
+      var addHead = newRow.querySelector('.daw-thead');
+      var addCollab = function () { buildCollabTrack(); };
+      addHead.addEventListener('click', addCollab);
+      addHead.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addCollab(); }
+      });
+    }
 
     // play / pause — sweeps the playhead (CSS) and ticks the timecode, just for fun
     var playBtn = daw.querySelector('.daw-play');
