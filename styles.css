@@ -361,7 +361,8 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 .gal-wrap { position: relative; margin: 8px 0 10px; }
 .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
 .marquee-track { display: flex; gap: 18px; width: max-content; animation: scrollx 46s linear infinite; }
-.marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+/* only the welcome-bar marquee pauses on band hover; the galleries pause per-photo in JS */
+.hello-bar .marquee:hover .marquee-track, .hello-bar .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee img { height: 300px; width: auto; border-radius: 14px; box-shadow: var(--shadow); -webkit-user-drag: none; user-select: none; }
 @keyframes scrollx { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .gal-accent { position: absolute; z-index: 3; pointer-events: none; transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
@@ -2007,12 +2008,12 @@ footer { border-top: 5px solid var(--plum); }
 .float-el.float-go { animation: floatIn 1.3s linear both; }
 .seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1.3s linear both; }
 @keyframes floatIn {
-  0%   { opacity: 0; transform: translateY(24px);  animation-timing-function: cubic-bezier(.26,.7,.5,1); }
-  22%  { opacity: 1; transform: translateY(-10px); animation-timing-function: cubic-bezier(.2,.62,.4,1); }
-  40%  { opacity: 1; transform: translateY(6px);   animation-timing-function: cubic-bezier(.4,0,.55,1); }
-  58%  { opacity: 1; transform: translateY(-4px);  animation-timing-function: cubic-bezier(.4,0,.55,1); }
-  75%  { opacity: 1; transform: translateY(2px);   animation-timing-function: cubic-bezier(.4,0,.55,1); }
-  89%  { opacity: 1; transform: translateY(-1px);  animation-timing-function: cubic-bezier(.4,0,.55,1); }
+  0%   { opacity: 0; transform: translateY(24px);  animation-timing-function: cubic-bezier(.25,0,.5,1); }
+  27%  { opacity: 1; transform: translateY(-10px); animation-timing-function: cubic-bezier(.32,0,.5,1); }
+  45%  { opacity: 1; transform: translateY(6px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  62%  { opacity: 1; transform: translateY(-4px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  77%  { opacity: 1; transform: translateY(2px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  90%  { opacity: 1; transform: translateY(-1px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
@@ -2032,10 +2033,9 @@ footer { border-top: 5px solid var(--plum); }
 @keyframes cg9  { from { background-position-x: 0; } to { background-position-x: -512px; } }
 @keyframes cg11 { from { background-position-x: 0; } to { background-position-x: -640px; } }
 
-/* D-pad: wrap each glyph so the up/down arrows can be nudged to optically center */
-.cdp-g { display: block; line-height: 1; }
-.cdp-up .cdp-g { transform: translateY(1px); }
-.cdp-down .cdp-g { transform: translateY(-1px); }
+/* D-pad glyph wrapper — holds a centered SVG arrow */
+.cdp-g { display: block; width: 13px; height: 13px; line-height: 0; }
+.cdp-g svg { display: block; width: 100%; height: 100%; }
 
 /* life gallery: hovering a photo lifts and enlarges it, pulling it forward over its
    neighbours (the strip is already frozen on hover, so it stays put) */
@@ -2101,3 +2101,30 @@ footer { border-top: 5px solid var(--plum); }
 
 /* keep the "use arrow keys" bubble above the footer's purple divider */
 .corgi-hint { bottom: 18px; }
+
+/* ============================================================ ROUND 74 — life gallery back to its old height; hover now grows the photo modestly and pushes its neighbours aside (small shadow, no leap off the page) ============================================================ */
+.gal-wrap .marquee { padding: 34px 0; }
+.gal-wrap .marquee img { transition: transform .32s cubic-bezier(.2,.7,.3,1), box-shadow .32s ease; }
+.gal-wrap .marquee img:hover { transform: scale(1.14); z-index: 6; box-shadow: 0 3px 8px rgba(54,49,51,.2); }
+
+/* ============================================================ ROUND 75 — galleries: scroll pauses only over a photo (JS sets it on the track); the band itself never pauses since the base rule is now scoped to the welcome bar ============================================================ */
+
+/* ============================================================ ROUND 76 — D-pad now uses centered SVG arrows, so no per-glyph nudging is needed ============================================================ */
+.cdp-g, .cdp-up .cdp-g, .cdp-down .cdp-g { transform: none; }
+
+/* ============================================================ ROUND 77 — mobile footer restructured to design 2b: grouped 2-col nav + email, then a full-width return-to-top bar closing the page ============================================================ */
+@media (max-width: 640px) {
+  .foot { display: flex; flex-direction: column; align-items: stretch; text-align: left; gap: 22px; }
+  /* quick nav: a mono label over a real two-column list */
+  .foot .quick { order: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 20px; text-align: left; }
+  .foot .quick .label { grid-column: 1 / -1; font-size: 0; line-height: 1; margin: 0 0 4px; }
+  .foot .quick .label::before { content: "quick nav"; font-family: var(--ui); font-size: .64rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(54,49,51,.5); }
+  .foot .quick a { margin: 0; padding: 9px 2px; font-size: 1.05rem; }
+  /* email sits under a hairline */
+  .foot .foot-email { order: 2; text-align: left; border-top: 1px solid rgba(54,49,51,.14); padding-top: 18px; }
+  /* return to top: a wide bar that closes the footer, edge to edge */
+  .foot .to-top { order: 3; margin: 4px -24px -30px; height: 52px; display: flex; align-items: center; justify-content: center; gap: 9px; background: rgba(255,255,255,.4); border-top: 1px solid rgba(54,49,51,.12); font-style: italic; font-size: .96rem; color: var(--plum); }
+  .foot .to-top .circle { width: auto; height: auto; border: none; }
+  .foot .to-top .circle svg { width: 15px; height: 15px; }
+  .foot .to-top:hover .circle { background: none; color: var(--plum); }
+}

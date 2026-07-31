@@ -190,6 +190,18 @@
     });
   }
 
+  /* ---- about galleries (life gallery + miss kaya): the scroll freezes ONLY while the
+     cursor is on a photo (not anywhere in the band), and that photo grows in place ---- */
+  var galRows = [].slice.call(document.querySelectorAll('.gal-wrap .marquee-track'));
+  if (galRows.length && !reduce) {
+    galRows.forEach(function (row) {
+      [].slice.call(row.querySelectorAll('img')).forEach(function (img) {
+        img.addEventListener('mouseenter', function () { row.style.animationPlayState = 'paused'; });
+        img.addEventListener('mouseleave', function () { row.style.animationPlayState = ''; });
+      });
+    });
+  }
+
   /* ---- singer "session" widget: waveforms, mute/solo, play/pause ---- */
   var daw = document.querySelector('.daw');
   if (daw) {
@@ -1084,10 +1096,18 @@
       mode = 'control'; clearTimeout(cyc); keys = {}; jumping = false; satLatched = false; running = false; jumpVX = 0;
       setState('idle2'); entryY = window.pageYOffset; entryTime = Date.now();
       padEl = document.createElement('div'); padEl.className = 'corgi-dpad';
+      // SVG arrows (perfectly centered in a 24x24 box) instead of font glyphs, which
+      // sit at inconsistent heights depending on the typeface
+      var arrowPath = {
+        up: 'M12 18 V6 M7 11 L12 6 L17 11',
+        down: 'M12 6 V18 M7 13 L12 18 L17 13',
+        left: 'M18 12 H6 M11 7 L6 12 L11 17',
+        right: 'M6 12 H18 M13 7 L18 12 L13 17'
+      };
       ['up', 'left', 'down', 'right'].forEach(function (k) {
         var el = document.createElement('span'); el.className = 'cdp cdp-' + k;
         var g = document.createElement('span'); g.className = 'cdp-g';
-        g.textContent = { up: '↑', down: '↓', left: '←', right: '→' }[k];
+        g.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + arrowPath[k] + '"/></svg>';
         el.appendChild(g); padEl.appendChild(el);
       });
       hintEl = document.createElement('div'); hintEl.className = 'corgi-hint'; hintEl.textContent = 'use arrow keys to move';
