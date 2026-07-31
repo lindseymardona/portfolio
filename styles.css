@@ -1335,3 +1335,379 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 /* gallery filter: active + hover go green instead of plum */
 .gal-chip:hover { border-color: #5C6B3E; }
 .gal-chip[aria-pressed="true"] { background: #5C6B3E; border-color: #5C6B3E; color: #fff; }
+
+/* ============================================================ ROUND 43 — feedback tweaks ============================================================ */
+/* reveal: smoother ease-out settle (was ease in-out, which read as a lag) */
+.reveal.in { animation: revealUp .5s cubic-bezier(.2,.7,.3,1) backwards; }
+
+/* IMPACT row: plum label, lighter-weight value for readability */
+.proj-metric .pm-label { color: var(--plum); }
+.proj-metric .pm-val { font-weight: 400; color: rgba(54,49,51,.74); }
+.proj-metric .pm-val em { font-style: italic; font-weight: 400; color: rgba(54,49,51,.82); }
+
+/* gallery filter: soft olive from the palette (dark text), not the deep green */
+.gal-chip:hover { border-color: var(--olive-deep); }
+.gal-chip[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--ink); }
+
+/* resume skills: back to filled chips, just at a lighter opacity (pink + green) */
+.skills-groups .chip { background: rgba(239,206,204,.5); border: none; color: var(--ink); }
+.skills-groups .tech-skills .chip { background: rgba(227,233,196,.6); border: none; color: var(--ink); }
+
+/* ============================================================ ROUND 44 ============================================================ */
+/* IMPACT row: drop the italic on "Health Affairs" — hard to read at this size */
+.proj-metric .pm-val em { font-family: var(--ui); font-style: normal; font-size: 1em; color: rgba(54,49,51,.82); }
+
+/* ============================================================ ROUND 45 — singer "session" widget (5c) ============================================================ */
+.daw { margin-top: 30px; background: #EFEEEC; border: 1px solid #E7DCD3; border-radius: 12px; overflow: hidden; box-shadow: 0 18px 40px -30px rgba(54,49,51,.4); font-family: var(--ui); }
+.daw-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; background: #E9E7E3; border-bottom: 1px solid #E1D9D0; }
+.daw-transport { display: flex; align-items: center; gap: 14px; }
+.daw-play { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--plum); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; padding-left: 2px; transition: background .18s ease, transform .12s ease; }
+.daw-play:hover, .daw-play:focus-visible { background: #7a3f72; }
+.daw-play.playing { padding-left: 0; font-size: 10px; }
+.daw-time { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: .04em; color: var(--ink); min-width: 74px; }
+.daw-meta { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6E645C; }
+.daw-session { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #6E645C; }
+.daw-note { margin: 0; padding: 12px 20px 0; font-size: 12.5px; color: #6E645C; }
+.daw-timeline { position: relative; margin: 12px 16px 18px; border: 1px solid rgba(54,49,51,.14); border-radius: 6px; background: #F7F6F4; overflow: hidden; }
+.daw-ruler { display: grid; grid-template-columns: 152px 1fr; border-bottom: 1px solid rgba(54,49,51,.12); }
+.daw-ruler .rl-head { border-right: 1px solid rgba(54,49,51,.12); }
+.daw-ruler .rl-bars { display: flex; }
+.daw-ruler .rl-bars i { flex: 1; padding: 5px 0 4px 7px; border-left: 1px solid rgba(54,49,51,.12); font-size: 11px; font-style: normal; color: #a09789; }
+.daw-ruler .rl-bars i:first-child { border-left: none; }
+.daw-track { display: grid; grid-template-columns: 152px 1fr; border-bottom: 1px solid rgba(54,49,51,.1); }
+.daw-track:last-of-type { border-bottom: none; }
+.daw-thead { display: flex; align-items: center; gap: 9px; padding: 0 12px; min-height: 70px; border-right: 1px solid rgba(54,49,51,.12); background: #EFEEEC; }
+.daw-thead .sw { width: 5px; height: 26px; border-radius: 2px; flex: none; }
+.daw-thead .sw.dim { background: rgba(54,49,51,.22); }
+.daw-thead .tname { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-right: auto; }
+.daw-thead .tname.dim { color: #8a8177; font-weight: 500; }
+.ms { flex: none; font-family: var(--ui); font-size: 10px; font-weight: 700; color: #8a8177; background: #fff; border: 1px solid rgba(54,49,51,.22); border-radius: 4px; padding: 2px 6px; cursor: pointer; transition: all .15s ease; }
+.ms:hover { border-color: rgba(54,49,51,.45); }
+.ms.m[aria-pressed="true"] { background: rgba(99,40,92,.14); border-color: var(--plum); color: var(--plum); }
+.ms.s[aria-pressed="true"] { background: rgba(163,180,113,.28); border-color: var(--olive-deep); color: #4f5a34; }
+.daw-lane { padding: 10px 12px; display: flex; align-items: center; }
+.daw-clip { display: flex; align-items: center; gap: 12px; width: 100%; height: 50px; padding: 0 14px; border-radius: 4px; text-decoration: none; overflow: hidden; transition: transform .18s ease, filter .18s ease; }
+.daw-clip:hover { transform: translateY(-1px); }
+.daw-clip .clip-info { display: flex; flex-direction: column; gap: 2px; flex: none; max-width: 58%; }
+.daw-clip .clip-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.daw-clip .clip-sub { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.daw-clip .wave { display: flex; align-items: center; gap: 2px; flex: 1; height: 100%; min-width: 0; overflow: hidden; }
+.daw-clip .wave i { width: 3px; border-radius: 1px; flex: none; }
+.c-plum { background: var(--plum); }
+.c-plum .clip-name { color: #fff; } .c-plum .clip-sub { color: rgba(239,206,204,.85); } .c-plum .wave i { background: rgba(239,206,204,.5); }
+.c-olive { background: var(--olive-deep); }
+.c-olive .clip-name { color: var(--ink); } .c-olive .clip-sub { color: rgba(54,49,51,.68); } .c-olive .wave i { background: rgba(54,49,51,.4); }
+.c-plumsoft { background: rgba(99,40,92,.1); border: 1px dashed rgba(99,40,92,.5); }
+.c-plumsoft .clip-name { color: var(--plum); } .c-plumsoft .clip-sub { color: rgba(99,40,92,.72); } .c-plumsoft .wave i { background: rgba(99,40,92,.35); }
+.newtrack .daw-thead { min-height: 46px; }
+.daw-track.muted .daw-lane { opacity: .32; filter: grayscale(.75); }
+.daw-track.muted .daw-clip { pointer-events: none; }
+.daw-track.muted .daw-thead .tname { opacity: .55; }
+.daw-timeline.has-solo .daw-track:not(.soloed):not(.newtrack) .daw-lane { opacity: .32; filter: grayscale(.75); }
+.daw-timeline.has-solo .daw-track:not(.soloed):not(.newtrack) .daw-clip { pointer-events: none; }
+.daw-timeline.has-solo .daw-track:not(.soloed):not(.newtrack) .daw-thead .tname { opacity: .55; }
+.daw-scan { position: absolute; top: 0; bottom: 0; left: 152px; right: 0; pointer-events: none; }
+.daw-playhead { position: absolute; top: 0; bottom: 0; left: 0; width: 1.5px; background: var(--plum); opacity: 0; }
+.daw-playhead::before { content: ''; position: absolute; top: -1px; left: -4px; width: 9px; height: 6px; border-radius: 1px; background: var(--plum); }
+.daw.playing .daw-playhead { opacity: 1; animation: dawsweep 8s linear infinite; }
+@keyframes dawsweep { from { left: 0; } to { left: 100%; } }
+@media (max-width: 640px) {
+  .daw-track, .daw-ruler { grid-template-columns: 104px 1fr; }
+  .daw-scan { left: 104px; }
+  .daw-thead { gap: 6px; padding: 0 8px; }
+  .daw-clip .clip-info { max-width: 66%; }
+  .daw-session { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .daw.playing .daw-playhead { animation: none; }
+}
+
+/* ============================================================ ROUND 46 — DAW: full band, staggered clips, playhead, mock text (5c v2) ============================================================ */
+/* full-width "session" band instead of a card; flows into the footer */
+.singer { padding-bottom: 0; }
+.daw { margin-top: 40px; background: #EFEEEC; border: none; border-top: 4px solid var(--plum); border-radius: 0; box-shadow: none; overflow: visible; padding: 26px 0 36px; }
+.daw-bar { background: none; border-bottom: none; padding: 0 0 14px; }
+.daw-note { padding: 12px 0 0; }
+.daw-timeline { margin: 14px 0 0; }
+
+/* staggered clips: no longer full-width; each sits partway across its lane */
+.daw-lane { gap: 0; }
+.daw-clip { width: auto; }
+.lane-gap { display: block; flex: 0 0 auto; }
+
+/* clip text — underlined title + uppercase credit, mock weights/sizes */
+.daw-clip .clip-name, .daw-file .clip-name { text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.daw-clip .clip-sub { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; }
+.c-plum .clip-name { text-decoration-color: rgba(239,206,204,.7); }
+.c-olive { background: var(--olive); }
+.c-olive .clip-name { text-decoration-color: rgba(54,49,51,.42); }
+
+/* covers track: two dashed "file" links side by side */
+.daw-file { display: flex; flex-direction: column; justify-content: center; gap: 3px; flex: 0 0 auto; height: 50px; padding: 0 16px; border-radius: 4px; border: 1px dashed rgba(99,40,92,.5); background: rgba(99,40,92,.07); text-decoration: none; transition: background .18s ease, transform .18s ease; }
+.daw-file:hover { background: rgba(99,40,92,.14); transform: translateY(-1px); }
+.daw-file .clip-name { font-size: 13px; font-weight: 600; color: var(--plum); text-decoration-color: rgba(99,40,92,.4); white-space: nowrap; }
+.daw-file .clip-sub { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(99,40,92,.72); white-space: nowrap; }
+.daw-timeline.has-solo .daw-track:not(.soloed):not(.newtrack) .daw-file,
+.daw-track.muted .daw-file { pointer-events: none; }
+
+/* playhead: always visible; sweeps while playing (default on) */
+.daw-playhead { opacity: 1; animation: dawsweep 8s linear infinite; animation-play-state: paused; }
+.daw.playing .daw-playhead { animation-play-state: running; }
+
+/* ============================================================ ROUND 47 — 5c micro-tweaks ============================================================ */
+/* body copy on Karla (incl. the "in my spare time…" line) — NOT the serif heading */
+.singer .wrap > p { font-family: var(--ui); }
+
+/* play/pause: SVG icons so the glyph is truly centered in the circle */
+.daw-play { padding: 0; }
+.daw-play .ic { width: 12px; height: 12px; fill: #fff; display: none; }
+.daw.playing .daw-play .ic-pause { display: block; }
+.daw:not(.playing) .daw-play .ic-play { display: block; }
+
+/* "every clip is a link": smaller + tucked right under the transport */
+.daw-bar { padding-bottom: 6px; }
+.daw-note { font-size: 11px; padding-top: 2px; }
+
+/* track names: tighter leading + a bit more air before the M button */
+.daw-thead { gap: 10px; }
+.daw-thead .tname { line-height: 1.15; }
+.daw-thead .ms.m { margin-left: 4px; }
+
+/* audio-file links: tighter leading, so the centered pair gets more room top & bottom */
+.daw-file { gap: 1px; }
+.daw-file .clip-name, .daw-file .clip-sub { line-height: 1.12; }
+
+/* ============================================================ ROUND 48 — gallery (5b): olive filter band + cleaner cards ============================================================ */
+/* filter controls live on a full-width olive band (olive = controls, like the home strip) */
+.gal-filterbar { background: var(--olive); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
+.gal-filterbar .wrap { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding-top: 14px; padding-bottom: 14px; }
+.gf-label { font-family: var(--ui); font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(54,49,51,.78); margin-right: 6px; }
+/* white pills on olive; active is plum (reads as a control, stands out on the band) */
+.gal-filterbar .gal-chip { font-size: .82rem; padding: 7px 16px; background: rgba(255,255,255,.75); border: 1px solid rgba(54,49,51,.2); color: var(--ink); }
+.gal-filterbar .gal-chip:hover { background: #fff; border-color: var(--plum); color: var(--plum); transform: none; }
+.gal-filterbar .gal-chip[aria-pressed="true"] { background: var(--plum); border-color: var(--plum); color: #fff; }
+
+/* cards: DM Serif title (a touch smaller), no description, kind + destination footer */
+.tile .tile-caption { padding: 13px 15px 14px; }
+.tile .t-title { font-family: var(--serif); font-weight: 400; font-size: 1.04rem; line-height: 1.24; letter-spacing: -0.01em; color: var(--ink); }
+.tile .t-for { display: none; }
+.tile-foot { margin-top: 11px; padding-top: 10px; border-top: 1px solid #E7DCD3; }
+.tile-foot .t-kind { font-family: var(--ui); font-size: .78rem; color: #6E645C; }
+.tile-foot .t-dest { display: inline-flex; align-items: baseline; gap: 5px; font-family: var(--ui); font-weight: 600; font-size: .78rem; color: var(--plum); white-space: nowrap; }
+.tile-foot .t-dest .ext { font-weight: 400; }
+
+/* ============================================================ ROUND 49 — gallery card container + DAW drag-reorder ============================================================ */
+/* gallery: flat, image-led cards — no border, gentler corners, lift-only hover (no shadow) */
+.masonry .tile { border: none; border-radius: 6px; }
+.masonry .tile:hover, .masonry .tile:focus-visible { transform: translateY(-3px); box-shadow: none; }
+.masonry .tile:focus-visible { outline: 3px solid rgba(99,40,92,.55); outline-offset: 3px; }
+/* title: soften DM Serif (single-weight face) with a touch less size + muted ink */
+.tile .t-title { font-size: .98rem; color: rgba(54,49,51,.9); }
+
+/* DAW: drag a track by its name column to reorder (novelty) */
+.daw-thead { cursor: grab; touch-action: none; }
+.daw-thead .ms { cursor: pointer; }
+.daw-track.dragging { position: relative; z-index: 5; }
+.daw-track.dragging .daw-thead { cursor: grabbing; }
+.daw-track.dragging .daw-thead, .daw-track.dragging .daw-lane { background: #E7E4DF; }
+.daw-track.drop-target { box-shadow: inset 0 2px 0 var(--plum); }
+
+/* ============================================================ ROUND 50 — 5a hover on gallery, serif titles, drag lift, hero simplify + welcome bar ============================================================ */
+/* gallery card titles: actually reach DM Serif (a 3-class rule was overriding the 2-class one) */
+.tile .tile-caption .t-title { font-family: var(--serif); font-weight: 400; font-size: .98rem; line-height: 1.24; letter-spacing: -0.01em; color: rgba(54,49,51,.9); }
+
+/* gallery hover: adopt the 5a language (lift + soft blush tint + soft shadow) */
+.masonry .tile:hover, .masonry .tile:focus-visible { transform: translateY(-4px); box-shadow: 0 20px 34px -26px rgba(54,49,51,.5); }
+.masonry .tile:hover { background: #FDF6F5; }
+
+/* DAW: dragging a track lifts it off the strip and tips slightly left, like picking it up */
+.daw-timeline { overflow: visible; }
+.daw-track { transition: transform .13s ease, box-shadow .13s ease; }
+.daw-track.dragging { transform: translateY(-7px) rotate(-2.2deg) scale(1.015); box-shadow: 0 18px 34px -14px rgba(54,49,51,.5); border-radius: 5px; }
+/* the "+ new track" row is not draggable — don't offer the grab hand */
+.newtrack .daw-thead { cursor: default; }
+
+/* ---- 5a: simplified 2-column hero + scrolling olive welcome bar ---- */
+.hero-grid { grid-template-columns: 1.12fr 0.88fr; }
+.hello-bar { background: var(--olive); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
+.hello-bar .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.hello-bar .marquee-track { padding: 13px 0; }
+.hello-bar .hm { font-family: var(--ui); font-size: .98rem; color: rgba(54,49,51,.92); margin-right: 34px; white-space: nowrap; }
+.hello-bar .hm.sep { color: rgba(54,49,51,.45); }
+@media (max-width: 620px) { .hello-bar .hm { font-size: .92rem; margin-right: 26px; } }
+
+/* ============================================================ ROUND 51 — gallery title/hover, hero type, 5a work section ============================================================ */
+/* gallery: bigger serif title; revert hover to the standard site card behavior (no pink) */
+.tile .tile-caption .t-title { font-size: 1.1rem; }
+.masonry .tile:hover, .masonry .tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(99,40,92,.16); }
+.masonry .tile:hover { background: #fff; }
+
+/* hero header, modeled on 5a: big serif name, small muted roles */
+.hero-left .name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 4.4vw, 2.5rem); line-height: 1.08; letter-spacing: -0.01em; margin: .08em 0 0; }
+.hero-left .name b { font-weight: 400; }
+.hero-left .roles { font-family: var(--ui); font-size: clamp(.9rem, 1.5vw, 1rem); font-weight: 400; color: rgba(54,49,51,.78); white-space: normal; margin: .5em 0 0; }
+
+/* DAW drag: follow the pointer 1:1 while lifted (no easing lag) */
+.daw-track.dragging { transition: none; }
+
+/* ---- 5a work section: white ground, header, featured card, mini grid, research card ---- */
+.late { background: var(--paper); }
+.work-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1.5px solid var(--ink); margin-bottom: 30px; }
+.wh-title { font-family: var(--serif); font-style: italic; font-size: clamp(1.7rem, 3.4vw, 2.15rem); color: var(--ink); }
+.wh-label { font-family: var(--ui); font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #6E645C; white-space: nowrap; }
+
+.feat-card { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 40px; align-items: center; background: var(--card); border: 1px solid #E7DCD3; border-radius: 12px; padding: 26px 28px; text-decoration: none; color: inherit; box-shadow: none; transition: transform .18s ease, box-shadow .18s ease; margin-bottom: 24px; }
+.feat-card:hover, .feat-card:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(99,40,92,.16); }
+.feat-card:focus-visible, .mini-card:focus-visible { outline: 3px solid rgba(99,40,92,.55); outline-offset: 3px; }
+.feat-text { display: flex; flex-direction: column; }
+.feat-eyebrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.fe-num { font-family: var(--ui); font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--plum); }
+.fe-year { font-family: var(--ui); font-size: .72rem; font-weight: 600; color: rgba(54,49,51,.8); background: #DDE1BE; border-radius: 999px; padding: 4px 11px; white-space: nowrap; }
+.feat-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 3.2vw, 2.5rem); line-height: 1.06; letter-spacing: -0.015em; margin: 0 0 12px; }
+.feat-desc { font-family: var(--read); font-size: 1rem; line-height: 1.62; color: rgba(54,49,51,.82); margin: 0 0 14px; max-width: 48ch; }
+.type-tags { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 2px 0 18px; }
+.type-pill { font-family: var(--ui); font-size: .72rem; font-weight: 600; letter-spacing: .04em; color: var(--ink); background: var(--blush); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+.tt-tags { font-family: var(--ui); font-size: .82rem; color: #6E645C; }
+.feat-card .proj-view { align-self: flex-start; margin: 0; }
+.feat-thumb { align-self: stretch; }
+.feat-thumb img { width: 100%; height: 100%; min-height: 220px; max-height: 300px; object-fit: cover; border-radius: 8px; }
+
+.feat-research { grid-template-columns: 1.45fr 1fr; }
+.feat-quote { font-family: var(--serif); font-style: italic; font-size: 1.12rem; line-height: 1.42; color: var(--plum); border-left: 2px solid var(--plum); padding-left: 16px; align-self: center; }
+
+.mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
+.mini-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid #E7DCD3; border-radius: 10px; overflow: hidden; text-decoration: none; color: inherit; box-shadow: none; transition: transform .18s ease, box-shadow .18s ease; }
+.mini-card:hover, .mini-card:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(99,40,92,.16); }
+.mini-thumb { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+.mini-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mini-body { display: flex; flex-direction: column; flex: 1; padding: 16px 16px 18px; }
+.mini-title { font-family: var(--serif); font-weight: 400; font-size: 1.4rem; line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 8px; }
+.mini-desc { font-family: var(--read); font-size: .9rem; line-height: 1.5; color: rgba(54,49,51,.8); margin: 0 0 12px; }
+.mini-body .type-tags { margin: auto 0 12px; }
+.mini-card .proj-view { align-self: flex-start; margin: 0; }
+.proj-view.muted { color: #8a8177; }
+.work-more { display: flex; justify-content: center; margin-top: 34px; }
+
+@media (max-width: 820px) {
+  .feat-card, .feat-research { grid-template-columns: 1fr; gap: 22px; }
+  .feat-thumb img { max-height: 260px; }
+  .mini-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feat-card:hover, .feat-card:focus-visible, .mini-card:hover, .mini-card:focus-visible { transform: none; }
+}
+
+/* ============================================================ ROUND 52 — outline-less work cards, hero spacing, singer, drag drop-zone ============================================================ */
+/* work-section cards: outline-less like the gallery (transparent at rest, lift + shadow on hover) */
+.feat-card, .mini-card { border: none; background: transparent; }
+
+/* hero: pull the name up under "hello," and make the roles readable */
+.hero-left .hello { line-height: .72; margin: 0; }
+.hero-left .name { margin-top: -0.14em; }
+.hero-left .roles { font-family: var(--ui); font-size: clamp(1.05rem, 2vw, 1.22rem); font-weight: 400; color: rgba(54,49,51,.85); margin-top: .55em; }
+
+/* hero: left column spans the same vertical range as the portrait */
+.hero-grid { align-items: stretch; }
+.hero-left { display: flex; flex-direction: column; justify-content: space-between; }
+.hero-left .socials { margin-top: 8px; }
+
+/* singer: trim the pink space above the heading */
+.singer { padding-top: 34px; }
+
+/* MAAPP mini-card: pin the "coming soon" badge on the image instead of pushing it down */
+.mini-thumb .proj-status { position: absolute; top: 10px; left: 10px; z-index: 3; }
+
+/* drag: no rotation, and the drop zone that marks where the track lands */
+.daw-track.dragging { transform: scale(1.02); }
+.daw-dropzone { border-radius: 5px; background: rgba(99,40,92,.09); box-shadow: inset 0 0 0 2px rgba(99,40,92,.42); }
+
+/* ============================================================ ROUND 53 — outlined home cards + restructure, hero size, gallery, olive rule, outro, connected footer ============================================================ */
+/* home cards: outlined again (bring back border + card fill) */
+.feat-card, .mini-card { border: 1px solid #E7DCD3; background: var(--card); }
+
+/* home card restructure: project type in the pink pill (top-left), tags + read on one line below */
+.feat-eyebrow { margin-bottom: 14px; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mini-body .card-foot { margin-top: auto; }
+.feat-card .card-foot { margin-top: 4px; }
+.card-foot .tt-tags { font-family: var(--ui); font-size: .82rem; color: #6E645C; }
+
+/* hero: bigger portrait, grouped text so a single gap sits between it and the socials */
+.portrait { --pf: clamp(224px, 25vw, 300px); }
+.hl-top { display: flex; flex-direction: column; }
+.hero-left .socials { margin-top: 0; }
+
+/* MAAPP mini badge: give it the pill treatment (was unstyled in mini-thumb) */
+.mini-thumb .proj-status { font-family: var(--ui); font-weight: 600; font-size: .68rem; letter-spacing: .01em; color: var(--ink); background: rgba(255,255,255,.94); border: 1px solid #E7DCD3; border-radius: 999px; padding: 4px 11px; box-shadow: 0 2px 10px rgba(20,18,19,.16); }
+
+/* gallery card titles: match the projects-page card titles */
+.tile .tile-caption .t-title { font-family: var(--serif); font-weight: 400; font-size: 1.3rem; line-height: 1.22; letter-spacing: -0.01em; color: var(--ink); }
+
+/* gallery filter: a little filter icon next to the label */
+.gf-label { display: inline-flex; align-items: center; gap: 6px; }
+.gf-ic { width: 13px; height: 13px; }
+
+/* singer → daw → footer read as one connected run: drop the plum rules between them */
+.daw { border-top: none; }
+footer { border-top: none; }
+
+/* olive accent rule under the page headers (from 4b) */
+.olive-rule { height: 4px; background: var(--olive); border-radius: 2px; margin: 22px 0 0; }
+.rz-hero-grid .olive-rule { grid-column: 1 / -1; margin-top: 26px; }
+
+/* about closing: heading left, buttons right (like the resume header), a bit shorter */
+.about-outro { padding: 48px 0 54px; }
+.about-outro .outro-row { display: flex; align-items: center; justify-content: space-between; gap: 44px; }
+.about-outro .outro-row h2 { margin: 0; max-width: 44ch; font-size: clamp(1.3rem, 2.4vw, 1.6rem); line-height: 1.32; }
+.about-outro .outro-btns { flex: none; margin: 0; }
+@media (max-width: 780px) {
+  .about-outro .outro-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+}
+
+/* ============================================================ ROUND 54 — projects-card restyle, footer rule back, thin olive page-strip ============================================================ */
+/* projects-page cards: project type in the pink pill, year in an olive pill, tags off JetBrains mono */
+.proj-metarow .pm-type { font-family: var(--ui); font-size: .72rem; font-weight: 600; letter-spacing: .04em; color: var(--ink); background: var(--blush); border-radius: 999px; padding: 4px 12px; }
+.proj-metarow .pm-year { font-family: var(--ui); font-size: .72rem; font-weight: 600; color: rgba(54,49,51,.8); background: #DDE1BE; border: none; border-radius: 999px; padding: 4px 11px; }
+.proj-tags { font-family: var(--ui); font-size: .78rem; letter-spacing: 0; color: #6E645C; }
+
+/* bring back the plum rule above the footer (the corgi walks on it) */
+footer { border-top: 5px solid var(--plum); }
+
+/* page separator: a thin full-width olive strip — like the gallery strip, no buttons, much thinner */
+.page-strip { height: 8px; background: var(--olive); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
+.olive-rule { display: none; }
+
+/* ============================================================ ROUND 55 — hero spacing, bottom-aligned titles, about header, karla leads ============================================================ */
+/* hero: center the text blob (more air above "hello,") and keep the socials tucked under the squiggle */
+.hero-grid { align-items: center; }
+.hero-left { justify-content: flex-start; }
+.hero-left .socials { margin-top: 24px; }
+
+/* projects cards: a 1-line title drops to the bottom of its 2-line reserved space */
+.proj-title { display: flex; align-items: flex-end; }
+
+/* about header now matches the projects header spacing (its lead fills the space) */
+
+/* header body text on Karla */
+.page-hero .lead { font-family: var(--ui); }
+
+/* ============================================================ ROUND 56 — DAW rose track, hero portrait bump ============================================================ */
+/* arrangements track clip colour */
+.c-rose { background: #8E4E64; }
+.c-rose .clip-name { color: #fff; } .c-rose .clip-sub { color: rgba(239,206,204,.85); } .c-rose .wave i { background: rgba(239,206,204,.5); }
+
+/* hero: bump the portrait up a touch and trim the pink space below */
+.hero { padding-bottom: 44px; }
+.portrait { transform: translateY(-20px); }
+
+/* ============================================================ ROUND 57 — thumbnail hover zoom, DAW track-head alignment ============================================================ */
+/* home + gallery cards: thumbnail zooms on hover (like the projects cards) */
+.feat-thumb { overflow: hidden; border-radius: 8px; }
+.mini-thumb img, .feat-thumb img { transition: transform .4s ease; }
+.mini-card:hover .mini-thumb img, .feat-card:hover .feat-thumb img { transform: scale(1.06); }
+.masonry .tile:hover .tile-img, .masonry .tile:hover .tile-ph { transform: scale(1.06); }
+
+/* DAW track heads: name fills + wraps, M/S grouped and right-aligned so they line up across every track */
+.daw-thead .tname { flex: 1 1 auto; min-width: 0; margin-right: 0; }
+.daw-thead .ms.m { margin-left: 0; }
+.ms-group { flex: none; display: inline-flex; align-items: center; gap: 5px; margin-right: 6px; }

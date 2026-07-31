@@ -9,8 +9,18 @@
     reveals.forEach(function (el) { el.classList.add('in'); });
   } else {
     reveals.forEach(function (el) {
-      var sibs = [].slice.call(el.parentNode.children).filter(function (c) { return c.classList.contains('reveal'); });
-      el.style.animationDelay = (Math.min(sibs.indexOf(el), 6) * 0.08) + 's';
+      var parent = el.parentNode;
+      var sibs = [].slice.call(parent.children).filter(function (c) { return c.classList.contains('reveal'); });
+      var idx = sibs.indexOf(el);
+      // stagger only ACROSS a row (by grid column), so each row reveals fresh as it
+      // scrolls into view — a lower row never inherits a big accumulated delay
+      var cols = 1;
+      try {
+        var gtc = getComputedStyle(parent).gridTemplateColumns;
+        if (gtc && gtc !== 'none') cols = gtc.split(' ').filter(Boolean).length;
+      } catch (e) {}
+      var step = cols > 1 ? (idx % cols) : Math.min(idx, 6);
+      el.style.animationDelay = (step * 0.07) + 's';
     });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -26,6 +36,19 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     reveals.forEach(function (el) { io.observe(el); });
+    // anything already on-screen at load reveals right away (the -8% margin can otherwise
+    // leave above-the-fold cards waiting for a scroll nudge)
+    requestAnimationFrame(function () {
+      reveals.forEach(function (el) {
+        if (el.classList.contains('in')) return;
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.96 && r.bottom > 0) {
+          var group = el.closest('[data-reveal-group]');
+          if (group) { [].slice.call(group.querySelectorAll('.reveal')).forEach(function (c) { c.classList.add('in'); io.unobserve(c); }); }
+          else { el.classList.add('in'); io.unobserve(el); }
+        }
+      });
+    });
   }
 
   /* ---- lightbox carousel (tiles with data-lightbox) ---- */
@@ -136,7 +159,7 @@
   /* project-card meta now lives in a fixed markup row (type + year pill) — nothing to split */
 
   /* ---- gallery filter chips (all / client work / motion & for fun) ---- */
-  var galFilters = document.querySelector('.gal-filters');
+  var galFilters = document.querySelector('.gal-filterbar');
   if (galFilters) {
     var galChips = [].slice.call(galFilters.querySelectorAll('.gal-chip'));
     var galTiles = [].slice.call(document.querySelectorAll('.masonry .tile'));
@@ -150,6 +173,130 @@
     galChips.forEach(function (c) {
       c.addEventListener('click', function () { applyFilter(c.getAttribute('data-filter')); });
     });
+  }
+
+  /* ---- singer "session" widget: waveforms, mute/solo, play/pause ---- */
+  var daw = document.querySelector('.daw');
+  if (daw) {
+    // build a stable pseudo-waveform that fills each clip end to end (bar count
+    // scales to the measured width so the wave runs the whole length of the track)
+    var buildWave = function (w, wi) {
+      var width = w.getBoundingClientRect().width;
+      var n = width > 0 ? Math.max(24, Math.floor(width / 6)) : 90; // ~6px pitch
+      var seed = (wi + 3) * 9173, html = '';
+      for (var i = 0; i < n; i++) {
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        var h = 20 + (seed % 100) * 0.74; // ~20%–94%
+        html += '<i style="height:' + h.toFixed(0) + '%"></i>';
+      }
+      w.innerHTML = html;
+    };
+    var waves = [].slice.call(daw.querySelectorAll('.wave[data-wave]'));
+    waves.forEach(buildWave);
+    // rebuild once on resize so the wave keeps filling the clip
+    var rzT;
+    window.addEventListener('resize', function () {
+      clearTimeout(rzT);
+      rzT = setTimeout(function () { waves.forEach(buildWave); }, 200);
+    });
+
+    // mute (M) grays that track; solo (S) grays the others
+    var timeline = daw.querySelector('.daw-timeline');
+    var tracks = [].slice.call(daw.querySelectorAll('.daw-track[data-track]'));
+    var syncSolo = function () {
+      timeline.classList.toggle('has-solo', tracks.some(function (t) { return t.classList.contains('soloed'); }));
+    };
+    tracks.forEach(function (t) {
+      var mBtn = t.querySelector('.ms.m'), sBtn = t.querySelector('.ms.s');
+      if (mBtn) mBtn.addEventListener('click', function () {
+        mBtn.setAttribute('aria-pressed', String(t.classList.toggle('muted')));
+      });
+      if (sBtn) sBtn.addEventListener('click', function () {
+        sBtn.setAttribute('aria-pressed', String(t.classList.toggle('soloed')));
+        syncSolo();
+      });
+    });
+
+    // drag a track by its name column to reorder — it lifts out and follows the
+    // pointer, and a highlight zone marks where it will land (no rotation)
+    var dragT = null, grabOff = 0, ph = null;
+    var otherTracks = function () {
+      return [].slice.call(timeline.querySelectorAll('.daw-track[data-track]')).filter(function (x) { return x !== dragT; });
+    };
+    var onDragMove = function (e) {
+      if (!dragT) return;
+      dragT.style.top = (e.clientY - grabOff) + 'px';
+      var rows = otherTracks(), placed = false;
+      for (var i = 0; i < rows.length; i++) {
+        var r = rows[i].getBoundingClientRect();
+        if (e.clientY < r.top + r.height / 2) { timeline.insertBefore(ph, rows[i]); placed = true; break; }
+      }
+      if (!placed) timeline.insertBefore(ph, timeline.querySelector('.daw-track.newtrack'));
+    };
+    var onDragEnd = function () {
+      if (!dragT) return;
+      var t = dragT; dragT = null;
+      timeline.insertBefore(t, ph);
+      if (ph && ph.parentNode) ph.parentNode.removeChild(ph);
+      ph = null;
+      t.classList.remove('dragging');
+      t.style.position = t.style.top = t.style.left = t.style.width = t.style.zIndex = '';
+      document.removeEventListener('pointermove', onDragMove);
+      document.removeEventListener('pointerup', onDragEnd);
+      document.removeEventListener('pointercancel', onDragEnd);
+    };
+    tracks.forEach(function (t) {
+      var head = t.querySelector('.daw-thead');
+      if (!head) return;
+      head.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('.ms')) return;            // let M / S buttons do their thing
+        if (e.button != null && e.button !== 0) return; // primary button only
+        e.preventDefault();
+        var r = t.getBoundingClientRect();
+        grabOff = e.clientY - r.top;
+        ph = document.createElement('div');
+        ph.className = 'daw-dropzone';
+        ph.style.height = r.height + 'px';
+        t.parentNode.insertBefore(ph, t);           // holds the slot + shows the landing zone
+        dragT = t;
+        t.classList.add('dragging');
+        t.style.width = r.width + 'px';
+        t.style.left = r.left + 'px';
+        t.style.top = r.top + 'px';
+        t.style.position = 'fixed';
+        t.style.zIndex = '30';
+        document.addEventListener('pointermove', onDragMove);
+        document.addEventListener('pointerup', onDragEnd);
+        document.addEventListener('pointercancel', onDragEnd);
+      });
+    });
+
+    // play / pause — sweeps the playhead (CSS) and ticks the timecode, just for fun
+    var playBtn = daw.querySelector('.daw-play');
+    var timeEl = daw.querySelector('.daw-time');
+    var playing = false, rafId = null, last = 0, elapsed = 0;
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var fmt = function (ms) {
+      var cs = Math.floor(ms / 10);
+      return pad(Math.floor(cs / 6000)) + ':' + pad(Math.floor((cs % 6000) / 100)) + ':' + pad(cs % 100);
+    };
+    var tick = function (ts) {
+      if (!playing) return;
+      if (!last) last = ts;
+      elapsed += ts - last; last = ts;
+      timeEl.textContent = fmt(elapsed);
+      rafId = requestAnimationFrame(tick);
+    };
+    var setPlaying = function (on) {
+      playing = on;
+      daw.classList.toggle('playing', on);
+      if (playBtn) { playBtn.setAttribute('aria-pressed', String(on)); playBtn.classList.toggle('playing', on); }
+      if (on) { last = 0; rafId = requestAnimationFrame(tick); }
+      else if (rafId) { cancelAnimationFrame(rafId); }
+    };
+    if (playBtn) playBtn.addEventListener('click', function () { setPlaying(!playing); });
+    // the transport runs by default so the playhead sweeps the tracks; paused for reduced-motion
+    setPlaying(!reduce);
   }
 
   /* ---- light deterrents against casual image saving (not foolproof) ---- */
