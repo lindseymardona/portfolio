@@ -107,7 +107,7 @@ h1, h2, h3, h4 { color: var(--ink); }
 .portrait .frame-bg.bg1 { background: rgba(195,201,141,0.55); transform: rotate(-13deg) translate(-18px,-6px); }
 .portrait .frame-bg.bg2 { border: 2.5px solid var(--coral); transform: rotate(5deg) translate(18px,18px); }
 .portrait .accent { position: absolute; z-index: 3; transition: transform .45s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
-.portrait .accent.f1 { top: -22px; left: -16px; width: 46px; }
+.portrait .accent.f1 { top: -12px; left: -16px; width: 46px; }
 .portrait .accent.f2 { bottom: -20px; right: -12px; width: 54px; }
 .portrait .accent.sq { top: 36%; right: -24px; width: 30px; }
 .portrait:hover .accent.f1 { transform: rotate(-24deg) scale(1.12); }
@@ -345,7 +345,7 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 /* case-study impact cards (text variant) */
 .cs-stat.text .n { font-size: 1.08rem; line-height: 1.25; }
 
-/* phone mockups (gingko project page) */
+/* phone mockups (ginkgo project page) */
 .phones { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 20px; }
 .phone { width: 208px; height: 450px; background: #1b1b1b; border-radius: 34px; padding: 9px; box-shadow: var(--shadow-lg); position: relative; }
 .phone::before { content: ""; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); width: 54px; height: 7px; background: #000; border-radius: 5px; z-index: 2; }
@@ -1806,11 +1806,12 @@ footer { border-top: 5px solid var(--plum); }
 @media (max-width: 920px) {
   .hero-grid { grid-template-columns: 1fr; align-items: start; }
   .hero-left { justify-content: flex-start; }
-  .portrait { order: -1; justify-self: center; transform: none; margin: 0 auto 4px; --pf: clamp(200px, 60vw, 264px); }
+  /* right-align the pfp; leave room on the right so the white outline square clears the edge */
+  .portrait { order: -1; justify-self: end; transform: none; margin: 0 24px 4px 0; --pf: clamp(196px, 56vw, 262px); }
 }
 
-/* collab clips share ONE soft-pink→white gradient across the track; dark text like the a cappella clip */
-.collab-blob { background-image: linear-gradient(to right, #EFC7C4, #FFFFFF); background-repeat: no-repeat;
+/* each collab clip has its own soft-pink → very-light-pink gradient; dark text like the a cappella clip */
+.collab-blob { background-image: linear-gradient(to right, #ECC1BE, #FBECEA); background-repeat: no-repeat;
   box-shadow: inset 0 0 0 1px rgba(54,49,51,.12), 0 1px 3px rgba(54,49,51,.14); }
 .collab-blob:hover { filter: brightness(1.02); }
 .collab-blob .clip-name { color: var(--ink); text-decoration-color: rgba(54,49,51,.4); }
@@ -1823,3 +1824,280 @@ footer { border-top: 5px solid var(--plum); }
 /* resume actions: email + LinkedIn stay together, dropping to their own line as a pair
    (flex:0 0 auto so the pair never shrinks to squeeze beside "download") */
 .ra-group { display: flex; gap: 14px; flex-wrap: wrap; flex: 0 0 auto; }
+
+/* ============================================================ ROUND 62 — Ginkgo case study: takeaways, subheads, audit table, references ============================================================ */
+/* subheadings inside the read column (serif, to sit between h2 and body) */
+.cs-read h3 { font-family: var(--serif); font-weight: 500; font-size: 1.3rem; line-height: 1.15; letter-spacing: -0.01em; color: var(--ink); margin: 32px 0 10px; }
+
+/* the bolded "takeaway" line that sits directly under each heading */
+.cs-takeaway { margin: 2px 0 20px; padding: 12px 16px 12px 18px; border-left: 3px solid var(--plum);
+  background: linear-gradient(90deg, rgba(99,40,92,.055), rgba(99,40,92,0) 92%); border-radius: 0 8px 8px 0; }
+.cs-takeaway .tk { display: block; font-family: var(--ui); font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--plum); margin-bottom: 5px; }
+.cs-takeaway .tx { font-family: var(--read); font-size: 1.05rem; line-height: 1.5; font-weight: 600; color: var(--ink); }
+
+/* competitive-audit table — 6 columns, tighter type; scrolls horizontally on narrow screens */
+.cs-read table.cs-audit { min-width: 720px; font-size: .84rem; }
+.cs-read table.cs-audit th, .cs-read table.cs-audit td { padding-right: 16px; }
+.cs-read table.cs-audit .heu { color: var(--plum); }
+
+/* references block */
+.cs-refs { margin-top: 42px; padding-top: 8px; border-top: 1px solid var(--hair); }
+.cs-refs h2 { font-size: 1.2rem; }
+.cs-refs h2::before { display: none; }
+.cs-refs ol { margin: 6px 0 0; padding-left: 1.35em; }
+.cs-refs li { font-family: var(--ui); font-size: .82rem; line-height: 1.5; color: rgba(54,49,51,.7); margin-bottom: 9px; }
+.cs-refs li::marker { color: var(--plum); }
+
+/* ============================================================ ROUND 63 — DAW responsive: stacked heads + shared horizontal scroller + minimap ============================================================ */
+/* desktop: the new wrappers are invisible pass-throughs; mobile-only bits hidden */
+.daw-lane-scroll, .daw-rl-scroll, .daw-mtop { display: contents; }
+.daw-minimap, .daw-mhead { display: none; }
+
+@media (max-width: 640px) {
+  /* copy swap + restored session filename */
+  .daw-note .dn-wide { display: none; }
+  .daw-note .dn-mobile { display: inline; }
+  .daw-session { display: block; width: 100%; }
+  .daw-bar { flex-wrap: wrap; gap: 6px 14px; }
+
+  .daw-timeline { --daw-w: 700px; overflow: visible; }
+
+  /* each track stacks: a full-width head strip, then the lane below it */
+  .daw-track, .daw-ruler { display: block; grid-template-columns: none; }
+  .daw-track { border-bottom: 1px solid rgba(54,49,51,.12); }
+  .daw-track:last-of-type { border-bottom: none; }
+  .daw-thead { width: auto; min-height: 0; padding: 7px 12px; border-right: none; border-bottom: 1px solid rgba(54,49,51,.10); gap: 8px; }
+  .newtrack .daw-thead { min-height: 0; }
+  .daw-thead .tname { font-size: 12.5px; }
+
+  /* lane + ruler become fixed-width horizontal scrollers (native bars hidden) */
+  .daw-lane-scroll { display: block; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .daw-lane-scroll::-webkit-scrollbar { display: none; }
+  .daw-lane { position: relative; width: var(--daw-w); min-width: var(--daw-w); }
+
+  .daw-ruler .rl-head { display: none; }
+  .daw-rl-scroll { display: block; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .daw-rl-scroll::-webkit-scrollbar { display: none; }
+  .daw-ruler .rl-bars { width: var(--daw-w); }
+
+  /* the shared top strip: minimap over the ruler */
+  .daw-mtop { display: block; background: #F7F6F4; }
+  .daw-minimap { display: block; padding: 9px 12px 7px; border-bottom: 1px solid rgba(54,49,51,.10); }
+  .daw-mm-track { position: relative; display: flex; gap: 3px; height: 22px; }
+  .daw-mm-track > i { flex: 1; background: rgba(54,49,51,.09); border-radius: 2px; }
+  .daw-mm-view { position: absolute; top: -3px; bottom: -3px; left: 0; width: 45%; border: 1.6px solid var(--plum); background: rgba(99,40,92,.13); border-radius: 5px; cursor: grab; touch-action: none; }
+  .daw-mm-view:active { cursor: grabbing; }
+
+  /* per-lane playhead lines — stay visible (freeze in place) even when paused */
+  /* the playhead is off by default on mobile; it appears (and stays, frozen when paused) only after the user taps play */
+  .daw-mhead { display: block; position: absolute; top: 0; bottom: 0; left: 0; width: 1.5px; background: var(--plum); opacity: 0; pointer-events: none; }
+  .daw.mhead-armed .daw-mhead { opacity: 1; }
+  .daw-scan { display: none; }
+
+  /* dog sprite: keep its own clearance below the widget so it isn't clipped */
+  .daw { padding-bottom: 30px; }
+  footer { overflow: visible; }
+}
+
+/* ============================================================ ROUND 64 — DAW clip hover glow, collab clip height, resume pill hover ============================================================ */
+/* regular clips lighten on hover (like the collab clips), not just lift */
+.daw-clip:hover { filter: brightness(1.07); }
+.daw-file:hover { filter: brightness(1.03); }
+
+/* collab clips: full 50px height so the title + "collaboration" both fit */
+.collab-lane { min-height: 70px; }
+
+/* resume pills: once the intro animation finishes, free the transform so they lift on hover like the home buttons */
+.js .resume-actions .pill.anim-done { animation: none !important; opacity: 1; }
+
+/* ============================================================ ROUND 65 — header entrances: cursive floats soft, home headings letter-bounce, everything else smooth ============================================================ */
+/* neutralize the old hero fades so the new entrances drive hello / name / roles */
+.hero .hello, .hero .name, .hero .roles { animation: none; }
+
+/* cursive words float in — soft, gentle, floaty (single easy overshoot, no hard dip) */
+.js .float-el, .js .seg-h .seg-float { opacity: 0; }
+.float-el.float-go { animation: floatIn 1.15s cubic-bezier(.26,1.45,.5,1) both; }
+.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1.15s cubic-bezier(.26,1.45,.5,1) both; }
+/* one smooth spring: rises from below, gently overshoots, and settles — no pause at the peak */
+@keyframes floatIn {
+  0%   { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* the non-cursive parts of a header just fade in smooth (inline → wraps naturally) */
+.js .seg-h .seg-smooth { opacity: 0; }
+.seg-h.seg-go .seg-smooth { animation: fadeSoft .6s ease both; }
+@keyframes fadeSoft { from { opacity: 0; } to { opacity: 1; } }
+
+/* the one-line header blurb fades in a beat after the cursive (delay set inline) */
+.js .lead-anim { opacity: 0; }
+.lead-anim.lead-go { animation: fadeSoft .6s ease both; }
+
+/* the two home headings bounce gently, letter by letter */
+.js .lb-h .ltr { display: inline-block; opacity: 0; }
+.lb-h.lb-go .ltr { animation: letterBounce .58s cubic-bezier(.2,.82,.3,1.15) both; }
+@keyframes letterBounce {
+  0%   { opacity: 0; transform: translateY(14px); }
+  55%  { opacity: 1; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* roles: word by word, smooth (fade + gentle push, no bounce); glow + lift on hover */
+.js .roles .rw { display: inline-block; opacity: 0; }
+.roles.rw-go .rw { animation: smoothPush .55s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes smoothPush { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+.rw-done { opacity: 1 !important; animation: none !important; }
+.roles .rw { transition: transform .2s ease, color .2s ease, text-shadow .2s ease; cursor: default; }
+.roles .rw:hover { transform: translateY(-3px); color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
+
+/* the name is hidden until it starts typing (avoids a flash of the full text) */
+.js .name-anim { opacity: 0; }
+
+/* blinking caret for the typed name */
+.type-caret { display: inline-block; width: 2px; height: 1.02em; background: var(--plum); margin-left: 3px; vertical-align: -0.12em; animation: caretBlink 1.05s steps(1) infinite; }
+@keyframes caretBlink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .float-el, .seg-h .seg, .lb-h .ltr, .roles .rw, .name-anim, .lead-anim { opacity: 1 !important; animation: none !important; }
+  .type-caret { display: none; }
+}
+
+/* ============================================================ ROUND 66 — singer copy width + keep the spotify arrow attached ============================================================ */
+.singer p { max-width: 720px; }
+.singer p a { white-space: nowrap; }
+
+/* ============================================================ ROUND 67 — more clearance below the DAW so the walking corgi doesn't hop into it ============================================================ */
+.daw { padding-bottom: 50px; }
+@media (max-width: 640px) { .daw { padding-bottom: 58px; } }
+
+/* ============================================================ ROUND 68 — flowers & squares rotate slowly + float (independent transform props) ============================================================ */
+@keyframes accSpin  { from { rotate: 0deg; } to { rotate: 360deg; } }
+@keyframes accFloat { 0%, 100% { translate: 0 0; } 50% { translate: 2px -7px; } }
+
+/* ============================================================ ROUND 69 — animated corgi sprite + D-pad ============================================================ */
+.corgi-stage { position: absolute; left: 0; right: 0; top: -46px; height: 48px; z-index: 6; pointer-events: none; }
+.corgi { position: absolute; left: 0; bottom: 0; width: 64px; height: 44px; background-repeat: no-repeat; background-size: auto 44px; background-position: 0 0; transform-origin: center bottom; cursor: pointer; pointer-events: auto; }
+.corgi.a-idle1 { background-image: url(assets/corgi-idle1.png); animation: cg5 1.4s steps(5) infinite; }
+.corgi.a-idle2 { background-image: url(assets/corgi-idle2.png); animation: cg5 1.25s steps(5) infinite; }
+.corgi.a-walk  { background-image: url(assets/corgi-walk.png);  animation: cg5 .62s steps(5) infinite; }
+.corgi.a-run   { background-image: url(assets/corgi-run.png);   animation: cg8 .56s steps(8) infinite; }
+.corgi.a-sniff { background-image: url(assets/corgi-sniff.png); animation: cg8 1s steps(8) infinite; }
+.corgi.a-sniffwalk { background-image: url(assets/corgi-sniffwalk.png); animation: cg8 .85s steps(8) infinite; }
+.corgi.a-sit   { background-image: url(assets/corgi-sit.png);   animation: cg9 .7s steps(9) forwards; }
+.corgi.a-jump  { background-image: url(assets/corgi-jump.png);  animation: cg11 .66s steps(11) forwards; }
+@keyframes cg5  { from { background-position-x: 0; } to { background-position-x: -320px; } }
+@keyframes cg8  { from { background-position-x: 0; } to { background-position-x: -512px; } }
+@keyframes cg9  { from { background-position-x: 0; } to { background-position-x: -576px; } }
+@keyframes cg11 { from { background-position-x: 0; } to { background-position-x: -704px; } }
+
+/* the D-pad indicator that appears when you click the corgi (desktop) — shows which
+   arrow keys to press and highlights them; it is not itself clickable */
+.corgi-dpad { position: absolute; bottom: 50px; left: 0; transform: translateX(-50%); display: grid; grid-template-columns: repeat(3, 21px); grid-template-rows: repeat(2, 21px); gap: 3px; pointer-events: none; opacity: 0; transition: opacity .18s ease; }
+.corgi-dpad.in { opacity: 1; }
+.cdp { display: flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 5px; background: rgba(99,40,92,.85); color: #fff; font: 700 13px/1 var(--ui); box-shadow: 0 2px 6px rgba(54,49,51,.3); transition: background .12s ease, transform .1s ease; }
+.cdp.active { background: #FF4557; transform: scale(1.12); }
+.cdp-up { grid-column: 2; grid-row: 1; } .cdp-left { grid-column: 1; grid-row: 2; }
+.cdp-down { grid-column: 2; grid-row: 2; } .cdp-right { grid-column: 3; grid-row: 2; }
+
+@media (prefers-reduced-motion: reduce) { .corgi { animation: none !important; } }
+
+/* ============================================================ ROUND 70 — header entrances restored + refined: cursive damped-bounces, serif pushes from the left, lead pushes up from below ============================================================ */
+/* cursive words (.hello + .script-accent) bounce in: up, down, up, down, settling —
+   amplitude decays like real damped motion; ease-in-out per segment so it never lingers at a peak */
+.float-el.float-go { animation: floatIn 1.3s linear both; }
+.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1.3s linear both; }
+@keyframes floatIn {
+  0%   { opacity: 0; transform: translateY(24px);  animation-timing-function: cubic-bezier(.26,.7,.5,1); }
+  22%  { opacity: 1; transform: translateY(-10px); animation-timing-function: cubic-bezier(.2,.62,.4,1); }
+  40%  { opacity: 1; transform: translateY(6px);   animation-timing-function: cubic-bezier(.4,0,.55,1); }
+  58%  { opacity: 1; transform: translateY(-4px);  animation-timing-function: cubic-bezier(.4,0,.55,1); }
+  75%  { opacity: 1; transform: translateY(2px);   animation-timing-function: cubic-bezier(.4,0,.55,1); }
+  89%  { opacity: 1; transform: translateY(-1px);  animation-timing-function: cubic-bezier(.4,0,.55,1); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* serif parts of a hero heading push in from the left (was a plain fade) */
+.seg-h.seg-go .seg-smooth { display: inline-block; animation: segLeft .62s cubic-bezier(.22,.72,.28,1) both; }
+@keyframes segLeft { 0% { opacity: 0; transform: translateX(-26px); } 100% { opacity: 1; transform: translateX(0); } }
+
+/* the lead blurb pushes up from below, a beat after the heading (was a plain fade) */
+.lead-anim.lead-go { animation: leadUp .7s cubic-bezier(.22,.72,.28,1) .22s both; }
+@keyframes leadUp { 0% { opacity: 0; transform: translateY(18px); } 100% { opacity: 1; transform: translateY(0); } }
+
+/* ============================================================ ROUND 71 — corgi hold-last-frame + D-pad glyph centering; carousel hover-expand; glow+raise on cursive labels & resume headings; education left bar ============================================================ */
+/* sit & jump are one-shot: step through every real frame and HOLD the last one
+   (jump-none lands on the final frame instead of the blank cell past the strip) */
+.corgi.a-sit  { animation: cg9 .7s steps(9, jump-none) forwards; }
+.corgi.a-jump { animation: cg11 .66s steps(11, jump-none) forwards; }
+@keyframes cg9  { from { background-position-x: 0; } to { background-position-x: -512px; } }
+@keyframes cg11 { from { background-position-x: 0; } to { background-position-x: -640px; } }
+
+/* D-pad: wrap each glyph so the up/down arrows can be nudged to optically center */
+.cdp-g { display: block; line-height: 1; }
+.cdp-up .cdp-g { transform: translateY(1px); }
+.cdp-down .cdp-g { transform: translateY(-1px); }
+
+/* life gallery: hovering a photo lifts and enlarges it, pulling it forward over its
+   neighbours (the strip is already frozen on hover, so it stays put) */
+.gal-wrap .marquee { padding: 30px 0; }
+.gal-wrap .marquee img { position: relative; z-index: 1; transition: transform .35s cubic-bezier(.34,1.4,.5,1), box-shadow .35s ease; }
+.gal-wrap .marquee img:hover { transform: scale(1.12) translateY(-3px); z-index: 6; box-shadow: 0 20px 44px rgba(54,49,51,.34); }
+
+/* glow + raise on the cursive section labels (life gallery, miss kaya) — uses the
+   independent `translate` property so it composes with the entrance `transform` */
+.section h2 .script-accent { cursor: default; transition: translate .2s ease, color .2s ease, text-shadow .2s ease; }
+.section h2 .script-accent:hover { translate: 0 -3px; color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
+
+/* glow + raise on the resume heading labels (education, experience, …) */
+.res-block > h2 { cursor: default; transition: transform .2s ease, color .2s ease, text-shadow .2s ease; }
+.res-block > h2:hover { transform: translateY(-3px); color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
+
+/* education entries: no left bar, but keep the 20px indent so their text lines up
+   with the experience entries below (which sit inside their own left-bar padding) */
+.rz-edu { padding-left: 20px; }
+
+/* ============================================================ ROUND 72 — corgi intro hint + arrow centering; roles fade plum→gray; resume underline stays put; about cursive fade-push + serif spacing; bigger uncut image hover ============================================================ */
+/* the "use arrow keys to move" hint shown beside the corgi on first click */
+.corgi-hint { position: absolute; bottom: 6px; white-space: nowrap; font: 600 12px/1 var(--ui); color: var(--plum); background: rgba(255,255,255,.85); padding: 5px 10px; border-radius: 999px; box-shadow: 0 2px 7px rgba(54,49,51,.2); opacity: 0; transition: opacity .2s ease; pointer-events: none; z-index: 7; }
+.corgi-hint.in { opacity: 1; }
+/* nudge the up-arrow glyph down a touch more so it sits centered in its key */
+.cdp-up .cdp-g { transform: translateY(2px); }
+
+/* roles animate in tinted plum, then settle to the usual dark gray */
+.roles.rw-go .rw { animation: rolePush .62s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes rolePush {
+  0%   { opacity: 0; transform: translateY(10px); color: var(--plum); }
+  45%  { opacity: 1; transform: translateY(0); color: var(--plum); }
+  100% { opacity: 1; transform: translateY(0); color: rgba(54,49,51,.85); }
+}
+
+/* resume heading hover: the label lifts + glows, but the little underline stays put */
+.res-block > h2::after { transition: transform .2s ease; }
+.res-block > h2:hover::after { transform: translateY(3px); }
+
+/* keep the space between a bare-text serif word and the cursive that follows it
+   (inline-block was swallowing the trailing space) */
+.seg-h .seg { white-space: pre-wrap; }
+
+/* about section cursive (life gallery, miss kaya): smooth fade + push up, no bounce */
+.section h2.seg-h.seg-go .seg-float { animation: leadUp .7s cubic-bezier(.22,.72,.28,1) both; }
+
+/* life gallery: bigger lift on hover, with room so the drop shadow isn't clipped */
+.gal-wrap .marquee { padding: 78px 0; }
+.gal-wrap .marquee img:hover { transform: scale(1.2) translateY(-5px); z-index: 6; box-shadow: 0 16px 34px rgba(54,49,51,.4); }
+
+/* ============================================================ ROUND 73 — restore the gentle roles push; drop the about-cursive hover; lift the corgi hint clear of the footer bar ============================================================ */
+/* roles push travels the full duration again (gentle), still tinted plum then settling gray */
+.roles.rw-go .rw { animation: rolePush .55s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes rolePush {
+  0%   { opacity: 0; transform: translateY(10px); color: var(--plum); }
+  55%  { color: var(--plum); }
+  100% { opacity: 1; transform: translateY(0); color: rgba(54,49,51,.85); }
+}
+
+/* no hover treatment on the life gallery / miss kaya cursive */
+.section h2 .script-accent,
+.section h2 .script-accent:hover { translate: 0 0; text-shadow: none; transition: none; }
+
+/* keep the "use arrow keys" bubble above the footer's purple divider */
+.corgi-hint { bottom: 18px; }

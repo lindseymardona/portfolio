@@ -19,8 +19,15 @@
         var gtc = getComputedStyle(parent).gridTemplateColumns;
         if (gtc && gtc !== 'none') cols = gtc.split(' ').filter(Boolean).length;
       } catch (e) {}
-      var step = cols > 1 ? (idx % cols) : Math.min(idx, 6);
-      el.style.animationDelay = (step * 0.07) + 's';
+      // home cards cascade sequentially and gently (more spaced out); the projects grid
+      // and other grids keep the original per-row stagger. the mini-grid (second row on
+      // home) also waits for the featured card above it to transition in first
+      var mini = parent.classList.contains('mini-grid');
+      var seq = cols <= 1 || mini || parent.classList.contains('masonry');
+      var step = seq ? Math.min(idx, 6) : (idx % cols);
+      var per = mini ? 0.15 : (seq ? 0.11 : 0.07);
+      var base = mini ? 0.3 : 0;
+      el.style.animationDelay = (base + step * per) + 's';
     });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -165,10 +172,18 @@
     var galTiles = [].slice.call(document.querySelectorAll('.masonry .tile'));
     var applyFilter = function (f) {
       galChips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-filter') === f)); });
+      // clear the reveal, hide non-matches, and stagger the matches by their VISIBLE order
+      // (so every filter click re-plays the same cascade — matching the first page load)
+      var vis = 0;
       galTiles.forEach(function (t) {
         var cat = t.getAttribute('data-cat');
-        t.hidden = !(f === 'all' || cat === f);
+        var show = (f === 'all' || cat === f);
+        t.classList.remove('in');
+        t.hidden = !show;
+        if (show) { t.style.animationDelay = (Math.min(vis, 6) * 0.11) + 's'; vis++; }
       });
+      void galFilters.offsetWidth;                    // one reflow so the animation restarts
+      galTiles.forEach(function (t) { if (!t.hidden) t.classList.add('in'); });
     };
     galChips.forEach(function (c) {
       c.addEventListener('click', function () { applyFilter(c.getAttribute('data-filter')); });
@@ -202,6 +217,7 @@
 
     // mute (M) grays that track; solo (S) grays the others
     var timeline = daw.querySelector('.daw-timeline');
+    var dawMobileAddTrack = null, dawMobileSetPlaying = null;  // set by the mobile module below
     var allTracks = function () { return [].slice.call(timeline.querySelectorAll('.daw-track[data-track]')); };
     var syncSolo = function () {
       timeline.classList.toggle('has-solo', allTracks().some(function (t) { return t.classList.contains('soloed'); }));
@@ -274,7 +290,7 @@
 
     // ---- the "new collab" gimmick: "+ new track" spawns an empty track you can
     // draw clips onto (click + drag to lay one down, drag the edges to resize) ----
-    var LINKEDIN = 'https://www.linkedin.com/in/lindseymardona/';
+    var COLLAB_LINK = 'mailto:lindseymardona@gmail.com';
     var NAMES = ['heyyy ;)', 'could be us', "but you playin'", 'so...'];
     var newRow = timeline.querySelector('.daw-track.newtrack');
     var collabSeed = 200;
@@ -302,10 +318,6 @@
       var place = function (bl) {
         bl.el.style.left = (bl.start / 8 * 100) + '%';
         bl.el.style.width = (bl.span / 8 * 100) + '%';
-        // one continuous pink→white gradient across the whole lane: scale the gradient
-        // to the full 8 blocks and offset it so each clip shows its slice of the sweep
-        bl.el.style.backgroundSize = (8 / bl.span * 100) + '% 100%';
-        bl.el.style.backgroundPosition = (bl.span >= 8 ? 0 : bl.start / (8 - bl.span) * 100) + '% 0';
         bl.el.classList.toggle('has-text', bl.span >= 2);   // too short → waveform only
       };
       var refreshBlob = function (bl) { place(bl); buildWave(bl.el.querySelector('.wave'), collabSeed++); };
@@ -321,7 +333,7 @@
       var makeBlob = function (start, span) {
         var el = document.createElement('a');
         el.className = 'collab-blob';
-        el.href = LINKEDIN; el.target = '_blank'; el.rel = 'noopener'; el.draggable = false;
+        el.href = COLLAB_LINK; el.rel = 'noopener'; el.draggable = false;
         el.innerHTML =
           '<span class="collab-resize l" aria-hidden="true"></span>' +
           '<span class="clip-info"><span class="clip-name">collaboration ↗</span><span class="clip-sub">collaboration</span></span>' +
@@ -441,7 +453,7 @@
       track.setAttribute('data-track', 'new collab');
       track.innerHTML =
         '<div class="daw-thead">' +
-          '<span class="sw" style="background:#7C8A4E"></span>' +
+          '<span class="sw" style="background:#E9A9A6"></span>' +
           '<span class="tname">new collab</span>' +
           '<span class="ms-group"><button class="ms m" type="button" aria-pressed="false" title="Mute this track">M</button><button class="ms s" type="button" aria-pressed="false" title="Solo this track">S</button></span>' +
           '<button class="collab-trackx" type="button" aria-label="Remove this track">×</button>' +
@@ -455,6 +467,7 @@
         tx.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
         tx.addEventListener('click', function (e) { e.stopPropagation(); if (track.parentNode) track.parentNode.removeChild(track); });
       }
+      if (dawMobileAddTrack) dawMobileAddTrack(track);   // wrap the new lane for the mobile scroller
       return track;
     };
 
@@ -489,10 +502,155 @@
       if (playBtn) { playBtn.setAttribute('aria-pressed', String(on)); playBtn.classList.toggle('playing', on); }
       if (on) { last = 0; rafId = requestAnimationFrame(tick); }
       else if (rafId) { cancelAnimationFrame(rafId); }
+      if (dawMobileSetPlaying) dawMobileSetPlaying(on);
     };
     if (playBtn) playBtn.addEventListener('click', function () { setPlaying(!playing); });
-    // the transport runs by default so the playhead sweeps the tracks; paused for reduced-motion
-    setPlaying(!reduce);
+
+    // ---------- mobile: stack the track heads and put ruler + all lanes in ONE
+    // shared horizontal scroller, driven by a minimap. Keeps clips full size. ----------
+    var isMobile = function () { return window.matchMedia('(max-width: 640px)').matches; };
+    (function dawMobile () {
+      var DAW_W = 700;                                  // must match CSS --daw-w
+      var syncing = false;
+
+      var scrollers = function () { return [].slice.call(daw.querySelectorAll('.daw-lane-scroll, .daw-rl-scroll')); };
+      var firstScroller = function () { return daw.querySelector('.daw-rl-scroll') || daw.querySelector('.daw-lane-scroll'); };
+      var viewW = function () { var s = firstScroller(); return s ? s.clientWidth : DAW_W; };
+
+      // minimap (built below) refs
+      var mm, mmTrack, mmView;
+      var updateMinimap = function (x) {
+        if (!mmView) return;
+        var vw = viewW(), frac = Math.min(1, vw / DAW_W), maxX = Math.max(0, DAW_W - vw);
+        mmView.style.width = (frac * 100) + '%';
+        mmView.style.left = ((maxX > 0 ? x / maxX : 0) * (1 - frac) * 100) + '%';
+      };
+
+      var positionHeads = function (pos) {
+        [].slice.call(daw.querySelectorAll('.daw-mhead')).forEach(function (h) { h.style.transform = 'translateX(' + pos + 'px)'; });
+      };
+
+      var setScroll = function (x, exclude) {
+        var vw = viewW(); x = Math.max(0, Math.min(DAW_W - vw, x));
+        syncing = true;
+        scrollers().forEach(function (s) { if (s !== exclude) s.scrollLeft = x; });
+        syncing = false;
+        updateMinimap(x);
+      };
+
+      var attachScroll = function (s) {
+        s.addEventListener('scroll', function () { if (!syncing) { updateMinimap(s.scrollLeft); syncOthers(s); } }, { passive: true });
+      };
+      var syncOthers = function (src) {
+        syncing = true;
+        scrollers().forEach(function (s) { if (s !== src) s.scrollLeft = src.scrollLeft; });
+        syncing = false;
+      };
+
+      // wrap one lane in a scroller + give it a playhead
+      var wrapLane = function (lane) {
+        if (!lane || (lane.parentNode && lane.parentNode.classList.contains('daw-lane-scroll'))) return;
+        var w = document.createElement('div');
+        w.className = 'daw-lane-scroll';
+        lane.parentNode.insertBefore(w, lane);
+        w.appendChild(lane);
+        var ph = document.createElement('span');
+        ph.className = 'daw-mhead';
+        ph.setAttribute('aria-hidden', 'true');
+        lane.appendChild(ph);
+        attachScroll(w);
+      };
+
+      // wrap every current lane
+      [].slice.call(daw.querySelectorAll('.daw-lane')).forEach(wrapLane);
+
+      // wrap the ruler bars + build the sticky top strip with the minimap
+      var ruler = daw.querySelector('.daw-ruler');
+      var rlbars = daw.querySelector('.rl-bars');
+      if (rlbars && ruler) {
+        var rw = document.createElement('div');
+        rw.className = 'daw-rl-scroll';
+        rlbars.parentNode.insertBefore(rw, rlbars);
+        rw.appendChild(rlbars);
+        attachScroll(rw);
+
+        var mtop = document.createElement('div');
+        mtop.className = 'daw-mtop';
+        ruler.parentNode.insertBefore(mtop, ruler);
+        mm = document.createElement('div');
+        mm.className = 'daw-minimap';
+        mm.setAttribute('aria-hidden', 'true');
+        mm.innerHTML = '<div class="daw-mm-track"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="daw-mm-view"></span></div>';
+        mtop.appendChild(mm);
+        mtop.appendChild(ruler);
+        mmTrack = mm.querySelector('.daw-mm-track');
+        mmView = mm.querySelector('.daw-mm-view');
+
+        // drag / tap the minimap to scroll
+        var mmGrab = function (e) {
+          e.preventDefault();
+          var r = mmTrack.getBoundingClientRect(), vw = viewW(), vfrac = Math.min(1, vw / DAW_W);
+          var to = function (cx) {
+            var f = (cx - r.left) / r.width - vfrac / 2;          // centre the view on the pointer
+            f = Math.max(0, Math.min(1 - vfrac, f));
+            setScroll((1 - vfrac > 0 ? f / (1 - vfrac) : 0) * (DAW_W - vw), null);
+          };
+          to(e.touches ? e.touches[0].clientX : e.clientX);
+          var mv = function (ev) { to(ev.touches ? ev.touches[0].clientX : ev.clientX); };
+          var up = function () {
+            document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up);
+          };
+          document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up);
+        };
+        mmTrack.addEventListener('pointerdown', mmGrab);
+      }
+
+      // dynamically-added collab tracks get wrapped too
+      dawMobileAddTrack = function (track) {
+        wrapLane(track.querySelector('.daw-lane'));
+      };
+
+      // playhead sweep + snap-scroll (mobile only, and only while playing)
+      var mpos = 0, mraf = null, mlast = 0;
+      var mLoop = function (ts) {
+        if (!daw.classList.contains('playing') || !isMobile()) { mraf = null; return; }
+        if (!mlast) mlast = ts;
+        mpos += (DAW_W / 8000) * (ts - mlast); mlast = ts;
+        if (mpos >= DAW_W) { mpos = 0; setScroll(0, null); }
+        positionHeads(mpos);
+        var s = firstScroller(), vw = viewW();
+        if (s && mpos > s.scrollLeft + vw - 3) setScroll(Math.min(DAW_W - vw, s.scrollLeft + vw), null);  // snap to the next screen
+        mraf = requestAnimationFrame(mLoop);
+      };
+      dawMobileSetPlaying = function (on) {
+        if (on && isMobile()) { daw.classList.add('mhead-armed'); mlast = 0; if (!mraf) mraf = requestAnimationFrame(mLoop); }
+        else if (mraf) { cancelAnimationFrame(mraf); mraf = null; }
+      };
+
+      window.addEventListener('resize', function () { updateMinimap(firstScroller() ? firstScroller().scrollLeft : 0); });
+      updateMinimap(0);
+    })();
+
+    // the transport starts fully paused everywhere — the visitor presses play to run it
+    setPlaying(false);
+  }
+
+  /* ---- resume buttons: after the intro rise finishes, free the transform so they lift on hover ---- */
+  [].slice.call(document.querySelectorAll('.resume-actions .pill')).forEach(function (p) {
+    p.addEventListener('animationend', function () { p.classList.add('anim-done'); });
+  });
+
+  /* ---- flowers + squares: slow rotation at random speeds (mostly clockwise); the ones
+     around the profile photo also drift/float. translate + rotate are independent props
+     so the two motions compose without fighting ---- */
+  if (!reduce) {
+    [].slice.call(document.querySelectorAll('.portrait .accent, .gal-accent, .about-photo .accent')).forEach(function (el) {
+      var fdur = (4 + Math.random() * 3);          // 4–7s float
+      var sdur = (20 + Math.random() * 22);        // 20–42s rotation (slow)
+      var ccw = Math.random() < 0.32;              // mostly clockwise, a few counter
+      el.style.animation = 'accFloat ' + fdur.toFixed(1) + 's ease-in-out infinite, accSpin ' + sdur.toFixed(1) + 's linear infinite' + (ccw ? ' reverse' : '');
+      el.style.animationDelay = '-' + (Math.random() * fdur).toFixed(1) + 's, -' + (Math.random() * sdur).toFixed(1) + 's';
+    });
   }
 
   /* ---- light deterrents against casual image saving (not foolproof) ---- */
@@ -691,56 +849,280 @@
     onRailScroll();
   }
 
-  /* ---- whimsy: a pixel corgi walking along the footer ---- */
-  var footEl = document.querySelector('footer');
-  if (footEl && !footEl.querySelector('.corgi-walk')) {
-    var walk = document.createElement('div');
-    walk.className = 'corgi-walk';
-    walk.setAttribute('aria-hidden', 'true');
-    walk.innerHTML =
-      '<div class="corgi-bob"><svg viewBox="0 0 68 46" xmlns="http://www.w3.org/2000/svg" width="56">' +
-      '<g class="legs-a">' +
-        '<rect x="16" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="27" y="32" width="4" height="10" fill="#FFFFFF"/>' +
-        '<rect x="35" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="45" y="32" width="4" height="10" fill="#FFFFFF"/>' +
-        '<rect x="16" y="40" width="4" height="2" fill="#3a2f28"/><rect x="27" y="40" width="4" height="2" fill="#3a2f28"/>' +
-        '<rect x="35" y="40" width="4" height="2" fill="#3a2f28"/><rect x="45" y="40" width="4" height="2" fill="#3a2f28"/>' +
-      '</g>' +
-      '<g class="legs-b">' +
-        '<rect x="20" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="24" y="32" width="4" height="10" fill="#FFFFFF"/>' +
-        '<rect x="39" y="32" width="4" height="10" fill="#FFFFFF"/><rect x="43" y="32" width="4" height="10" fill="#FFFFFF"/>' +
-        '<rect x="20" y="40" width="4" height="2" fill="#3a2f28"/><rect x="24" y="40" width="4" height="2" fill="#3a2f28"/>' +
-        '<rect x="39" y="40" width="4" height="2" fill="#3a2f28"/><rect x="43" y="40" width="4" height="2" fill="#3a2f28"/>' +
-      '</g>' +
-      '<rect x="8" y="21" width="9" height="7" rx="3.5" fill="#E0A46A"/>' +       /* little nub tail out the back (horizontal) */
-      '<rect x="14" y="19" width="34" height="16" rx="8" fill="#E0A46A"/>' +      /* rounded body */
-      '<rect x="40" y="12" width="21" height="20" rx="8" fill="#E0A46A"/>' +      /* head */
-      '<rect x="44" y="3" width="7" height="11" rx="2" fill="#E0A46A"/>' +        /* ear */
-      '<rect x="45.6" y="5" width="4" height="6" rx="1" fill="#E79FA0"/>' +       /* ear inner */
-      '<rect x="49.5" y="12" width="3.6" height="7" rx="1.5" fill="#F7EBD3"/>' +  /* small head stripe */
-      '<rect x="46" y="23" width="4.5" height="12" rx="1.5" fill="#FFFFFF"/>' +   /* white chest blaze (lowered) */
-      '<rect x="46.4" y="30.5" width="3.6" height="3.4" rx="1" fill="#E79FA0"/>' + /* pink tag */
-      '<rect x="57" y="20" width="8" height="7" rx="2" fill="#F7EBD3"/>' +        /* snout */
-      '<rect x="61.6" y="21" width="3" height="3" rx="1" fill="#3a2f28"/>' +      /* nose */
-      '<rect x="51" y="17" width="3" height="3" rx="1" fill="#3a2f28"/>' +        /* eye */
-      '</svg></div>';
-    footEl.appendChild(walk);
+  /* ---- header entrances: cursive words bounce in softly; the serif pushes in from
+     the left; the lead blurb pushes up from below; the name types itself out ---- */
+  if (!reduce) (function headers () {
+    var jobs = [];   // { el, go }
 
-    /* hop while the cursor is over the corgi. Keyed off the browser's own :hover
-       state (the exact thing that shows the hand cursor), checked every frame, with
-       a time-based cooldown — so it can't get stuck and there's no rect/hover
-       mismatch. Each hop finishes, then it can hop again once it's back down. */
-    var bobEl = walk.querySelector('.corgi-bob');
-    if (bobEl && !reduce) {
-      var lastJump = 0;
-      (function hop() {
-        var now = Date.now();
-        if (now - lastJump > 720 && walk.matches(':hover')) {
-          lastJump = now;
-          bobEl.classList.add('jump');
-          setTimeout(function () { bobEl.classList.remove('jump'); }, 640);
+    // typed name with a blinking caret
+    var typeName = function (el) {
+      var seq = [];
+      (function flat (node, bold) {
+        [].slice.call(node.childNodes).forEach(function (c) {
+          if (c.nodeType === 3) { for (var i = 0; i < c.nodeValue.length; i++) seq.push({ c: c.nodeValue[i], b: bold }); }
+          else if (c.nodeType === 1) flat(c, bold || c.tagName === 'B' || c.tagName === 'STRONG');
+        });
+      })(el, false);
+      el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+      el.style.animation = 'none';
+      el.style.opacity = '1';
+      el.textContent = '';
+      var norm = document.createElement('span'), bold = document.createElement('b');
+      var caret = document.createElement('span'); caret.className = 'type-caret'; caret.setAttribute('aria-hidden', 'true');
+      el.appendChild(norm); el.appendChild(bold); el.appendChild(caret);
+      var i = 0;
+      var tick = function () {
+        if (i >= seq.length) return;
+        var it = seq[i++];
+        (it.b ? bold : norm).appendChild(document.createTextNode(it.c));
+        setTimeout(tick, it.c === ' ' ? 42 : 50 + Math.random() * 34);
+      };
+      tick();
+    };
+
+    // a header with a cursive accent: the .script-accent floats/bounces, the serif pushes from the left
+    var segHeader = function (h) {
+      var i = 0;
+      [].slice.call(h.childNodes).forEach(function (node) {
+        if (node.nodeType === 3) {
+          if (!node.nodeValue.trim()) return;   // keep plain whitespace between spans
+          var s = document.createElement('span'); s.className = 'seg seg-smooth'; s.textContent = node.nodeValue;
+          s.style.animationDelay = (i++ * 0.1).toFixed(2) + 's';
+          h.replaceChild(s, node);
+        } else if (node.nodeType === 1) {
+          node.classList.add('seg', node.classList.contains('script-accent') ? 'seg-float' : 'seg-smooth');
+          node.style.animationDelay = (i++ * 0.1).toFixed(2) + 's';
         }
-        requestAnimationFrame(hop);
-      })();
+      });
+      h.classList.add('seg-h');
+      jobs.push({ el: h, go: function () { h.classList.add('seg-go'); } });
+    };
+
+    // the two home headings bounce letter-by-letter (gentle)
+    var letterHead = function (el) {
+      var i = 0;
+      var walk = function (node) {
+        [].slice.call(node.childNodes).forEach(function (c) {
+          if (c.nodeType === 3) {
+            var t = c.nodeValue, frag = document.createDocumentFragment();
+            for (var k = 0; k < t.length; k++) {
+              if (t[k] === ' ') { frag.appendChild(document.createTextNode(' ')); continue; }
+              var s = document.createElement('span'); s.className = 'ltr'; s.textContent = t[k];
+              s.style.animationDelay = (i++ * 30) + 'ms'; frag.appendChild(s);
+            }
+            node.replaceChild(frag, c);
+          } else if (c.nodeType === 1 && !c.classList.contains('eq')) { walk(c); }
+        });
+      };
+      el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+      walk(el); el.classList.add('lb-h');
+      jobs.push({ el: el, go: function () { el.classList.add('lb-go'); } });
+    };
+
+    // register: hero greeting floats; page/section headers segment; home headings letter-bounce
+    var hello = document.querySelector('.hello');
+    if (hello) { hello.classList.add('float-el'); jobs.push({ el: hello, go: function () { hello.classList.add('float-go'); } }); }
+    [].slice.call(document.querySelectorAll('.page-hero h1')).forEach(function (h) { if (h.textContent.trim()) segHeader(h); });
+    [].slice.call(document.querySelectorAll('.section h2')).forEach(function (h) { if (h.querySelector('.script-accent')) segHeader(h); });
+    ['.wh-title', '.section-quote'].forEach(function (sel) { var el = document.querySelector(sel); if (el) letterHead(el); });
+
+    // the lead blurb under a page hero pushes up from below, just after the heading
+    [].slice.call(document.querySelectorAll('.page-hero .lead')).forEach(function (el) {
+      el.classList.add('lead-anim'); jobs.push({ el: el, go: function () { el.classList.add('lead-go'); } });
+    });
+
+    // roles: word by word — a beat, then ~1s between each; smooth (no bounce), glow on hover
+    var roles = document.querySelector('.roles');
+    if (roles) {
+      var words = roles.textContent.trim().split(/\s+/);
+      roles.setAttribute('aria-label', roles.textContent.replace(/\s+/g, ' ').trim());
+      roles.textContent = '';
+      words.forEach(function (w, k) {
+        if (k) roles.appendChild(document.createTextNode(' '));
+        var s = document.createElement('span'); s.className = 'rw'; s.textContent = w;
+        s.style.animationDelay = (0.55 + k * 1.0).toFixed(2) + 's';
+        s.addEventListener('animationend', function () { s.classList.add('rw-done'); });
+        roles.appendChild(s);
+      });
+      jobs.push({ el: roles, go: function () { roles.classList.add('rw-go'); } });
+    }
+
+    // name: typed with a caret
+    var nameEl = document.querySelector('.name');
+    if (nameEl) { nameEl.classList.add('name-anim'); jobs.push({ el: nameEl, go: function () { if (!nameEl.dataset.typed) { nameEl.dataset.typed = '1'; typeName(nameEl); } } }); }
+
+    // trigger on view (immediately for anything already in view at load)
+    var run = function (j) { if (j && !j.done) { j.done = true; j.go(); } };
+    if ('IntersectionObserver' in window) {
+      var hio = new IntersectionObserver(function (ents) {
+        ents.forEach(function (e) { if (e.isIntersecting) { run(e.target.__hjob); hio.unobserve(e.target); } });
+      }, { threshold: 0.2 });
+      jobs.forEach(function (j) { j.el.__hjob = j; hio.observe(j.el); });
+      requestAnimationFrame(function () {
+        jobs.forEach(function (j) {
+          var r = j.el.getBoundingClientRect();
+          if (r.top < (window.innerHeight || 800) * 0.9 && r.bottom > 0) { run(j); hio.unobserve(j.el); }
+        });
+      });
+    } else { jobs.forEach(run); }
+  })();
+
+  /* ---- the footer corgi: an animated sprite that wanders on its own. On desktop,
+     click it to take the controls and drive it with the keyboard arrow keys ---- */
+  var footEl = document.querySelector('footer');
+  if (footEl && !footEl.querySelector('.corgi')) {
+    var touch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    var stage = document.createElement('div'); stage.className = 'corgi-stage'; stage.setAttribute('aria-hidden', 'true');
+    var dog = document.createElement('div'); dog.className = 'corgi';
+    stage.appendChild(dog); footEl.appendChild(stage);
+
+    var CW = 64;
+    var x = 24, dir = 1, state = '', mode = 'auto';   // 'auto' | 'control'
+    var jumpVX = 0;                                    // horizontal speed while mid-jump
+    var SPEED = { walk: 26, sniffwalk: 15, run: 80 };
+    var maxX = function () { return Math.max(20, footEl.clientWidth - CW - 10); };
+    var padEl = null, hintEl = null;
+    var positionHint = function () {
+      if (!hintEl) return;
+      var w = hintEl.offsetWidth || 150;
+      var right = x + CW + 10;
+      if (right + w <= footEl.clientWidth - 6) hintEl.style.left = Math.round(right) + 'px';
+      else hintEl.style.left = Math.round(Math.max(6, x - 10 - w)) + 'px';
+    };
+    var place = function () {
+      dog.style.transform = 'translateX(' + x + 'px) scaleX(' + dir + ')';
+      if (padEl) padEl.style.left = Math.round(x + CW / 2) + 'px';
+      if (hintEl) positionHint();
+    };
+    var setState = function (s) { if (s !== state) { state = s; dog.className = 'corgi a-' + s; } };
+    var rnd = function (a, b) { return a + Math.random() * (b - a); };
+    place(); setState('idle2');
+
+    // movement loop
+    if (!reduce) {
+      var cLast = 0;
+      (function loop (ts) {
+        if (!cLast) cLast = ts;
+        var dt = (ts - cLast) / 1000; cLast = ts;
+        var vx = SPEED[state] ? SPEED[state] * dir : (state === 'jump' ? jumpVX : 0);
+        if (vx) {
+          x += vx * dt;
+          if (x >= maxX()) { x = maxX(); if (mode === 'auto') dir = -1; }
+          else if (x <= 10) { x = 10; if (mode === 'auto') dir = 1; }
+          place();
+        }
+        requestAnimationFrame(loop);
+      })(0);
+    }
+
+    // ---- auto wander ----
+    var cyc = null;
+    var CYCLE = ['idle2', 'walk', 'run', 'sniff', 'sniffwalk', 'sit', 'walk', 'idle2'];
+    var wander = function () {
+      if (mode !== 'auto') return;
+      var s = CYCLE[Math.floor(Math.random() * CYCLE.length)];
+      if (s === 'walk' || s === 'run' || s === 'sniffwalk') {
+        // if he's already at a wall, always head away from it; otherwise pick a way at random
+        if (x >= maxX() - 6) dir = -1;
+        else if (x <= 16) dir = 1;
+        else if (Math.random() < 0.5) dir = -dir;
+      }
+      if (s === 'run') {
+        // he leaps into a run rather than snapping straight to top speed
+        jumpVX = dir * SPEED.run * 0.85; setState('jump');
+        setTimeout(function () { if (mode === 'auto') { jumpVX = 0; setState('run'); } }, 560);
+      } else { setState(s); }
+      cyc = setTimeout(wander, rnd(2200, 4800));
+    };
+    if (!reduce) wander();
+
+    // ---- keyboard control (desktop only) ----
+    var arrows = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+    var keys = {}, jumping = false, satLatched = false, running = false, sniffT = null, entryY = 0, entryTime = 0;
+    var held = function (k) { return !!keys['Arrow' + k]; };
+    var dirHeld = function () { return held('Right') ? 1 : (held('Left') ? -1 : 0); };
+    var anyKey = function () { return held('Left') || held('Right') || held('Up') || held('Down'); };
+    var scheduleSniff = function () {
+      clearTimeout(sniffT);
+      sniffT = setTimeout(function () {
+        if (mode === 'control' && state === 'idle2' && !anyKey() && !satLatched) {
+          setState('sniff');
+          setTimeout(function () { if (mode === 'control' && !anyKey() && !satLatched) setState('idle2'); scheduleSniff(); }, 1300);
+        } else scheduleSniff();
+      }, rnd(3500, 7000));
+    };
+    // choose the grounded pose from whatever keys are currently held
+    var resolve = function () {
+      if (mode !== 'control' || jumping) return;
+      if (satLatched) { setState('sit'); return; }
+      var d = dirHeld(), down = held('Down');
+      if (down && d) { dir = d; running = false; setState('sniffwalk'); }
+      else if (down) { running = false; setState('sniff'); }
+      else if (d) { dir = d; setState(running ? 'run' : 'walk'); }
+      else { running = false; setState('idle2'); }
+    };
+    var doJump = function () {
+      if (jumping || satLatched) return;
+      jumping = true;
+      var d = dirHeld(); if (d) dir = d;
+      jumpVX = d ? d * SPEED.run * 0.85 : 0;       // leap toward the held direction
+      setState('jump');
+      setTimeout(function () {
+        jumping = false; jumpVX = 0;
+        if (mode !== 'control') return;
+        running = !!dirHeld();                      // still holding a way at touchdown → run out of it
+        resolve();
+      }, 640);
+    };
+    // the intro cue: a D-pad diagram + "use arrow keys to move", both gone on first press
+    var dismissIntro = function () {
+      if (padEl) { padEl.parentNode && padEl.parentNode.removeChild(padEl); padEl = null; }
+      if (hintEl) { hintEl.parentNode && hintEl.parentNode.removeChild(hintEl); hintEl = null; }
+    };
+    var enterControl = function () {
+      if (touch || reduce || mode === 'control') return;
+      mode = 'control'; clearTimeout(cyc); keys = {}; jumping = false; satLatched = false; running = false; jumpVX = 0;
+      setState('idle2'); entryY = window.pageYOffset; entryTime = Date.now();
+      padEl = document.createElement('div'); padEl.className = 'corgi-dpad';
+      ['up', 'left', 'down', 'right'].forEach(function (k) {
+        var el = document.createElement('span'); el.className = 'cdp cdp-' + k;
+        var g = document.createElement('span'); g.className = 'cdp-g';
+        g.textContent = { up: '↑', down: '↓', left: '←', right: '→' }[k];
+        el.appendChild(g); padEl.appendChild(el);
+      });
+      hintEl = document.createElement('div'); hintEl.className = 'corgi-hint'; hintEl.textContent = 'use arrow keys to move';
+      stage.appendChild(padEl); stage.appendChild(hintEl); place();
+      requestAnimationFrame(function () { if (padEl) padEl.classList.add('in'); if (hintEl) hintEl.classList.add('in'); });
+      scheduleSniff();
+    };
+    var exitControl = function () {
+      if (mode !== 'control') return;
+      mode = 'auto'; keys = {}; jumping = false; satLatched = false; running = false; jumpVX = 0; clearTimeout(sniffT);
+      dismissIntro();
+      wander();
+    };
+
+    if (!touch && !reduce) {
+      dog.addEventListener('click', function (e) { e.stopPropagation(); if (mode === 'control') exitControl(); else enterControl(); });
+      document.addEventListener('click', function (e) { if (mode === 'control' && !(e.target && e.target.closest && e.target.closest('.corgi'))) exitControl(); });
+      window.addEventListener('scroll', function () { if (mode === 'control' && Date.now() - entryTime > 450 && Math.abs(window.pageYOffset - entryY) > 40) exitControl(); }, { passive: true });
+      document.addEventListener('keydown', function (e) {
+        if (mode !== 'control' || arrows.indexOf(e.key) < 0) return;
+        e.preventDefault();
+        if (e.repeat) return;
+        keys[e.key] = true; dismissIntro();
+        if (held('Up') && held('Down')) {           // up + down together → sit, and stay sat
+          satLatched = true; jumping = false; jumpVX = 0; running = false; setState('sit'); return;
+        }
+        satLatched = false;
+        if (e.key === 'ArrowUp') doJump(); else resolve();
+      });
+      document.addEventListener('keyup', function (e) {
+        if (arrows.indexOf(e.key) < 0) return;
+        keys[e.key] = false;
+        if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !dirHeld()) running = false;
+        resolve();
+      });
     }
   }
 })();
