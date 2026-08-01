@@ -2128,3 +2128,92 @@ footer { border-top: 5px solid var(--plum); }
   .foot .to-top .circle svg { width: 15px; height: 15px; }
   .foot .to-top:hover .circle { background: none; color: var(--plum); }
 }
+
+/* ============================================================ ROUND 78 — camera-lens lightbox for the about galleries (click a photo to open) ============================================================ */
+.cam { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: 30px; background: rgba(60,54,50,.34); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; transition: opacity .22s ease; }
+.cam.cam-in { opacity: 1; }
+.cam[hidden] { display: none; }
+.cam-stage { display: flex; align-items: center; gap: 16px; position: relative; }
+
+/* the lens frame */
+.cam-lens { position: relative; margin: 0; background: #F6F1E9; border: 1px solid rgba(99,40,92,.22); border-radius: 20px; padding: 18px 18px 14px; box-shadow: 0 40px 90px rgba(40,26,40,.42); --lbh: min(58vh, 500px); --lbw: calc(var(--lbh) * 0.78); animation: lbPop .34s cubic-bezier(.2,.9,.3,1) both; }
+@keyframes lbPop { 0% { opacity: 0; transform: scale(.96) translateY(8px); } 100% { opacity: 1; transform: none; } }
+
+.cam-top { display: flex; justify-content: space-between; align-items: center; gap: 18px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; color: var(--plum); margin-bottom: 12px; }
+.cam-rec { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.cam-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); animation: lbBlink 1.4s steps(1, end) infinite; }
+@keyframes lbBlink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
+.cam-exif { color: #9d7d99; white-space: nowrap; }
+
+.cam-photo { position: relative; width: var(--lbw); height: var(--lbh); border-radius: 8px; overflow: hidden; background: #e9e2d6; }
+.cam-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cam-photo.cam-dev .cam-img { animation: lbDevelop .5s ease both; }
+@keyframes lbDevelop { 0% { opacity: 0; transform: scale(1.05); filter: brightness(2.3) contrast(.9); } 45% { opacity: 1; } 100% { opacity: 1; transform: none; filter: none; } }
+
+/* focus reticle overlay */
+.cam-reticle { position: absolute; inset: 0; pointer-events: none; }
+.cam-c { position: absolute; width: 30px; height: 30px; filter: drop-shadow(0 1px 2px rgba(40,20,40,.5)); }
+.cam-tl { top: 9px; left: 9px; border-top: 2.5px solid #F6F1E9; border-left: 2.5px solid #F6F1E9; border-radius: 3px 0 0 0; }
+.cam-tr { top: 9px; right: 9px; border-top: 2.5px solid #F6F1E9; border-right: 2.5px solid #F6F1E9; border-radius: 0 3px 0 0; }
+.cam-bl { bottom: 9px; left: 9px; border-bottom: 2.5px solid #F6F1E9; border-left: 2.5px solid #F6F1E9; border-radius: 0 0 0 3px; }
+.cam-br { bottom: 9px; right: 9px; border-bottom: 2.5px solid #F6F1E9; border-right: 2.5px solid #F6F1E9; border-radius: 0 0 3px 0; }
+.cam-focus { position: absolute; top: 50%; left: 50%; width: 74px; height: 74px; margin: -37px 0 0 -37px; border: 1.5px solid rgba(246,241,233,.9); border-radius: 4px; animation: lbPulse 2.4s ease-in-out infinite; }
+@keyframes lbPulse { 0%, 100% { opacity: .9; transform: scale(1); } 50% { opacity: .35; transform: scale(1.12); } }
+.cam-cross-v { position: absolute; top: 50%; left: 50%; width: 1px; height: 16px; margin: -8px 0 0 0; background: rgba(246,241,233,.85); }
+.cam-cross-h { position: absolute; top: 50%; left: 50%; width: 16px; height: 1px; margin: 0 0 0 -8px; background: rgba(246,241,233,.85); }
+
+.cam-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-top: 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--plum); }
+.cam-cap { font-size: 12.5px; letter-spacing: .02em; }
+.cam-count { font-size: 11px; color: #9d7d99; }
+
+/* close button */
+.cam-close { position: absolute; top: -13px; right: -13px; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--plum); background: var(--plum); color: #F6F1E9; cursor: pointer; display: grid; place-items: center; box-shadow: 0 4px 12px rgba(40,20,40,.32); transition: transform .18s ease; }
+.cam-close svg { width: 15px; height: 15px; }
+.cam-close:hover { transform: rotate(90deg) scale(1.09); }
+
+/* prev / next arrows */
+.cam-nav { flex: none; width: 54px; height: 54px; border-radius: 50%; border: 1.5px solid var(--plum); background: #F6F1E9; color: var(--plum); cursor: pointer; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(40,20,40,.26); opacity: .94; transition: transform .16s ease, background .16s ease, color .16s ease, opacity .16s ease; }
+.cam-nav svg { width: 22px; height: 22px; }
+.cam-nav:hover { background: var(--plum); color: #F6F1E9; opacity: 1; }
+.cam-prev:hover { transform: translateX(-3px) scale(1.06); }
+.cam-next:hover { transform: translateX(3px) scale(1.06); }
+
+@media (max-width: 640px) {
+  .cam { padding: 16px; }
+  .cam-lens { --lbw: min(84vw, calc(62vh * .78)); --lbh: calc(var(--lbw) / .78); border-radius: 16px; padding: 14px 14px 12px; }
+  /* arrows float over the photo edges so the frame can stay large */
+  .cam-nav { position: absolute; top: 50%; width: 42px; height: 42px; margin-top: -21px; opacity: .86; box-shadow: 0 4px 12px rgba(40,20,40,.34); }
+  .cam-nav svg { width: 17px; height: 17px; }
+  .cam-prev { left: 4px; } .cam-next { right: 4px; }
+  .cam-prev:hover { transform: scale(1.06); } .cam-next:hover { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lb, .cam-lens, .cam-dot, .cam-focus, .cam-photo.cam-dev .cam-img { animation: none; }
+}
+
+/* ROUND 78 fix — keep the caption on one line and the counter clear of it */
+.cam-bottom { align-items: baseline; }
+.cam-cap { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cam-count { flex: none; }
+
+/* ROUND 78 fix 2 — lock the top/bottom rows to the photo width so a long caption
+   ellipsizes instead of stretching the frame (keeps every photo the same modal size) */
+.cam-top, .cam-bottom { width: var(--lbw); box-sizing: border-box; }
+
+/* ============================================================ ROUND 79 — about galleries: bigger photos + tighter band (less empty space above/below); flowers & squares pulled back onto the photo edges; kaya's nudged so they don't line up with the life gallery's ============================================================ */
+.marquee img { height: 320px; }
+.gal-wrap .marquee { padding: 24px 0; }
+.gal-wrap .marquee img:hover { transform: scale(1.1); box-shadow: 0 2px 6px rgba(54,49,51,.2); }
+
+/* accents sit on the photo's top/bottom edges again (24px padding pulled the photos in) */
+.gal-accent.a1 { top: 6px; }
+.gal-accent.a3 { top: 10px; }
+.gal-accent.a4 { top: 12px; }
+.gal-accent.a2 { bottom: 8px; }
+.gal-accent.a5 { bottom: 6px; }
+.gal-accent.a6 { top: auto; bottom: 8px; }
+
+/* kaya's flowers/squares shifted sideways so they don't align with the life gallery's above */
+.kaya-wrap .gal-accent.a1 { left: 10%; }
+.kaya-wrap .gal-accent.a2 { right: 15%; }
+.kaya-wrap .gal-accent.a3 { right: 31%; }

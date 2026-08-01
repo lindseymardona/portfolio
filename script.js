@@ -191,13 +191,81 @@
   }
 
   /* ---- about galleries (life gallery + miss kaya): the scroll freezes ONLY while the
-     cursor is on a photo (not anywhere in the band), and that photo grows in place ---- */
+     cursor is on a photo, that photo grows in place, and clicking it opens a
+     camera-lens lightbox (arrow keys + esc, click-outside/✕ to close) ---- */
   var galRows = [].slice.call(document.querySelectorAll('.gal-wrap .marquee-track'));
-  if (galRows.length && !reduce) {
+  if (galRows.length) {
+    // build the lightbox shell once
+    var lb = document.createElement('div');
+    lb.className = 'cam'; lb.hidden = true;
+    lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'photo viewer');
+    lb.innerHTML =
+      '<div class="cam-stage">' +
+        '<button class="cam-nav cam-prev" type="button" aria-label="previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+        '<figure class="cam-lens">' +
+          '<div class="cam-top"><span class="cam-rec"><span class="cam-dot"></span>REC</span><span class="cam-exif">f/1.8 &middot; 1/250 &middot; ISO 400</span></div>' +
+          '<div class="cam-photo"><img class="cam-img" alt="">' +
+            '<div class="cam-reticle" aria-hidden="true"><span class="cam-c cam-tl"></span><span class="cam-c cam-tr"></span><span class="cam-c cam-bl"></span><span class="cam-c cam-br"></span><span class="cam-focus"></span><span class="cam-cross-v"></span><span class="cam-cross-h"></span></div>' +
+          '</div>' +
+          '<figcaption class="cam-bottom"><span class="cam-cap"></span><span class="cam-count"></span></figcaption>' +
+          '<button class="cam-close" type="button" aria-label="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+        '</figure>' +
+        '<button class="cam-nav cam-next" type="button" aria-label="next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>' +
+      '</div>';
+    document.body.appendChild(lb);
+    var lbImg = lb.querySelector('.cam-img'), lbCap = lb.querySelector('.cam-cap'),
+        lbCount = lb.querySelector('.cam-count'), lbPhoto = lb.querySelector('.cam-photo');
+    var photos = [], idx = 0, lastFocus = null;
+    var pad2 = function (n) { return (n < 10 ? '0' : '') + n; };
+    var render = function () {
+      var ph = photos[idx];
+      lbImg.src = ph.src; lbImg.alt = ph.alt;
+      lbCap.textContent = ph.alt;
+      lbCount.textContent = pad2(idx + 1) + ' / ' + pad2(photos.length);
+      lbPhoto.classList.remove('cam-dev'); void lbPhoto.offsetWidth; lbPhoto.classList.add('cam-dev');   // re-fire the "develop" flash
+    };
+    var openLb = function (list, i) {
+      photos = list; idx = i; lastFocus = document.activeElement;
+      render(); lb.hidden = false; document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { lb.classList.add('cam-in'); });
+      lb.querySelector('.cam-close').focus();
+    };
+    var closeLb = function () {
+      lb.classList.remove('cam-in'); document.body.style.overflow = '';
+      setTimeout(function () { lb.hidden = true; }, 220);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    var step = function (d) { if (photos.length) { idx = (idx + d + photos.length) % photos.length; render(); } };
+    lb.addEventListener('click', closeLb);                                                              // backdrop / outside
+    lb.querySelector('.cam-lens').addEventListener('click', function (e) { e.stopPropagation(); });
+    lb.querySelector('.cam-prev').addEventListener('click', function (e) { e.stopPropagation(); step(-1); });
+    lb.querySelector('.cam-next').addEventListener('click', function (e) { e.stopPropagation(); step(1); });
+    lb.querySelector('.cam-close').addEventListener('click', function (e) { e.stopPropagation(); closeLb(); });
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') closeLb();
+      else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    });
+
+    // wire each gallery: pause-on-photo, and click to open
     galRows.forEach(function (row) {
-      [].slice.call(row.querySelectorAll('img')).forEach(function (img) {
-        img.addEventListener('mouseenter', function () { row.style.animationPlayState = 'paused'; });
-        img.addEventListener('mouseleave', function () { row.style.animationPlayState = ''; });
+      var imgs = [].slice.call(row.querySelectorAll('img'));
+      var list = [], seen = {};
+      imgs.forEach(function (im) {
+        if (im.getAttribute('aria-hidden') === 'true') return;
+        var s = im.currentSrc || im.src;
+        if (seen[s]) return; seen[s] = true;
+        list.push({ src: s, alt: im.alt || 'photo' });
+      });
+      var indexOfSrc = function (src) { for (var i = 0; i < list.length; i++) if (list[i].src === src) return i; return 0; };
+      imgs.forEach(function (img) {
+        if (!reduce) {
+          img.addEventListener('mouseenter', function () { row.style.animationPlayState = 'paused'; });
+          img.addEventListener('mouseleave', function () { row.style.animationPlayState = ''; });
+        }
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', function () { openLb(list, indexOfSrc(img.currentSrc || img.src)); });
       });
     });
   }
