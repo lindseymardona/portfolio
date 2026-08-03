@@ -2217,3 +2217,16 @@ footer { border-top: 5px solid var(--plum); }
 .kaya-wrap .gal-accent.a1 { left: 10%; }
 .kaya-wrap .gal-accent.a2 { right: 15%; }
 .kaya-wrap .gal-accent.a3 { right: 31%; }
+
+/* ============================================================ ROUND 80 — case studies: let the reading column shrink to the phone width. The heval/audit tables have a min-width and, as a grid item, .cs-read defaulted to min-width:auto — so the whole write-up was forced as wide as the table. The tables scroll on their own inside .heval-wrap. ============================================================ */
+.cs-read { min-width: 0; }
+.cs-read .heval-wrap { max-width: 100%; }
+
+/* on phones: the simple 3-column findings table wraps to fit; the wide 6-column
+   comparison audit keeps legible columns and scrolls sideways inside its wrap */
+@media (max-width: 640px) {
+  .cs-read table.heval { min-width: 0; font-size: .82rem; }
+  .cs-read table.heval th, .cs-read table.heval td { padding: 8px 9px 8px 0; }
+  .cs-read table.heval th:first-child, .cs-read table.heval td:first-child { padding-right: 10px; }
+  .cs-read table.cs-audit { min-width: 620px; font-size: .8rem; }
+}
