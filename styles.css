@@ -1936,11 +1936,11 @@ footer { border-top: 5px solid var(--plum); }
 
 /* the two home headings bounce gently, letter by letter */
 .js .lb-h .ltr { display: inline-block; opacity: 0; }
-.lb-h.lb-go .ltr { animation: letterBounce .58s cubic-bezier(.2,.82,.3,1.15) both; }
+.lb-h.lb-go .ltr { animation: letterBounce .6s cubic-bezier(.22,.68,.32,1) both; }
 @keyframes letterBounce {
-  0%   { opacity: 0; transform: translateY(14px); }
-  55%  { opacity: 1; transform: translateY(-4px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: translate3d(0,14px,0); }
+  58%  { opacity: 1; transform: translate3d(0,-4px,0); }
+  100% { opacity: 1; transform: translate3d(0,0,0); }
 }
 
 /* roles: word by word, smooth (fade + gentle push, no bounce); glow + lift on hover */
@@ -2230,3 +2230,22 @@ footer { border-top: 5px solid var(--plum); }
   .cs-read table.heval th:first-child, .cs-read table.heval td:first-child { padding-right: 10px; }
   .cs-read table.cs-audit { min-width: 620px; font-size: .8rem; }
 }
+
+/* ============================================================ ROUND 81 — card year moved to the end of the title/header line (was a separate eyebrow above) ============================================================ */
+.feat-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin: 0 0 12px; }
+.feat-head .feat-title { margin: 0; flex: 1 1 auto; min-width: 0; }
+.mini-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 8px; }
+.mini-head .mini-title { margin: 0; flex: 1 1 auto; min-width: 0; }
+.feat-head .fe-year, .mini-head .fe-year { flex: none; }
+
+/* ============================================================ ROUND 82 — reveal on a 3D layer so the card doesn't sub-pixel-snap on its final frame ============================================================ */
+@keyframes revealUp { from { opacity: 0; transform: translate3d(0,22px,0); } to { opacity: 1; transform: translate3d(0,0,0); } }
+
+/* ============================================================ ROUND 83 — hold animated elements on a stable GPU layer through AND after the animation, so they don't re-rasterize / sub-pixel-snap on the final frame (the tiny end-of-animation jitter) ============================================================ */
+.reveal.in,
+.lb-h.lb-go .ltr,
+.float-el.float-go,
+.seg-h.seg-go .seg-float,
+.seg-h.seg-go .seg-smooth,
+.roles.rw-go .rw,
+.lead-anim.lead-go { will-change: transform; backface-visibility: hidden; }
