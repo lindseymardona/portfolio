@@ -36,7 +36,7 @@
     <header class="cs-hero">
       <div class="wrap">
         <h1><span class="h-print">Geographies of Affect</span></h1>
-        <p class="cs-tagline">A digital-humanities capstone mapping how emotion shifts across place in Holocaust survivor testimonies — and a close, honest look at where computation meets the limits of human memory.</p>
+        <p class="cs-tagline">A digital-humanities capstone mapping how emotion shifts across place in Holocaust survivor testimonies, and a close, honest look at where computation meets the limits of human memory.</p>
         <div class="cs-meta">
           <div><div class="k">Role</div><div class="v">Sentiment analysis (3-person team)</div></div>
           <div><div class="k">Context</div><div class="v">UCLA Digital Humanities capstone</div></div>
@@ -52,8 +52,8 @@
     <section class="section cs-snapshot" style="padding:38px 0;">
       <div class="wrap">
         <div class="cs-stats">
+          <div class="cs-stat reveal"><span class="n">864</span><span class="l">segments hand-annotated to build our own evaluation set</span></div>
           <div class="cs-stat reveal"><span class="n">~1,000</span><span class="l">oral histories drawn from the Shoah Foundation's Visual History Archive</span></div>
-          <div class="cs-stat reveal"><span class="n">864</span><span class="l">testimony segments hand-annotated for sentiment</span></div>
           <div class="cs-stat reveal"><span class="n">144K+</span><span class="l">place entities extracted and geocoded</span></div>
           <div class="cs-stat reveal"><span class="n">3</span><span class="l">model families compared — dictionary, linear, transformer</span></div>
         </div>
@@ -68,32 +68,58 @@
             <a href="#role">Role</a>
             <a href="#approach">Approach</a>
             <a href="#findings">Findings</a>
+            <a href="#postscript">Postscript</a>
             <a href="#reflection">Reflection</a>
+            <a href="#references">References</a>
           </nav>
           <div class="cs-read">
-            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">Geographies of Affect was a UCLA Digital Humanities capstone that asked a hard question: could computational tools trace how survivors' emotions shift across the places in their stories — the camps, the routes of flight, the postwar homes — without flattening memory into a single number? It drew on nearly 1,000 English-language oral histories from the USC Shoah Foundation's Visual History Archive.</p>
+            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">Geographies of Affect was a UCLA Digital Humanities capstone that asked a hard question: could computational tools trace how survivors' emotions shift across the places in their stories — the camps, the routes of flight, the postwar homes — without flattening memory into a single number? It drew on 984 English-language oral histories from the USC Shoah Foundation's Visual History Archive.</p>
 
             <h2 id="context">Context</h2>
-            <p>Holocaust testimony is some of the most emotionally layered material there is. A survivor recalling a single place might hold grief, defiance, tenderness, and numbness in the same breath. The premise of the project — and its risk — was to bring sentiment analysis and mapping to exactly that kind of material: to ask what patterns emerge when you track emotion across narrative time and geographic space, while staying honest about what those tools can and cannot see.</p>
+            <p>Holocaust testimonies are extremely emotionally layered. The premise of the project — and its risk — was to bring sentiment analysis and mapping to exactly that kind of material: to ask what patterns emerge when you track emotion across narrative time and geographic space, while staying honest about what those tools can and cannot see.</p>
 
             <h2 id="role">My role</h2>
-            <p>I focused on the sentiment-analysis side of a three-person team — Laurel Woods led the data visualization and Ulysses Pascal led the mapping. I helped shape the research framework, did a large share of the manual annotation, evaluated and compared the NLP approaches, fine-tuned a GPT-2 model, and contributed to the geocoding pipeline.</p>
+            <p>I handled the sentiment-analysis side of a three-person team, while Laurel Woods led the data visualization and Ulysses Pascal led the mapping. That meant much of the manual annotation, building and comparing the NLP approaches: dictionary tools, linear classifiers, and transformers, as well as fine-tuning a GPT-2 model on our labeled data.</p>
 
             <h2 id="approach">Approach</h2>
-            <p>We paired close, manual annotation with computational methods in Python (NLTK, spaCy, scikit-learn), plus GPT-2/GPT-3 and named-entity recognition to extract and geocode the places named in each testimony.</p>
-            <p>To choose a sentiment method rather than assume one, we compared three families head-to-head: <strong>dictionary-based tools</strong> (VADER, TextBlob), <strong>linear classifiers</strong> (Naive Bayes, Logistic Regression), and <strong>transformer models</strong>. I hand-annotated 864 testimony segments for sentiment to build a grounded evaluation set, and we extracted and geocoded 144,000+ place entities to anchor emotion to geography.</p>
+            <p>We paired close, manual annotation with computational methods in Python (NLTK, spaCy, scikit-learn). Sentiment ran through a range of models, from dictionary tools to a fine-tuned GPT-2 and GPT-3; separately, a spaCy named-entity pipeline pulled the place names from each testimony and geocoded them through the Google Maps API.</p>
+            <p>To choose a sentiment method rather than assume one, we compared three families head-to-head: <strong>dictionary-based tools</strong> (VADER, TextBlob), <strong>linear classifiers</strong> (Naive Bayes, Logistic Regression), and <strong>transformer models</strong>. Two of us divided and hand-annotated 864 testimony segments — 354 negative, 314 neutral, 196 positive — to build a grounded evaluation set, and we extracted and geocoded 144,000+ place entities to anchor emotion to geography.</p>
+            <p>None of them scored especially high. The dictionary and linear methods hovered around 50% on those 864 labels — VADER only climbed from 54% to 58% after I rebuilt its lexicon for this material, where by default it read "People became like animals" as positive. A fine-tuned GPT-2 reached 66%, and GPT-3, too costly to run across the full corpus, topped out near 70%.</p>
 
             <h2 id="findings">Findings</h2>
-            <p>Transformer models substantially outperformed the traditional methods — but the more important finding was about limits. Sentiment in Holocaust testimonies is often ambiguous, multidimensional, and resistant to categorical classification: memories of camps, refuge, and postwar life carried layered, contradictory emotions that no single label captured well.</p>
-            <p>We built visualizations that tracked those emotional shifts across narrative time and across the geography of each testimony — a way to <em>see</em>, not just measure, how affect moves through a story.</p>
+            <p>The transformer models came out ahead by a wide margin. That ranking turned out to be the least interesting thing we measured.</p>
+            <p>What we kept running into was that the labels themselves didn't fit the material. A survivor describing a single place — a barracks, a border crossing, an apartment they returned to and found occupied — could hold grief, defiance, tenderness, and numbness in the same passage, not in sequence but at once. Scoring that from −1 to 1 doesn't compress the meaning down to its essentials. It discards most of it and reports the remainder as though it were the whole.</p>
+            <p>That showed up first in our own annotation, before any model touched the data. Two careful readers can look at the same sentence about liberation and code it in opposite directions, and both be right, because liberation in these testimonies is very often not a happy ending. The disagreement wasn't carelessness, but it was the material telling us the question was badly formed.</p>
+            <p>So the honest finding wasn't that our tools were too weak; rather, it was that the construct was ill-posed. "Sentiment," as an ordinal scale, presumes a single underlying quantity that a passage contains more or less of. Testimony doesn't behave that way, and no amount of model capacity supplies a thing that isn't there.</p>
+            <p>What the visualizations could do — and this is where the project earned its keep — was hold the ambiguity in view instead of resolving it.</p>
 
             <figure>
               <img src="assets/research-map.jpg" alt="World map plotting the sentiment of testimony segments during the post-war period, each geocoded place colored on a sentiment scale from -1 to 1" loading="lazy" />
               <figcaption>Sentiment of testimony segments in the post-war period, mapped to the places survivors named — points colored from −1 to 1.</figcaption>
             </figure>
 
+            <p>Averaged across the 984 testimonies, the sentiment curve roughly followed the arc of a life: steadier at the start and end, where people talked about childhood and postwar family, and lowest through the middle. While that in itself wasn't a discovery, what it was good for was spotting the testimonies that didn't follow it, which is a question you can only answer by going back and reading them.</p>
+
+            <h2 id="postscript">Postscript — 2026</h2>
+            <p>I've come back to this project wondering whether it expired. Sentiment analysis in 2022 was meaningfully worse than what's available now, and the obvious reading is that a better model would have dissolved the problem. I don't think it did.</p>
+            <p>NLP has since built an entire line of work around what it calls <em>human label variation</em>, or <em>data perspectivism</em>: the position that for subjective tasks there frequently is no ground truth, and that annotator disagreement is signal to be preserved rather than error to be repaired. Recent evaluations find that large language models handle simple sentiment well but struggle with complex affect, and struggle specifically at modeling the disagreement between human annotators. For scale, GoEmotions — a standard emotion-labeling dataset — reports per-emotion inter-annotator agreement (Cohen's kappa) that ranges from about 0.75 for "gratitude" down to roughly 0.10 for "grief." People don't agree with each other about this either, least of all about the emotions this material is made of.</p>
+            <p>A stronger model doesn't recover a true label that a weaker one missed. It produces a more confident number for a question that doesn't have one. On this material, that's worse than being obviously wrong, because obviously wrong invites a second look.</p>
+            <p>The stakes moved too. In 2024 UNESCO published a report warning that generative AI could distort the historical record of the Holocaust — documenting fabricated events and invented witness quotes, and flagging the technology's tendency to oversimplify complex history and privilege a narrow range of sources. And the USC Shoah Foundation, the archive this project drew on, is now using language models to help catalogue and analyze testimony at scale. What we were asking as a student capstone is an operational question now, at the institution that holds the material.</p>
+            <p>Our answer was never that we shouldn't have tried. It's that a tool pointed at this kind of material has to show you where it's uncertain, and hand you back to the source rather than stand in for it. That's a design principle, and it's the one I've carried into everything since.</p>
+
             <h2 id="reflection">Reflection</h2>
-            <p>This project taught me as much about the limits of computational tools on historically complex, human material as about the methods themselves. It made me careful about what a metric can quietly erase — and that instinct, to design for meaning and not just measurement, is a big part of what pulled me toward HCI.</p>
+            <p>This project changed how I work. It made me careful about what a metric can quietly erase, and that instinct to design for meaning and not just measurement, is a big part of what pulled me toward HCI.</p>
+            <p style="margin:22px 0 26px;"><a href="https://docs.google.com/document/d/1d7dr2HnSEuHJAI5LtIhl87N2PUI582vfQRMDF0BzhpY/" target="_blank" rel="noopener"><strong>▶ read the full paper ↗</strong></a></p>
+
+            
+
+            <h2 id="references">References</h2>
+            <ul class="cs-refs" style="font-size:.9rem; line-height:1.65; padding-left:1.15em; margin:10px 0 0; opacity:.85;">
+              <li style="margin-bottom:7px;">Plank, B. (2022). The "problem" of human label variation: On ground truth in data, modeling and evaluation. <em>EMNLP</em>.</li>
+              <li style="margin-bottom:7px;">Basile, V., et al. (2021). We need to consider disagreement in evaluation. <em>Proceedings of the 1st Workshop on Benchmarking: Past, Present and Future of Natural Language Processing</em>.</li>
+              <li style="margin-bottom:7px;">Demszky, D., et al. (2020). GoEmotions: A dataset of fine-grained emotions. <em>ACL</em>.</li>
+              <li style="margin-bottom:7px;">UNESCO &amp; World Jewish Congress (2024). <em>AI and the Holocaust: Rewriting History?</em></li>
+            </ul>
 
             <div style="margin-top:36px;">
               <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>

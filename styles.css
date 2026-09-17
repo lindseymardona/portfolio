@@ -2249,3 +2249,12 @@ footer { border-top: 5px solid var(--plum); }
 .seg-h.seg-go .seg-smooth,
 .roles.rw-go .rw,
 .lead-anim.lead-go { will-change: transform; backface-visibility: hidden; }
+
+/* ============================================================ ROUND 85 — featured card image overflow on narrow mobile screens ============================================================ */
+/* Grid items default to min-width:auto, so the featured card's image could
+   force its column (and the whole page) wider than the viewport on mobile
+   browsers that don't cap replaced-element min-content the way desktop Chrome
+   does. Let the tracks shrink, and cap the images as a belt-and-suspenders. */
+.feat-card > *, .feat-research > * { min-width: 0; }
+.feat-thumb { min-width: 0; }
+.feat-thumb img, .mini-thumb img { max-width: 100%; }

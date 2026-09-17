@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rin姫 Commissions — Lindsey Mardona</title>
+  <meta name="description" content="Case study: a self-serve commission site for harmony guides and vocal arrangements — a filterable song catalog with audio previews, a structured intake form, and direct invoicing off VGen." />
+  <link rel="canonical" href="https://lindseymardona.com/commissions.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">skip to content</a>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="index.html">home</a>
+        <a href="resume.html">resume</a>
+        <a href="projects.html" aria-current="page">projects</a>
+        <a href="gallery.html">gallery</a>
+        <a href="about.html">about</a>
+      </div>
+    </div>
+    <div class="nav-rule" role="presentation"></div>
+  </nav>
+
+  <main id="main">
+    <div class="cs-backbar">
+      <div class="wrap"><a class="cs-back" href="projects.html"><span aria-hidden="true">←</span> back to projects</a></div>
+    </div>
+    <header class="cs-hero">
+      <div class="wrap">
+        <h1><span class="h-print">rin姫 Commissions</span></h1>
+        <p class="cs-tagline">The commission site I designed and built for my own harmony-guide and vocal-arrangement work — so returning clients can browse what I've already made, hear a preview, and send a structured request, without a platform taking a cut.</p>
+        <div class="cs-meta">
+          <div><div class="k">Date</div><div class="v">2026</div></div>
+          <div><div class="k">Context</div><div class="v">Personal — my own vocal-commission business (rin姫)</div></div>
+          <div><div class="k">Team</div><div class="v">Solo — design &amp; build</div></div>
+          <div><div class="k">My role</div><div class="v">Product, UX, and front-end — the decisions, the interface, the code, and the copy</div></div>
+          <div><div class="k">Tools</div><div class="v">HTML, CSS &amp; JavaScript · GitHub Pages</div></div>
+        </div>
+        <div class="cs-hero-links">
+          <a class="pill ghost" href="https://rinhimee.github.io/commissions/" target="_blank" rel="noopener">visit the live site ↗</a>
+          <a class="pill ghost" href="https://www.youtube.com/@rinhimee" target="_blank" rel="noopener">youtube ↗</a>
+          <a class="pill ghost" href="https://twitter.com/rinhimeee" target="_blank" rel="noopener">twitter ↗</a>
+          <a class="pill ghost" href="https://github.com/rinhimee/commissions" target="_blank" rel="noopener">github repo ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <article class="cs-body">
+      <div class="wrap">
+        <div class="cs-layout">
+          <nav class="cs-rail" aria-label="Case study sections">
+            <a href="#context">Context</a>
+            <a href="#role">Role</a>
+            <a href="#approach">Approach</a>
+            <a href="#build">What I built</a>
+            <a href="#reflection">Reflection</a>
+          </nav>
+          <div class="cs-read">
+            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">I make harmony guides and vocal arrangements for cover artists and VTubers — the isolated harmony tracks a singer learns their parts from, and the original harmonies and adlibs that make a cover sound like theirs. Most of my requests come through VGen, and for good reason. But I wanted my own front door: a site that keeps the structure VGen is good at, drops the fees it isn't, and finally makes my back catalog worth something to a client browsing it.</p>
+
+            <h2 id="context">Context</h2>
+            <p>If you commission art or music online, the default is <a href="https://vgen.co/" target="_blank" rel="noopener">VGen</a>, and it's genuinely good. You get discovered there, everything lives in one place, there's a kanban board to track orders, you can list different services, payment is streamlined on both ends, and there's a middleman holding the money so the artist and the client both feel safe. For a first-time client and a working artist, that's a lot of trust to get for free.</p>
+            <p>The catch is the fees. VGen takes a 5% service fee, and then payment processing sits on top — Stripe at 2.9% + $0.30, or PayPal at its own rates, and PayPal's cut is actually higher routed through VGen than when I invoice someone directly. I price low on purpose: this is a hobbyist community and my commissions are mostly for fun and a bit of extra cash, not a wage I live on. So a percentage that looks small takes a real bite, and I've had to tack a 5% processing fee onto my quotes just to offset it — the client covers VGen, I cover payment processing.</p>
+            <p>The usual ways off the platform are worse. You can post on Twitter and hope it goes viral, then run everything through DMs and manual PayPal invoices. Or you can put a site in your bio — which only really works once you're famous enough that people are searching for you. Now that I'm a little more established, most of my discovery still comes from VGen, but I wanted a place to send returning and higher-profile clients who skip it — and to fix two things VGen structurally can't.</p>
+
+            <h2 id="role">Role</h2>
+            <p>Solo. I made the product calls, designed the interface, wrote the copy, and built and shipped the whole thing — it's a static site I hand-built and host on GitHub Pages.</p>
+
+            <h2 id="approach">Approach</h2>
+            <p>I didn't want to build more than I needed, so I started by figuring out why the obvious off-the-shelf options don't fit — and only built the parts that were actually missing.</p>
+            <p><strong>Why not just a contact email?</strong> Too open-ended. The thing I actually like about VGen is the structured intake — by the time a request reaches me, the song, the guide type, the add-ons, the deadline, and how to reach the client are all in one place, and I can quote it without a back-and-forth. An email throws all of that away. I wanted to keep the structure and lose the platform.</p>
+            <p><strong>Why not a storefront (Gumroad / VGen Shop)?</strong> Most guide makers sell premade, ready-to-buy guides through a shop, and I wanted to sell my back catalog at a discount too — but storefronts fought me on two fronts. First, they're not flexible enough: I offer both 1:1 harmony guides <em>and</em> vocal arrangements, and a fixed product listing would quietly discourage someone from, say, requesting an arrangement of a song I've only ever made a harmony guide for. Second, they're built for visual goods — the listing is a photo or a video preview. Audio previews just aren't a first-class thing there, so I'd have to render my previews into videos, which is more work for me and a worse experience than an audio player that already does the job.</p>
+            <p><strong>Why not a stem-player demo?</strong> I considered a little built-in DAW-style widget that would let a client mute and solo the tracks to hear how dense a guide is. I liked it, and I killed it. The isolated stems <em>are</em> the deliverable, so a previewable stem player would hand out a usable, shortened version of the thing I'm selling. On top of that, some of my guides have a genuinely absurd number of tracks, and automating a mute/solo demo for a short section of every one of them wasn't worth it. A plain audio preview gets the point across without giving the product away.</p>
+            <p><strong>Why not a spreadsheet?</strong> I actually started this one — a Google Sheet of every guide I've made, tagged by language, type, and complexity — and then bailed on it. Sheets can sort and filter, sure, but handing a client a spreadsheet is a rough first impression: there's nowhere to preview a guide, no clean way to turn a row into an actual request, and it reads like you're poking around my database instead of browsing my work. If the catalog was going to earn its keep, it had to feel like a tool, not a tab.</p>
+
+            <figure>
+              <img src="assets/comm-sheet.jpg" alt="The abandoned Google Sheet — a plain table of songs with columns for song name, artist, language, type, and complexity, and colored tags in each cell" loading="lazy" />
+              <figcaption>The version I actually started before scrapping it — the same data the catalog holds now, but flattened into a spreadsheet: no previews, no one-click request, and not the first impression I wanted to give a client.</figcaption>
+            </figure>
+            <p>So the build came down to four things VGen and the alternatives couldn't give me at once: a catalog a client can actually browse, a preview that's safe to share, an intake form as structured as VGen's, and a home for the questions I answer over and over.</p>
+
+            <h2 id="build">What I built</h2>
+            <p><strong>A catalog that does the sales pitch for me.</strong> Every song I've already worked on lives in a searchable, filterable catalog — 69 of them so far — that you can narrow by language (English, Japanese, Spanish, Korean, Chinese), by complexity, and by guide type. The filters aren't decoration: what I have on hand is exactly what sets the discount and the turnaround. If I already have the harmony guide, I can hand it over almost instantly; if I have a vocal arrangement and you want a harmony guide, I strip the extras back out; if I have a harmony guide and you want an arrangement, I've got a running start. So catalog songs come 10–50% off depending on how much of the work is already done — and turning that into something a client can browse, instead of a discount I mention if they happen to ask, is the whole point. With school starting and less time to take fresh commissions, nudging people toward the back catalog is good for both of us.</p>
+            <p><strong>A preview that can't be re-used as the product.</strong> Opening a song pulls up what I already have on hand — guide type, complexity, and the track count — plus an audio preview with play, mute, and a timecode, and a button that starts a request with the song and artist already filled in. The preview is deliberately a flat audio clip rather than a stem player, for the reason above: it has to demonstrate the harmony without being a usable substitute for the guide itself.</p>
+
+            <figure>
+              <img src="assets/comm-modal.jpg" alt="The song modal for “Everything Goes On”: what's on hand — a complex, 18-track vocal arrangement — a short audio preview clip noting the full guide ships as isolated stems, an embed of the finished cover, and a “request this guide” button" loading="lazy" />
+              <figcaption>Opening a catalog song shows what I already have on hand — here a complex, 18-track arrangement — with a short preview clip (a flat mix, not the isolated stems it actually ships as), the finished cover for songs that are already out, and a button that starts a request with the song filled in.</figcaption>
+            </figure>
+
+            <p style="margin:22px 0 4px;">It's live, and the best way to see it is to poke at it — search a song, flip the filters, and open one to hear a preview and watch the request form pre-fill.</p>
+            <p style="margin:0 0 26px;"><a href="https://rinhimee.github.io/commissions/#catalog" target="_blank" rel="noopener"><strong>▶ open the live catalog ↗</strong></a></p>
+
+            <p><strong>An intake form that asks exactly what I need to quote.</strong> The request flow splits into two paths up front — “a specific song” or “something else” for originals, collabs, and things worth talking through first — so nobody's staring at fields that don't apply to them. For a song, it collects the guide type, the main-melody-guide option (full lead vocal +$20, partial +$10, or none for free), the add-ons, a deadline, and how to reach me, and it shows arrangement-only fields like vocal range and “anything I should know about your voice” only when they're relevant. The add-ons carry their own price blurbs inline — monetized covers +50%, commercial or merch use +100%, rush +100%, staying uncredited +100% — so the pricing that used to live in my head is right there in the form. (There's also a hidden honeypot field quietly catching spam bots, since a static site has no server to do it.) By the time a request lands, I can quote it in one read — which is the exact thing I didn't want to lose by leaving VGen.</p>
+
+            <figure>
+              <img src="assets/comm-form.jpg" alt="The custom-request form: song name, original artist, a link to the original with a checkbox for custom or commissioned instrumentals, guide type, the main-melody-guide tiers (full +$20, partial +$10, none free), the add-ons with their prices, and contact fields" loading="lazy" />
+              <figcaption>The request form asks exactly what I need to quote — guide type, the main-melody-guide tiers, and every add-on with its price right there — so a request lands ready to price.</figcaption>
+            </figure>
+            <p><strong>Pricing and FAQ, out loud.</strong> A pricing page lays out the floors (harmony guide from $20, vocal arrangement from $40, catalog songs 10–50% off), the add-on math, and the main-melody-guide tiers, so a quote is never a surprise — they're free and non-committal, and payment is a PayPal invoice once we've agreed, with a deposit option. And because I field the same handful of questions constantly, a proper FAQ and terms answer them up front: what you actually receive (labelled WAV stems in a zip), that you can use my vocals as a reference to learn from but not as your final track, transposition, revisions, TV-size requests, and how payment works.</p>
+
+            <h2 id="reflection">Reflection</h2>
+            <p>This started as a way to stop losing a cut on already-cheap hobby work, but building it made me name what I actually care about in a commissioning flow: enough structure that quoting is fast, enough transparency that a client isn't guessing at the price, and a preview that shows the work without becoming the work. That last one was the most interesting decision on the whole project — the stem player was the better <em>demo</em> and the worse <em>idea</em>, and choosing the plain audio clip meant putting protecting the deliverable ahead of the flashier build.</p>
+            <p>I'm also clear-eyed about the trade-off. Going direct means giving up VGen's discoverability and its money-holding middleman, so this doesn't replace VGen — it gives my established and higher-profile clients a faster door, while I keep VGen up for reach and link the site from my Twitter (and maybe VGen itself). Next, I want to add a proper featured-works portfolio — the one genuinely nice VGen thing I haven't rebuilt yet — and keep growing the catalog. For a project that's “just” my hobby commissions, it turned out to be the clearest example I have of designing around a real constraint: money, time, and a deliverable that's a little too easy to walk off with.</p>
+
+            <div style="margin-top:36px;">
+              <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <a class="to-top" href="#top"><span class="up" aria-hidden="true">↑</span> return to top</a>
+      <div class="quick">
+        <span class="label">quick nav</span>
+        <a href="index.html">home</a>
+        <a href="resume.html">resume</a>
+        <a href="projects.html">projects</a>
+        <a href="gallery.html">gallery</a>
+        <a href="about.html">about</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
