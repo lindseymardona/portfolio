@@ -1875,6 +1875,7 @@ footer { border-top: 5px solid var(--plum); }
 /* desktop: the new wrappers are invisible pass-throughs; mobile-only bits hidden */
 .daw-lane-scroll, .daw-rl-scroll, .daw-mtop { display: contents; }
 .daw-minimap, .daw-mhead { display: none; }
+.daw-note .dn-mobile { display: none; }
 
 @media (max-width: 640px) {
   /* copy swap + restored session filename */
@@ -2413,3 +2414,6 @@ footer { border-top: 5px solid var(--plum); }
 .lightbox.open { animation: fadeIn .2s ease both; }
 .lb-close:focus-visible, .lb-prev:focus-visible, .lb-next:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .lightbox.open { animation: none; } }
+
+/* ============================================================ ROUND 89 — "being redesigned" note at the end of case studies still on the original layout ============================================================ */
+.cs-read .cs-redesign-note { margin: 44px 0 0; padding-top: 18px; border-top: 1px solid var(--hair); font-family: var(--ui); font-size: .92rem; line-height: 1.55; color: #6b6266; }
