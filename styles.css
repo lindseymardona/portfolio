@@ -2258,3 +2258,76 @@ footer { border-top: 5px solid var(--plum); }
 .feat-card > *, .feat-research > * { min-width: 0; }
 .feat-thumb { min-width: 0; }
 .feat-thumb img, .mini-thumb img { max-width: 100%; }
+
+/* ============================================================ ROUND 86 — bigger hero (hello ×1.35, name ×1.3, portrait ×1.4), h1 name, status sticker, thinner/slower welcome bar + pause button ============================================================ */
+/* more air under the hero; the sticker hangs 24px below the portrait */
+.hero { padding-bottom: 80px; }
+
+/* hello: ×1.35 (was clamp(3.4rem, 7.5vw, 5.4rem)). Borel's deep descent is why
+   line-height goes to 1 and the bottom margin goes negative — it pulls the name
+   up under the glyph instead of under the font box */
+.hero-left .hello { font-size: clamp(4.4rem, 9.5vw, 6.5rem); line-height: 1; margin: .5em 0 -0.21em; }
+
+/* name: now an <h1> — restate everything a UA stylesheet would set on h1 so it
+   looks identical to the old <p>; ×1.3 (was clamp(1.9rem, 4.4vw, 2.5rem)) */
+.hero-left .name { font-family: var(--serif); font-weight: 400; font-size: clamp(2.3rem, 5vw, 3.25rem); line-height: 1.08; letter-spacing: -0.01em; margin: 0; }
+
+/* portrait ×1.4 (was clamp(224px, 25vw, 300px)); the photo is now a slightly
+   tall card (11:12, matching the mock) rather than a square — the framing
+   squares follow the same ratio so they stay tucked behind it */
+.portrait { --pf: clamp(280px, 31vw, 380px); margin-right: 28px; }  /* inset so the outline square + dot don't kiss the page edge */
+.portrait .frame, .portrait .frame-bg { aspect-ratio: 11 / 12; border-radius: 39px; }
+.portrait .frame-bg.bg1 { transform: rotate(-13deg) translate(-25px,-8px); }
+.portrait .frame-bg.bg2 { border-width: 3.5px; transform: rotate(5deg) translate(25px,25px); }
+.portrait:hover .frame-bg.bg1 { transform: rotate(-19deg) translate(-36px,-17px); }
+.portrait:hover .frame-bg.bg2 { transform: rotate(10deg) translate(36px,34px); }
+.portrait .accent.f1 { top: -17px; left: -22px; width: 64px; }
+.portrait .accent.f2 { bottom: -28px; right: -17px; width: 76px; }
+.portrait .accent.sq { right: -34px; width: 42px; }
+
+/* status sticker: lives inside .portrait so it fades in with the photo and
+   drifts on the same accFloat keyframes as the flowers (offset in time so it
+   reads as a separate layer). float uses `translate`, the tilt uses
+   `transform`, so the two never fight; the hover lives on the inner card */
+.portrait .status-sticker { position: absolute; left: -84px; bottom: -24px; z-index: 4; transform: rotate(-7deg); animation: accFloat 6.4s ease-in-out -2.6s infinite; }
+.portrait .ss-inner { display: flex; flex-direction: column; gap: 3px; background: var(--plum); color: #fff; border-radius: 18px; padding: 18px 24px; box-shadow: 0 8px 18px rgba(54,49,51,.2); font-family: var(--ui); white-space: nowrap; transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+.portrait:hover .ss-inner { transform: rotate(-2deg) scale(1.04); }   /* hovers with the frames + flowers, not on its own */
+.portrait .ss-k { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #e6eabf; line-height: 1.2; }
+.portrait .ss-t { font-size: 21px; font-weight: 600; line-height: 1.2; }
+.portrait .ss-s { font-size: 15px; color: #f3dfe9; line-height: 1.3; }
+
+/* stacked hero (phones/tablets): portrait ×1.25 (was clamp(196px, 56vw, 262px)),
+   a touch more right margin so the bigger outline square clears the edge, and
+   the sticker drops into flow BELOW the photo, left-aligned with it */
+@media (max-width: 920px) {
+  /* stacked: photo, sticker and text all share the left edge (right-aligning the
+     photo left it floating off on its own at tablet widths) */
+  .portrait { --pf: clamp(245px, 70vw, 328px); justify-self: start; margin: 0 0 4px 30px; }
+  .portrait .status-sticker { position: static; width: max-content; margin: 58px 0 0; transform: rotate(-4deg); }
+  /* the sticker makes .portrait taller than the photo, so pin the bottom flower
+     and the side dot to the FRAME's height (--pf × 12/11) instead of the box */
+  .portrait .accent.f2 { bottom: auto; top: calc(var(--pf) * 12 / 11 - 48px); }
+  .portrait .accent.sq { top: calc(var(--pf) * 12 / 11 * .36); }
+  .portrait .ss-inner { padding: 16px 20px; }
+  .portrait .ss-t { font-size: 19px; }
+  .portrait .ss-s { font-size: 14px; }
+}
+
+/* welcome bar: thinner, smaller type, ~30% slower (CSS fallback; JS speed is
+   set in script.js), plus a pause/play button on the right edge */
+.hello-bar { position: relative; }
+.hello-bar .marquee-track { padding: 9px 0; animation-duration: 66s; }
+.hello-bar .hm { font-size: .9rem; }
+.hello-bar.is-paused .marquee-track { animation-play-state: paused; }
+.hello-bar .hb-toggle { position: absolute; right: 14px; top: 50%; translate: 0 -50%; z-index: 2; width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 1px solid rgba(54,49,51,.3); background: rgba(253,252,251,.88); color: var(--ink); font-size: 10px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.hello-bar .hb-toggle:hover { background: #fff; }
+.hello-bar .hb-toggle:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+@media (max-width: 620px) { .hello-bar .hm { font-size: .84rem; } .hello-bar .hb-toggle { right: 10px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait .status-sticker { animation: none !important; }
+  .portrait .ss-inner { transition: none; }
+  .portrait:hover .ss-inner { transform: none; }
+  /* the bar is already frozen (and swipeable) under reduced motion — nothing to pause */
+  .hello-bar .hb-toggle { display: none; }
+}

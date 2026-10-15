@@ -118,12 +118,22 @@
       track.style.animation = 'none';
       track.style.willChange = 'transform';
       var reverse = m.classList.contains('rev');
-      var x = 0, speed = 0.45, paused = false;
+      // the welcome bar runs ~30% slower than the photo galleries; `held` is the
+      // user's pause button, `paused` is hover — either one stops the strip
+      var bar = m.closest('.hello-bar');
+      var x = 0, speed = bar ? 0.315 : 0.45, paused = false, held = false;
       m.addEventListener('mouseenter', function () { paused = true; });
       m.addEventListener('mouseleave', function () { paused = false; });
+      var toggle = bar && bar.querySelector('.hb-toggle');
+      if (toggle) toggle.addEventListener('click', function () {
+        held = !held;
+        bar.classList.toggle('is-paused', held);
+        toggle.setAttribute('aria-label', held ? 'Play banner' : 'Pause banner');
+        var ic = toggle.querySelector('i'); if (ic) ic.className = held ? 'fa-solid fa-play' : 'fa-solid fa-pause';
+      });
       function outerW(el) { var s = getComputedStyle(el); return el.offsetWidth + (parseFloat(s.marginRight) || 0) + (parseFloat(s.marginLeft) || 0); }
       function step() {
-        if (!paused) {
+        if (!paused && !held) {
           if (!reverse) {
             x -= speed;
             var first = track.firstElementChild;

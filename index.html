@@ -46,7 +46,7 @@
         <div class="hero-left">
           <div class="hl-top">
             <p class="hello">hello,</p>
-            <p class="name">my name is <b>Lindsey</b></p>
+            <h1 class="name">my name is <b>Lindsey</b></h1>
             <p class="roles">designer. developer. musician.</p>
             <svg class="squiggle" viewBox="0 0 300 22" fill="none" aria-hidden="true">
               <path d="M2 12 C 30 2, 55 2, 82 12 S 140 22, 168 12 S 224 2, 252 12 S 296 18, 298 11"
@@ -64,12 +64,20 @@
           <span class="frame-bg bg1" aria-hidden="true"></span>
           <span class="frame-bg bg2" aria-hidden="true"></span>
           <div class="frame">
-            <img src="assets/lindsey.jpg" alt="Portrait of Lindsey Mardona"
+            <img src="assets/lindsey-hero.jpg" width="880" height="960" alt="Portrait of Lindsey Mardona"
                  onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<span class=&quot;initials&quot;>lm</span>');" />
           </div>
           <svg class="accent f1" viewBox="0 0 40 40" aria-hidden="true"><g fill="#63285C"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
           <svg class="accent f2" viewBox="0 0 40 40" aria-hidden="true"><g fill="#C3C98D"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5.5" fill="#FFFFFF"/></svg>
           <svg class="accent sq" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="3" width="24" height="24" rx="9" fill="#FF4557"/></svg>
+          <!-- status sticker: outer = position/tilt/float, inner = hover only -->
+          <div class="status-sticker">
+            <div class="ss-inner">
+              <span class="ss-k">currently</span>
+              <span class="ss-t">HCI M.S. @ UC Santa Cruz</span>
+              <span class="ss-s">open to Summer 2027 internships</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -78,20 +86,22 @@
     <div class="hello-bar reveal">
       <div class="marquee">
         <div class="marquee-track">
-          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep">✦</span>
-          <span class="hm">HCI M.S. @ UC Santa Cruz</span><span class="hm sep">✦</span>
-          <span class="hm">have a lovely day ❤</span><span class="hm sep">✦</span>
-          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep">✦</span>
-          <span class="hm">HCI M.S. @ UC Santa Cruz</span><span class="hm sep">✦</span>
-          <span class="hm">have a lovely day ❤</span><span class="hm sep">✦</span>
-          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep">✦</span>
-          <span class="hm">HCI M.S. @ UC Santa Cruz</span><span class="hm sep">✦</span>
-          <span class="hm">have a lovely day ❤</span><span class="hm sep">✦</span>
-          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep">✦</span>
-          <span class="hm">HCI M.S. @ UC Santa Cruz</span><span class="hm sep">✦</span>
-          <span class="hm">have a lovely day ❤</span><span class="hm sep">✦</span>
+          <!-- first copy is read by screen readers; the separators + repeats are decorative -->
+          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
+          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
         </div>
       </div>
+      <button class="hb-toggle" type="button" aria-label="Pause banner"><i class="fa-solid fa-pause" aria-hidden="true"></i></button>
     </div>
 
     <!-- WORKIN' LATE -->
