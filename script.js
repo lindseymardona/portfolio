@@ -58,25 +58,37 @@
     });
   }
 
-  /* ---- lightbox carousel (tiles with data-lightbox) ---- */
+  /* ---- lightbox carousel (anything with data-lightbox: gallery tiles, case-study
+     figure buttons). Optional: data-captions (JSON), data-alts (JSON), data-start.
+     Focus moves into the dialog, Tab stays inside it, and focus returns to the
+     trigger on close. Alt text comes from data-alts, else the matching <img> on the
+     page; a single image's caption falls back to its figure's figcaption ---- */
   var lbTiles = [].slice.call(document.querySelectorAll('[data-lightbox]'));
   if (lbTiles.length) {
     var m = document.createElement('div');
     m.className = 'lightbox';
     m.setAttribute('role', 'dialog');
     m.setAttribute('aria-modal', 'true');
+    m.setAttribute('aria-label', 'Image viewer');
     m.innerHTML =
-      '<button class="lb-close" aria-label="Close">&times;</button>' +
-      '<button class="lb-prev" aria-label="Previous image">&#8249;</button>' +
+      '<button class="lb-close" type="button" aria-label="Close">&times;</button>' +
+      '<button class="lb-prev" type="button" aria-label="Previous image">&#8249;</button>' +
       '<figure class="lb-fig"><img alt="" /><figcaption></figcaption></figure>' +
-      '<button class="lb-next" aria-label="Next image">&#8250;</button>' +
+      '<button class="lb-next" type="button" aria-label="Next image">&#8250;</button>' +
       '<span class="lb-count"></span>';
     document.body.appendChild(m);
-    var imgs = [], caps = [], idx = 0;
+    var imgs = [], caps = [], alts = [], idx = 0, lbReturn = null;
     var lbImg = m.querySelector('img'), lbCap = m.querySelector('figcaption'), lbCount = m.querySelector('.lb-count');
+    var lbClose = m.querySelector('.lb-close');
+    var pageAlt = function (src) {
+      var all = document.querySelectorAll('img');
+      for (var k = 0; k < all.length; k++) if (all[k].getAttribute('src') === src && all[k].alt) return all[k].alt;
+      return '';
+    };
     function show(i) {
       idx = (i + imgs.length) % imgs.length;
       lbImg.src = imgs[idx];
+      lbImg.alt = alts[idx] || pageAlt(imgs[idx]) || caps[idx] || '';
       lbCap.textContent = caps[idx] || '';
       lbCount.textContent = imgs.length > 1 ? (idx + 1) + ' / ' + imgs.length : '';
     }
@@ -84,18 +96,32 @@
       try { imgs = JSON.parse(t.getAttribute('data-lightbox')); }
       catch (e) { imgs = [t.getAttribute('data-lightbox')]; }
       try { caps = JSON.parse(t.getAttribute('data-captions') || '[]'); } catch (e) { caps = []; }
+      try { alts = JSON.parse(t.getAttribute('data-alts') || '[]'); } catch (e) { alts = []; }
+      if (!caps.length && imgs.length === 1) {
+        var fc = t.closest('figure') && t.closest('figure').querySelector('figcaption');
+        if (fc) caps = [fc.textContent.trim()];
+      }
       var multi = imgs.length > 1;
       m.querySelector('.lb-prev').style.display = multi ? '' : 'none';
       m.querySelector('.lb-next').style.display = multi ? '' : 'none';
-      show(0);
+      show(parseInt(t.getAttribute('data-start'), 10) || 0);
+      lbReturn = t;
       m.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      // lock scroll on <html>, not <body>: html has overflow-x:clip, so a body lock makes
+      // body its own scroll box and the sticky nav / back pill scroll away behind the overlay
+      document.documentElement.style.overflow = 'hidden';
+      lbClose.focus();
     }
-    function close() { m.classList.remove('open'); document.body.style.overflow = ''; }
+    function close() {
+      m.classList.remove('open');
+      document.documentElement.style.overflow = '';
+      if (lbReturn) { try { lbReturn.focus({ preventScroll: true }); } catch (e) { lbReturn.focus(); } }
+      lbReturn = null;
+    }
     lbTiles.forEach(function (t) {
       t.addEventListener('click', function (e) { e.preventDefault(); open(t); });
     });
-    m.querySelector('.lb-close').addEventListener('click', close);
+    lbClose.addEventListener('click', close);
     m.querySelector('.lb-prev').addEventListener('click', function () { show(idx - 1); });
     m.querySelector('.lb-next').addEventListener('click', function () { show(idx + 1); });
     m.addEventListener('click', function (e) { if (e.target === m) close(); });
@@ -104,6 +130,14 @@
       if (e.key === 'Escape') close();
       else if (e.key === 'ArrowLeft') show(idx - 1);
       else if (e.key === 'ArrowRight') show(idx + 1);
+      else if (e.key === 'Tab') {
+        // keep focus on the dialog's visible buttons
+        var btns = [].slice.call(m.querySelectorAll('button')).filter(function (b) { return b.style.display !== 'none'; });
+        var at = btns.indexOf(document.activeElement);
+        e.preventDefault();
+        if (at < 0) btns[e.shiftKey ? btns.length - 1 : 0].focus();
+        else btns[(at + (e.shiftKey ? -1 : 1) + btns.length) % btns.length].focus();
+      }
     });
   }
 
@@ -236,12 +270,12 @@
     };
     var openLb = function (list, i) {
       photos = list; idx = i; lastFocus = document.activeElement;
-      render(); lb.hidden = false; document.body.style.overflow = 'hidden';
+      render(); lb.hidden = false; document.documentElement.style.overflow = 'hidden';   // html, not body: see the lightbox note
       requestAnimationFrame(function () { lb.classList.add('cam-in'); });
       lb.querySelector('.cam-close').focus();
     };
     var closeLb = function () {
-      lb.classList.remove('cam-in'); document.body.style.overflow = '';
+      lb.classList.remove('cam-in'); document.documentElement.style.overflow = '';
       setTimeout(function () { lb.hidden = true; }, 220);
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     };
@@ -837,7 +871,7 @@
     var railLinks = [].slice.call(rail.querySelectorAll('a'));
     var railHeads = railLinks.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
     var csNav = document.querySelector('.nav');
-    var csMq = window.matchMedia('(max-width: 820px)');
+    var csMq = window.matchMedia('(max-width: 920px)');   // matches the section-bar CSS (where the layout stacks)
 
     /* ---- point "back" at wherever you actually came from (?from=home) ---- */
     var fromHome = new URLSearchParams(location.search).get('from') === 'home';
@@ -876,8 +910,8 @@
       mName = mbar.querySelector('.csm-name');
       mCount = mbar.querySelector('.csm-count');
       var trig = mbar.querySelector('.csm-trigger');
-      var closeSheet = function () { trig.setAttribute('aria-expanded', 'false'); mSheet.classList.remove('open'); mOverlay.classList.remove('open'); document.body.style.overflow = ''; };
-      var openSheet = function () { positionSheet(); trig.setAttribute('aria-expanded', 'true'); mSheet.classList.add('open'); mOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; };
+      var closeSheet = function () { trig.setAttribute('aria-expanded', 'false'); mSheet.classList.remove('open'); mOverlay.classList.remove('open'); document.documentElement.style.overflow = ''; };
+      var openSheet = function () { positionSheet(); trig.setAttribute('aria-expanded', 'true'); mSheet.classList.add('open'); mOverlay.classList.add('open'); document.documentElement.style.overflow = 'hidden'; };   // html, not body: see the lightbox note
       trig.addEventListener('click', function () { (mSheet.classList.contains('open') ? closeSheet : openSheet)(); });
       mOverlay.addEventListener('click', closeSheet);
       mItems.forEach(function (it) { it.addEventListener('click', closeSheet); });

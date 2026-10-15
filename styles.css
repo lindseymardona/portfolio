@@ -1048,7 +1048,9 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 /* hidden by default; only the mobile @media block below turns it on */
 .cs-mobilebar, .csm-overlay, .csm-sheet { display: none; }
 
-@media (max-width: 820px) {
+/* (was 820px; ROUND 88 moved it to 920px, where the case-study layout stacks, so the
+   in-between widths get the section bar instead of a wrapped row of rail links) */
+@media (max-width: 920px) {
   /* the merged section bar replaces the desktop back-pill + rail on phones */
   .cs-backbar { display: none; }
   .cs-body .cs-layout .cs-rail { display: none; }
@@ -2358,3 +2360,154 @@ footer { border-top: 5px solid var(--plum); }
      and dropped far enough to clear the outline's rotated bottom edge */
   .portrait .status-sticker { position: relative; z-index: 4; left: 50%; bottom: auto; margin: 64px 0 0; transform: translateX(-50%) rotate(-4deg); }
 }
+
+/* ============================================================ ROUND 88 — LCHD case study rebuild (case-study-lppi.html). Everything is scoped to body.cs-lchd except the shared lightbox polish at the end ============================================================ */
+.cs-lchd { --cs-measure: 620px; }
+
+/* one label style for the whole page: section names, meta keys, figure + card labels, rail heading */
+.cs-lchd .cs-label { font-family: var(--ui); font-weight: 700; font-size: 13px; line-height: 1.3; letter-spacing: .08em; text-transform: uppercase; color: var(--plum); margin: 0 0 10px; }
+.cs-lchd .cs-label-muted { color: #6b6266; }
+
+/* hero: title + subtitle + live link on the left, the projects-card thumbnail as a tilted card on the right */
+.cs-hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; }
+.cs-lchd .cs-hero h1 { line-height: 1.1; }   /* the title wraps to two lines here; body's 1.6 left a gap between them */
+.cs-hero-card { margin: 0; justify-self: end; width: 100%; max-width: 400px; animation: fadeUp .6s ease both; animation-delay: .42s; }
+.cs-hero-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; transform: rotate(2deg); box-shadow: 0 16px 34px rgba(99,40,92,0.18); }
+.cs-hero-card figcaption { font-family: var(--ui); font-size: 13px; color: rgba(54,49,51,.8); text-align: center; margin-top: 18px; }
+
+/* meta row: all six in one row under a thin divider */
+.cs-lchd .cs-meta { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px 24px; max-width: none; margin-top: 40px; padding-top: 24px; border-top: 1.5px solid rgba(54,49,51,0.25); }
+.cs-lchd .cs-meta .k { margin-bottom: 6px; }
+.cs-lchd .cs-meta .v { font-family: var(--read); font-weight: 500; font-size: 15.5px; line-height: 1.45; }
+
+/* stat band: four cards */
+.cs-lchd .cs-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin: 0; }
+.cs-lchd .cs-snapshot .cs-stat { background: rgba(255,255,255,0.55); border-radius: 16px; padding: 22px; }
+.cs-lchd .cs-stat .n, .cs-lchd .cs-stat.text .n { font-family: var(--serif); font-size: 30px; line-height: 1.1; }
+.cs-lchd .cs-stat .l { font-family: var(--ui); font-size: 15px; line-height: 1.45; margin-top: 10px; color: rgba(54,49,51,.85); }
+
+/* body: same side margins as the nav/hero/stat band. Text keeps a 620px measure;
+   figures, card grids, the stat callouts and the version strip run the full column */
+.cs-lchd .cs-body .wrap { max-width: var(--maxw); }
+.cs-lchd .cs-body .cs-layout .cs-read { max-width: none; }
+.cs-lchd .cs-section > * { max-width: var(--cs-measure); }
+.cs-lchd .cs-section > .fig-wide, .cs-lchd .cs-section > .cs-who, .cs-lchd .cs-section > .cs-findings { max-width: none; }
+.cs-lchd .cs-section { scroll-margin-top: 136px; }
+.cs-lchd .cs-section + .cs-section { margin-top: 76px; }
+.cs-lchd .cs-read > .cs-section:first-child .cs-pair { margin-top: 0; }
+.cs-lchd .cs-outro { margin-top: 64px; }
+
+/* section claims: label above, no plum bar */
+.cs-lchd .cs-body h2::before { content: none; display: none; }
+.cs-lchd .cs-read h2 { font-family: var(--serif); font-size: 34px; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 18px; }
+.cs-lchd .cs-read h3 { font-size: 24px; line-height: 1.2; margin: 40px 0 12px; }
+.cs-lchd .cs-read .cs-label-h2 { font-family: var(--ui); font-weight: 700; font-size: 13px; line-height: 1.3; letter-spacing: .08em; margin: 0 0 10px; }
+.cs-lchd .cs-label-h2 + h3 { margin-top: 0; }
+.cs-lchd .cs-strip + h2 { margin-top: 44px; }
+
+/* rail: "on this page" heading; inactive links darkened to pass 4.5:1 (active stays plum + bold) */
+.cs-lchd .cs-rail-label { margin: 0 0 12px; }
+.cs-lchd .cs-rail a:not(.active) { color: #6b6266; }
+.cs-lchd .cs-rail a:not(.active):hover { color: var(--plum); }
+/* mobile section bar's n/total counter: Karla, no mono on this page */
+.cs-lchd .csm-meta { font-family: var(--ui); font-size: .78rem; }
+
+/* captions: existing type, left-aligned to the text measure, darkened to pass 4.5:1 */
+.cs-lchd .cs-read figcaption { text-align: left; max-width: var(--cs-measure); color: #6b6266; margin-top: 12px; }
+
+/* figure images are real buttons that open the lightbox */
+.cs-zoom { display: block; width: 100%; padding: 0; margin: 0; border: 0; background: none; font: inherit; color: inherit; text-align: inherit; cursor: zoom-in; border-radius: 12px; }
+.cs-zoom img { transition: transform .2s ease, box-shadow .2s ease; }
+.cs-zoom:hover img { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(99,40,92,.5); }
+.cs-zoom:focus-visible { outline: 3px solid rgba(99,40,92,.6); outline-offset: 4px; }
+/* tint behind images so a not-yet-exported placeholder reads as a box */
+.cs-lchd .cs-read figure img { background: #f3ecea; }
+
+/* before/after + V5/final: two images side by side, label above each */
+.cs-pair-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+
+/* who it's for: three cards */
+.cs-lchd .cs-body .cs-who { list-style: none; padding: 0; margin: 26px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.cs-lchd .cs-body .cs-who-card { background: #faf3f2; border-radius: 14px; padding: 20px; margin: 0; font-size: .96rem; line-height: 1.5; color: rgba(54,49,51,.9); }
+.cs-lchd .cs-body .cs-who-card::before { content: none; }
+.cs-lchd .cs-who-card strong { display: block; font-size: 1rem; margin-bottom: 6px; color: var(--ink); }
+
+/* testing task list: plum number badges */
+.cs-lchd .cs-body .cs-steps { list-style: none; padding: 0; margin: 4px 0 30px; counter-reset: cs-step; }
+.cs-lchd .cs-body .cs-steps li { counter-increment: cs-step; position: relative; padding: 1px 0 0 42px; margin-bottom: 14px; min-height: 28px; }
+.cs-lchd .cs-body .cs-steps li::before { content: counter(cs-step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--plum); color: #fff; font-family: var(--ui); font-weight: 700; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+
+/* testing findings: two big stat callouts */
+.cs-findings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 34px 0 6px; }
+.cs-finding { background: #EFCECC; border-radius: 18px; padding: 26px; }
+.cs-lchd .cs-finding .cs-label { margin-bottom: 8px; }
+.cs-lchd .cs-body .cs-finding-num { font-family: var(--serif); font-size: 60px; line-height: 1.05; letter-spacing: -0.01em; color: var(--plum); margin: 4px 0 12px; }
+.cs-lchd .cs-body .cs-finding-text { font-family: var(--ui); font-size: 1rem; line-height: 1.55; color: var(--ink); margin: 0; }
+.cs-finding-dark { background: #63285C; }
+.cs-lchd .cs-finding-dark .cs-label { color: #e6eabf; }
+.cs-lchd .cs-body .cs-finding-dark .cs-finding-num { color: #fff; }
+.cs-lchd .cs-body .cs-finding-dark .cs-finding-text { color: #f3dfe9; }
+
+/* version strip: page 1 of each version, final outlined in plum */
+.cs-lchd .cs-body .cs-strip-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.cs-lchd .cs-body .cs-strip-item { padding: 0; margin: 0; font-size: inherit; }
+.cs-lchd .cs-body .cs-strip-item::before { content: none; }
+.cs-lchd .cs-strip-item img { aspect-ratio: 17 / 22; object-fit: cover; object-position: top; }
+.cs-lchd .cs-strip-item .cs-label { font-size: 12.5px; margin: 10px 0 0; }
+.cs-lchd .cs-read .cs-strip-final img { border: 2px solid var(--plum); }
+
+/* iteration bar chart: bar length = rounds / 10 of the track (minus room for the value) */
+.cs-bars { display: grid; gap: 10px; margin: 4px 0 22px; }
+.cs-bar-row { display: grid; grid-template-columns: 110px minmax(0, 1fr); align-items: center; gap: 14px; }
+.cs-bar-label { font-family: var(--ui); font-size: 14px; color: var(--ink); }
+.cs-bar-track { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.cs-bar { flex: none; display: block; height: 18px; border-radius: 9px; background: #6E7A35; width: calc((100% - 84px) * var(--n) / 10); }
+.cs-bar-hi { background: #63285C; }
+.cs-bar-val { font-family: var(--ui); font-weight: 700; font-size: 14px; color: var(--ink); white-space: nowrap; }
+
+/* tablet: hero stacks into one centered column, like the home hero (its .wrap caps
+   at 600px; phones are narrower than that, so they're unaffected); the card centers
+   under the text. Meta to 3 columns, stats 2x2 */
+@media (max-width: 920px) {
+  .cs-lchd .cs-hero .wrap { max-width: 600px; }
+  .cs-hero-grid { grid-template-columns: 1fr; }
+  .cs-hero-card { justify-self: center; }
+  .cs-lchd .cs-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cs-lchd .cs-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-lchd .cs-section { scroll-margin-top: 140px; }   /* clears the nav + section bar */
+}
+/* 821–920px now gets the section bar too, but the site nav only auto-hides at 820px and
+   below, so section jumps there have to clear both (other case studies' h2 anchors too) */
+@media (min-width: 821px) and (max-width: 920px) {
+  .cs-read h2[id] { scroll-margin-top: 140px; }
+}
+@media (max-width: 820px) {
+  .cs-lchd .cs-section { scroll-margin-top: 124px; }
+}
+@media (max-width: 700px) {
+  .cs-lchd .cs-body .cs-who { grid-template-columns: 1fr; }
+}
+/* phone: pairs + callouts stack, strip goes 2x2, smaller claims */
+@media (max-width: 600px) {
+  .cs-pair-grid { grid-template-columns: 1fr; gap: 22px; }
+  .cs-findings { grid-template-columns: 1fr; }
+  .cs-lchd .cs-body .cs-strip-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
+  .cs-lchd .cs-read h2 { font-size: 28px; }
+  .cs-lchd .cs-read h3 { font-size: 22px; }
+  .cs-lchd .cs-body .cs-finding-num { font-size: 48px; }
+  .cs-lchd .cs-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-bar-row { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+}
+@media (max-width: 520px) {
+  .cs-lchd .cs-stats { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-hero-card { animation: none; }
+  .cs-zoom img { transition: none; }
+  .cs-zoom:hover img { transform: none; }
+}
+
+/* shared lightbox (gallery + case studies): soft fade in, visible focus on its buttons */
+.lightbox.open { animation: fadeIn .2s ease both; }
+.lb-close:focus-visible, .lb-prev:focus-visible, .lb-next:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .lightbox.open { animation: none; } }

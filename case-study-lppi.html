@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Latino Climate &amp; Health Dashboard — Lindsey Mardona</title>
-  <meta name="description" content="UX case study: designing the UCLA LPPI Latino Climate & Health Dashboard — county factsheets that turn climate-and-health research into tools policymakers can act on." />
+  <meta name="description" content="The first-of-its-kind public dashboard that turns dense, neighborhood-level climate and health research into county factsheets advocates and policymakers can actually use." />
   <link rel="canonical" href="https://lindseymardona.com/case-study-lppi.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
   <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body id="top">
+<body id="top" class="cs-lchd">
   <a class="skip-link" href="#main">skip to content</a>
 
   <nav class="nav" aria-label="Primary">
@@ -35,16 +35,25 @@
     </div>
     <header class="cs-hero">
       <div class="wrap">
-        <h1><span class="h-print">Latino Climate &amp; Health Dashboard</span></h1>
-        <p class="cs-tagline">The first-of-its-kind public dashboard that turns dense, neighborhood-level climate-and-health research into county factsheets advocates and policymakers can actually use.</p>
-        <div class="cs-meta">
-          <div><div class="k">Role</div><div class="v">UX Designer (sole designer)</div></div>
-          <div><div class="k">Timeline</div><div class="v">Oct 2024 – June 2025</div></div>
-          <div><div class="k">Client</div><div class="v">UCLA LPPI</div></div>
-          <div><div class="k">Team</div><div class="v">8 (me + developer + 6 research/leadership)</div></div>
-          <div><div class="k">Tools</div><div class="v">Figma, Qualtrics</div></div>
+        <div class="cs-hero-grid">
+          <div class="cs-hero-copy">
+            <h1><span class="h-print">Latino Climate &amp; Health Dashboard</span></h1>
+            <p class="cs-tagline">The first-of-its-kind public dashboard that turns dense, neighborhood-level climate and health research into county factsheets advocates and policymakers can actually use.</p>
+            <div class="cs-hero-links"><a class="pill ghost" href="https://latinoclimatehealth.org/" target="_blank" rel="noopener">view the live dashboard ↗</a></div>
+          </div>
+          <figure class="cs-hero-card">
+            <img src="assets/proj-lchd.jpg" alt="Three phone mockups of the Latino Climate &amp; Health Dashboard: the Newsroom, California County Profiles with the county map, and Our Data pages" />
+            <figcaption>Dashboard design mockups.</figcaption>
+          </figure>
         </div>
-        <div style="margin-top:22px;"><a class="pill ghost" href="https://latinoclimatehealth.org/" target="_blank" rel="noopener">view the live dashboard ↗</a></div>
+        <div class="cs-meta">
+          <div><div class="k cs-label">Role</div><div class="v">UX Designer &amp; Researcher (sole designer)</div></div>
+          <div><div class="k cs-label">Timeline</div><div class="v">Oct 2024 – June 2025</div></div>
+          <div><div class="k cs-label">Client</div><div class="v">UCLA Latino Policy &amp; Politics Institute</div></div>
+          <div><div class="k cs-label">Team</div><div class="v">8 (me + developer + 6 research/leadership)</div></div>
+          <div><div class="k cs-label">Tools</div><div class="v">Figma, Qualtrics</div></div>
+          <div><div class="k cs-label">Methods</div><div class="v">Comprehension testing, stakeholder reviews, WCAG contrast testing</div></div>
+        </div>
       </div>
     </header>
 
@@ -52,9 +61,10 @@
     <section class="section cs-snapshot" style="padding:38px 0;">
       <div class="wrap">
         <div class="cs-stats">
-          <div class="cs-stat text reveal"><span class="n">Health Affairs</span><span class="l">featured in a peer-reviewed 2026 article (45:5)</span></div>
+          <div class="cs-stat text reveal"><span class="n">Health Affairs</span><span class="l">the subject of a peer-reviewed 2026 article (45:5)</span></div>
+          <div class="cs-stat reveal"><span class="n">38</span><span class="l">people tested the factsheets before launch</span></div>
           <div class="cs-stat text reveal"><span class="n">NALEO</span><span class="l">presented at the 43rd Annual Conference</span></div>
-          <div class="cs-stat reveal"><span class="n">6,000+</span><span class="l">users in the first year after launch</span></div>
+          <div class="cs-stat reveal"><span class="n">~6,000</span><span class="l">users in the first year after launch</span></div>
         </div>
       </div>
     </section>
@@ -63,76 +73,282 @@
       <div class="wrap">
         <div class="cs-layout">
           <nav class="cs-rail" aria-label="Case study sections">
-            <a href="#context">Context</a>
-            <a href="#role">Role</a>
-            <a href="#process">Process</a>
+            <p class="cs-label cs-rail-label">On this page</p>
+            <a href="#before-after">Before &amp; after</a>
+            <a href="#problem">Problem</a>
+            <a href="#audience">Who it’s for</a>
+            <a href="#team">Team &amp; role</a>
+            <a href="#experience">The experience</a>
+            <a href="#testing">Testing</a>
+            <a href="#evolution">How it evolved</a>
             <a href="#outcome">Outcome</a>
-            <a href="#reflection">Reflection</a>
+            <a href="#learned">What I learned</a>
           </nav>
           <div class="cs-read">
-          <h2 id="context">Context</h2>
-          <p>LPPI had rigorous data on how climate and health risks — extreme heat and air pollution — fall unevenly on California's Latino neighborhoods. Unfortunately, rigorous data doesn't move policy on its own. Researchers can easily parse dense tables; but what about the advocates, organizers, and legislative staff who actually drive change?</p>
-          <p>The design challenge was legibility under pressure: <strong>make a neighborhood's disparities clear to a non-researcher in under a minute, without diluting the research.</strong></p>
 
-          <h2 id="role">My role</h2>
-          <p>I was the sole designer on an eight-person team, owning the interaction and visual design of both the interactive California county map and every county factsheet. I worked closely with our developer through design handoff, contributed to the survey design used to validate the factsheets, and led the integration of stakeholder and user feedback across every iteration.</p>
+            <!-- ============ BEFORE & AFTER ============ -->
+            <section class="cs-section" id="before-after" aria-labelledby="before-after-h">
+              <h2 class="sr-only" id="before-after-h">Before and after</h2>
+              <figure class="cs-pair fig-wide">
+                <div class="cs-pair-grid">
+                  <div class="cs-pair-item">
+                    <p class="cs-label cs-label-muted">Before · Dec 2024</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/lchd/before.jpg">
+                      <img src="assets/lchd/before.jpg" alt="Early draft of the Los Angeles County Extreme Heat factsheet, page 1: a dense grid of statistic cards, a gray placeholder map, and long dark text panels that crowd the numbers" loading="lazy" />
+                    </button>
+                  </div>
+                  <div class="cs-pair-item">
+                    <p class="cs-label">After · Final</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/lchd/after.jpg">
+                      <img src="assets/lchd/after.jpg" alt="Final California Extreme Heat factsheet, page 1: population and statistic cards across the top, a shaded map of extreme heat days, and large paired numbers for Latino and non-Latino White neighborhoods" loading="lazy" />
+                    </button>
+                  </div>
+                </div>
+                <figcaption>Left: an early draft, where the text drowned the numbers. Right: the final, after 10 rounds of revision and testing with 38 people. Copy cut, hierarchy rebuilt, and every term defined, so the statistics carry the weight.</figcaption>
+              </figure>
+            </section>
 
-          <h2 id="process">Process</h2>
-          <p><strong>The experience.</strong> An interactive map of California counties. Selecting a county surfaces two infographic-style factsheets with that county's data, deliberately contrasting Latino and non-Latino White populations on the chosen metric — extreme heat or air pollution. Final scope: 24 factsheets (23 counties plus a statewide sheet), each produced for both topics.</p>
+            <!-- ============ THE PROBLEM ============ -->
+            <section class="cs-section" id="problem" aria-labelledby="problem-h">
+              <p class="cs-label">The problem</p>
+              <h2 id="problem-h">Rigorous data doesn’t move policy on its own.</h2>
+              <p>LPPI had rigorous data on how extreme heat and air pollution fall unevenly on California’s Latino neighborhoods, down to the census tract. Researchers can parse dense tables easily. The advocates, organizers, and legislative staff who actually drive change usually can’t, and they don’t have time to try.</p>
+              <p>The design challenge was legibility under pressure: make a neighborhood’s disparities clear to a non-researcher in under a minute, on a printed two-page factsheet, without diluting the research.</p>
+            </section>
 
-          <figure>
-            <img src="assets/lchd/factsheet-air.jpg" alt="A county air-pollution factsheet — an infographic pairing each metric for Latino and non-Latino White neighborhoods, with a neighborhood map of PM2.5 exposure" loading="lazy" />
-            <figcaption>A county factsheet — infographic-style, pairing every metric for Latino vs. non-Latino White neighborhoods so a disparity reads in seconds. Selecting a county on the map surfaces its two factsheets.</figcaption>
-          </figure>
+            <!-- ============ WHO IT'S FOR ============ -->
+            <section class="cs-section" id="audience" aria-labelledby="audience-h">
+              <p class="cs-label">Who it’s for</p>
+              <h2 id="audience-h">People who use data to argue for change, not to study it.</h2>
+              <ul class="cs-who">
+                <li class="cs-who-card reveal"><strong>Advocates and community organizers</strong> <span>who bring statistics to city council meetings, community workshops, and grant proposals.</span></li>
+                <li class="cs-who-card reveal"><strong>Legislative and agency staff</strong> <span>who need a defensible number fast, often in a briefing.</span></li>
+                <li class="cs-who-card reveal"><strong>Researchers and partner organizations</strong> <span>who want neighborhood-level evidence in one place.</span></li>
+              </ul>
+              <p>Many of them would meet the factsheets on paper, printed and handed across a table. That meant designing for print: two pages, no hover states, text no smaller than 12 pt, and a real question of how everything would read when printed in black and white.</p>
+            </section>
 
-          <p><strong>Validation.</strong> We ran a Qualtrics survey with the internal team and policymakers to test whether the factsheets communicated clearly. I helped shape the survey and translated what came back into the next round of design.</p>
+            <!-- ============ TEAM AND MY ROLE ============ -->
+            <section class="cs-section" id="team" aria-labelledby="team-h">
+              <p class="cs-label">Team and my role</p>
+              <h2 id="team-h">The only designer on a team of researchers.</h2>
+              <p>My eight-person team: six researchers and project leads, a developer, and me as the only designer. I owned the interaction and visual design of the interactive county map, the website, and every factsheet.</p>
+              <ul>
+                <li><strong>Design:</strong> factsheets for both topics, the website and homepage, the “Our Data,” FAQ, and Resource Directory pages, and the color and type system.</li>
+                <li><strong>Research:</strong> user testing was part of my scope from the start. I co-planned the comprehension survey with our project lead and integrated stakeholder and user feedback into each iteration.</li>
+                <li><strong>Handoff:</strong> I worked closely with our developer as he automated factsheet generation from my Figma files, so every layout decision had to work across all 46 county factsheets, not just one.</li>
+              </ul>
+              <p>I’m acknowledged by name in the dashboard’s official Technical Documentation for the design of the factsheets.</p>
+            </section>
 
-          <p><strong>The core problem — restraint.</strong> Early factsheets were text-heavy to the point of drowning the numbers, which were the whole point. Across iterations I cut copy aggressively and rebuilt the visual hierarchy so the statistics carried the weight — using size, color, and directional indicators to steer the eye to what mattered. This meant genuine editorial tradeoffs on both sides: researchers had to re-write and even remove very carefully written copy, and I dropped graphs and visuals of my own, all to prioritize and fit the essential data legibly in a fixed space. And facilitating that negotiation — helping a research team let go in service of the reader — was as much of the work as the design itself.</p>
+            <!-- ============ THE EXPERIENCE ============ -->
+            <section class="cs-section" id="experience" aria-labelledby="experience-h">
+              <p class="cs-label">The experience</p>
+              <h2 id="experience-h">Pick a county, get the disparities in seconds.</h2>
+              <p>An interactive map of California counties. Selecting a county opens two infographic-style factsheets, one for extreme heat and one for air pollution, each contrasting Latino neighborhoods with non-Latino White neighborhoods on every metric. Final scope: 23 counties plus statewide California factsheets, each produced for both topics.</p>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/lchd/factsheet-air.jpg">
+                  <img src="assets/lchd/factsheet-air.jpg" alt="A county air pollution factsheet: an infographic pairing each metric for Latino and non-Latino White neighborhoods, with a neighborhood map of PM2.5 exposure" loading="lazy" />
+                </button>
+                <figcaption>A county factsheet pairs every metric for Latino and non-Latino White neighborhoods, so the gap between them is visible at a glance.</figcaption>
+              </figure>
+              <p>Around the factsheets, I designed the supporting pages that make the data trustworthy: “Our Data,” where I proposed a searchable, filterable indicator list (the shipped version sorts alphabetically with theme filters), an FAQ, and a Resource Directory of community organizations. I also pushed for a short explanatory blurb on the homepage, pointing to dashboards like KFF and MyFutureNC, because a landing page with no text gives a first-time visitor no way to know what they’re looking at. A one-sentence version shipped: it tells visitors the dashboard equips advocates and decision-makers with data on climate and health risks in Latino neighborhoods.</p>
+            </section>
 
-          <figure class="fig-wide">
-            <img src="assets/lchd/before-after.jpg" alt="Before and after of an extreme-heat factsheet: a text-heavy early draft on the left, and the final on the right where the statistics carry the weight" loading="lazy" />
-            <figcaption>Left: an early draft, drowning the numbers. Right: the final — copy cut, hierarchy rebuilt, the statistics given room to carry the weight.</figcaption>
-          </figure>
+            <!-- ============ TESTING ============ -->
+            <section class="cs-section" id="testing" aria-labelledby="testing-h">
+              <p class="cs-label">Testing what people actually understood</p>
+              <h2 id="testing-h">We asked people to find things, not whether they liked it.</h2>
+              <p>I co-planned a comprehension survey with our project lead. Following advice from LPPI’s Latino Data Hub team, we built it around tasks instead of opinions: people can tell you they understand something without being able to use it. Thirty-eight people tested a draft factsheet for LA or Fresno County: advocates and community organizers, state agency staff, UCLA researchers, and LPPI staff. Each one:</p>
+              <ol class="cs-steps">
+                <li>Found the definition of an extreme heat day.</li>
+                <li>Compared Latino and non-Latino White neighborhoods on a chart.</li>
+                <li>Read the map to say whether the county had more or fewer extreme heat days than the state.</li>
+                <li>Rated their confidence and the design, then told us what was confusing or missing.</li>
+              </ol>
 
-          <p><strong>Iteration as system-building.</strong> The flagship extreme heat factsheet went through 10 rounds of revision, because it was effectively inventing the template. That investment paid off: air pollution mostly reused the established pattern and needed only 4 rounds, and the dashboard itself took roughly 4. The early grind and frustrations produced a reusable system, not just a single deliverable.</p>
+              <div class="cs-findings">
+                <div class="cs-finding reveal">
+                  <p class="cs-label">The map was the problem</p>
+                  <p class="cs-finding-num">9 of 34</p>
+                  <p class="cs-finding-text">LA readers got the county-versus-state comparison wrong, couldn’t find it, or said it was hard to find.</p>
+                </div>
+                <div class="cs-finding cs-finding-dark reveal">
+                  <p class="cs-label">They didn’t know they’d misread it</p>
+                  <p class="cs-finding-num">7 of 9</p>
+                  <p class="cs-finding-text">of those readers still rated themselves confident they understood the factsheet.</p>
+                </div>
+              </div>
 
-          <p><strong>A late curveball on color.</strong> The palette I'd designed used two distinct color families — one per topic — so extreme heat and air pollution read as different chapters at a glance. It went through 4 rounds of revisions and passed WCAG contrast testing before it was approved, and persisted through another six rounds of design revision. Then, with under a month to the deadline, leadership decided it read as too colorful and asked for a single, more subdued green-and-blue palette shared across both factsheets. It wasn't the direction the team or I would have chosen — I still think distinct palettes served the reader better — but the constraint was real, so we made the shift work. Thankfully, with reusable Figma color styles, swapping the palette across every factsheet was a near-instant global change instead of editing each sheet by hand.</p>
+              <h3>The map was the problem.</h3>
+              <p>Everyone found the definition and made the neighborhood comparison. The map was different: on the LA version, 4 of 34 people got the county-versus-state comparison wrong or couldn’t find it, and 5 more said it was hard to find.</p>
 
-          <figure class="fig-wide">
-            <img src="assets/lchd/colors.jpg" alt="The approved color system — a distinct palette for extreme heat (reds and magenta) and for air pollution (blues and green), with tints and type styles" loading="lazy" />
-            <figcaption>The approved system: a distinct palette per topic, so the two factsheets read as different chapters.</figcaption>
-          </figure>
-          <figure class="fig-wide">
-            <img src="assets/lchd/ada.jpg" alt="A WCAG contrast-compliance sheet testing text and background color pairings for AA and AAA passes" loading="lazy" />
-            <figcaption>Every text-on-color pairing was contrast-tested for WCAG AA/AAA before sign-off.</figcaption>
-          </figure>
+              <h3>People didn’t know when they’d misread it.</h3>
+              <p>7 of those 9 still rated themselves confident they understood the factsheet. If we had only asked people how they felt, we would have missed a problem that affected about a quarter of LA readers. One tester put it plainly: “I eventually understood the map, but not at first glance like everything else.”</p>
 
-          <p><strong>A shifting brand.</strong> Partway through, the dashboard also moved from sharing its parent initiative's branding to standing up its own visual identity. Re-skinning the system to a new brand while factsheets were still in flight was exactly the situation where reusable Figma styles and components earn their keep.</p>
+              <h3>The comments explained why.</h3>
+              <ul>
+                <li>The legend said “above” and “below average” without saying which average: county or state.</li>
+                <li>“Latino neighborhood” was never defined on the page.</li>
+                <li>Page 2 was dense, and its stats were loosely connected to their labels.</li>
+                <li>People wanted plain-language takeaways, more visual contrast, and less text.</li>
+              </ul>
 
-          <h2 id="outcome">Outcome</h2>
-          <p>The dashboard launched publicly on June 24, 2025, billed as the first tool of its kind to provide Latino neighborhood-level climate-and-health data across California. It surfaced stark, actionable disparities — for example, that Latino neighborhoods are roughly <strong>twice as likely</strong> to face poor air quality and asthma-related ER visits compared with non-Latino White neighborhoods.</p>
-          <ul>
-            <li>Analyzed in a peer-reviewed <strong>Health Affairs</strong> article (2026; 45(5): 570–579).</li>
-            <li>Presented at <strong>NALEO's 43rd Annual Conference</strong>.</li>
-            <li>Used in LPPI's <strong>2026 Policy in Action Summit</strong> and community "policy plática" convenings to ground advocacy discussions.</li>
-            <li>Reached <strong>6,000+ users</strong> in its first year.</li>
-            <li>Acknowledged <strong>by name</strong> in the dashboard's official Technical Documentation for the factsheet and dashboard design.</li>
-          </ul>
-          <p>Follow-on work included a mobile prototype, event stickers, a policy toolkit, and a vertical conference banner. I designed the mobile version on a proper auto-layout and component system in Figma — applying what I'd just finished learning in Google's UX Design Certificate — which made it noticeably more rigorous and maintainable than my original design files for the web build.</p>
+              <figure class="cs-pair fig-wide">
+                <div class="cs-pair-grid">
+                  <div class="cs-pair-item">
+                    <p class="cs-label cs-label-muted">V5 · Tested</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/lchd/legend-v5.png">
+                      <img src="assets/lchd/legend-v5.png" alt="Tested version of the map legend, titled Categorical Average, with keys for Zero Day Count, Below/Equal Avg., and Above Avg., next to a callout reading County Average: 27 and State Average: 51" loading="lazy" />
+                    </button>
+                  </div>
+                  <div class="cs-pair-item">
+                    <p class="cs-label">Final</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/lchd/legend-final.png">
+                      <img src="assets/lchd/legend-final.png" alt="Final map legend, titled Extreme Heat Days, with keys for Zero Days, Below County Avg., and Above County Avg., next to a callout reading County Average: 27 days and State Average: 51 days" loading="lazy" />
+                    </button>
+                  </div>
+                </div>
+                <figcaption>The tested version’s “Categorical Average” legend (left) and the final, which names the comparison and gives the county and state averages their own callout (right).</figcaption>
+              </figure>
+            </section>
 
-          <figure class="fig-wide">
-            <img src="assets/lchd/mobile.jpg" alt="Three screens of the LCHD mobile prototype: the county-profiles home with the map, the newsroom, and the data reference" loading="lazy" />
-            <figcaption>The mobile prototype — county profiles, newsroom, and data reference — built on auto-layout and components from the ground up.</figcaption>
-          </figure>
+            <!-- ============ HOW THE FACTSHEET EVOLVED ============ -->
+            <section class="cs-section" id="evolution" aria-labelledby="evolution-h">
+              <p class="cs-label">How the factsheet evolved</p>
+              <figure class="cs-strip fig-wide">
+                <ol class="cs-strip-list">
+                  <li class="cs-strip-item reveal">
+                    <button class="cs-zoom" type="button" data-start="0"
+                      data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
+                      data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
+                      <img src="assets/version-1-1.png" alt="Page 1 of the December 2024 Extreme Heat factsheet draft" loading="lazy" />
+                    </button>
+                    <p class="cs-label cs-label-muted">Dec 2024 · Drafts</p>
+                  </li>
+                  <li class="cs-strip-item reveal">
+                    <button class="cs-zoom" type="button" data-start="1"
+                      data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
+                      data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
+                      <img src="assets/version-2-v5-1.png" alt="Page 1 of version 5 of the Extreme Heat factsheet, the version used in comprehension testing" loading="lazy" />
+                    </button>
+                    <p class="cs-label cs-label-muted">V5 · Tested</p>
+                  </li>
+                  <li class="cs-strip-item reveal">
+                    <button class="cs-zoom" type="button" data-start="2"
+                      data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
+                      data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
+                      <img src="assets/version-3-post-test-1.png" alt="Page 1 of the Extreme Heat factsheet revised after testing" loading="lazy" />
+                    </button>
+                    <p class="cs-label cs-label-muted">Post-test revision</p>
+                  </li>
+                  <li class="cs-strip-item cs-strip-final reveal">
+                    <button class="cs-zoom" type="button" data-start="3"
+                      data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
+                      data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
+                      <img src="assets/version-4-final-1.png" alt="Page 1 of the final Extreme Heat factsheet" loading="lazy" />
+                    </button>
+                    <p class="cs-label">Final</p>
+                  </li>
+                </ol>
+                <figcaption>Page 1 of each version. Click any version to see it full size.</figcaption>
+              </figure>
 
-          <h2 id="reflection">Reflection</h2>
-          <p><strong>Design systems from day one.</strong> If I could do it over, I'd establish a proper Figma component and color-token system at the start. I only did this well on the later mobile prototype — after completing Google's UX Design Certificate — and the color-scheme rework is exactly the kind of pain a token system prevents.</p>
-          <p><strong>Test the whole product, not just the artifact.</strong> Budget and timeline resulted in the prioritization of the fact sheets. However, I would have liked to run usability research on the website and map interaction, not only the factsheets, since users engage with both.</p>
-          <p><strong>Facilitation is design work.</strong> Managing the tension between researchers' desire to preserve their writing and the constraints of a legible page was as consequential as any single visual decision — and something I got measurably better at with each round.</p>
+              <h2 id="evolution-h">The hardest problem was restraint.</h2>
+              <p>My first draft in December was text-heavy, and I flagged it myself: I wouldn’t go below 12 pt type, so the copy crowded out the numbers, which were the whole point. Across iterations I cut copy aggressively and rebuilt the hierarchy so the statistics carried the weight, using size, color, and directional indicators to steer the eye. That meant real editorial tradeoffs on both sides. Researchers rewrote and even removed carefully written copy, and I dropped graphs and visuals of my own, all to fit the essential data legibly in a fixed space.</p>
 
-          <div style="margin-top:36px;">
-            <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
-          </div>
+              <h3>Testing told us what to fix.</h3>
+              <p>We prioritized fixes from the survey as a team, within real constraints: two pages of space, and an automated pipeline where every layout change had a cost. I:</p>
+              <ul>
+                <li>defined both neighborhood types right on the page (census tracts with 70%+ Latino or non-Latino White residents),</li>
+                <li>moved the extreme heat definition into a banner at the top of the section,</li>
+                <li>pulled the county and state averages out of the map corner into their own callout,</li>
+                <li>added a subtitle tying the county statistics to heat exposure, and</li>
+                <li>rebuilt page 2 into labeled columns with plain-language cause-and-effect statements (“Less tree canopy = Increased exposure”).</li>
+              </ul>
+              <p>The legend confusion surfaced again after launch, this time from our advisory committee, and the legend was relabeled to name the comparison explicitly: “Below County Avg.” and “Above County Avg.” Two sources, months apart, found the same problem.</p>
+
+              <h3>Two early calls that testing backed up.</h3>
+              <p>Before testing, I had asked whether the factsheets should define their comparison groups (the team chose to put definitions in the FAQ), and I had flagged my own draft as text-heavy. Testing confirmed both: undefined terms confused readers, and density was the most common complaint.</p>
+
+              <h3>Iteration as system-building.</h3>
+              <div class="cs-bars" role="img" aria-label="Rounds of revision: Extreme Heat factsheet, 10; Air Pollution factsheet, 4; dashboard, about 4.">
+                <div class="cs-bar-row" style="--n:10;"><span class="cs-bar-label">Extreme Heat</span><span class="cs-bar-track"><span class="cs-bar cs-bar-hi"></span><span class="cs-bar-val">10 rounds</span></span></div>
+                <div class="cs-bar-row" style="--n:4;"><span class="cs-bar-label">Air Pollution</span><span class="cs-bar-track"><span class="cs-bar"></span><span class="cs-bar-val">4</span></span></div>
+                <div class="cs-bar-row" style="--n:4;"><span class="cs-bar-label">Dashboard</span><span class="cs-bar-track"><span class="cs-bar"></span><span class="cs-bar-val">~4</span></span></div>
+              </div>
+              <p>The flagship Extreme Heat factsheet went through 10 rounds of revision because it was effectively inventing the template: every labeling, spacing, and hierarchy decision was being made for the first time. Air Pollution mostly reused that pattern and needed only 4.</p>
+
+              <h3>Designing for automation.</h3>
+              <p>Our developer generated every factsheet from my Figma designs, so a design change meant reworking his pipeline for all 46 county factsheets. We worked through it together: for example, instead of hand-placing each map legend, we set legend positions per county in the data file so automation wouldn’t break.</p>
+
+              <h3>A late curveball on color.</h3>
+              <p>The palette I designed used two distinct color families, one per topic, so extreme heat and air pollution read as different chapters at a glance. It went through 4 rounds of revisions and passed WCAG contrast testing against the university’s AA standard. Then, eight rounds into the factsheet’s revisions, leadership decided it read as too colorful and asked for a single, more subdued green-and-blue palette shared across both factsheets. It wasn’t the direction the team or I would have chosen, and I still think distinct palettes served the reader better, but the decision was final, so I made it work. Because I’d built reusable Figma color styles, swapping the palette across every factsheet was a near-instant global change.</p>
+              <figure class="fig-wide">
+                <button class="cs-zoom" type="button" data-lightbox="assets/lchd/colors.jpg">
+                  <img src="assets/lchd/colors.jpg" alt="The approved color system: a distinct palette for extreme heat in reds and magenta and for air pollution in blues and green, with tints and type styles" loading="lazy" />
+                </button>
+                <figcaption>The approved system: a distinct palette per topic, so the two factsheets read as different chapters.</figcaption>
+              </figure>
+              <figure class="fig-wide">
+                <button class="cs-zoom" type="button" data-lightbox="assets/lchd/ada.jpg">
+                  <img src="assets/lchd/ada.jpg" alt="A WCAG contrast sheet testing text and background color pairings for AA and AAA passes" loading="lazy" />
+                </button>
+                <figcaption>Every text-on-color pairing was contrast-tested for WCAG AA and AAA before sign-off.</figcaption>
+              </figure>
+
+              <h3>A shifting brand.</h3>
+              <p>Partway through, the dashboard moved from sharing its parent initiative’s branding to standing up its own visual identity. Re-skinning the system while factsheets were still in flight was exactly the situation reusable Figma styles and components are built for.</p>
+            </section>
+
+            <!-- ============ OUTCOME ============ -->
+            <section class="cs-section" id="outcome" aria-labelledby="outcome-h">
+              <p class="cs-label">Outcome</p>
+              <h2 id="outcome-h">Launched, used in policy rooms, and studied in a peer-reviewed journal.</h2>
+              <p>The dashboard launched publicly on June 24, 2025, billed as the first tool of its kind to provide Latino neighborhood-level climate and health data across California. It surfaced stark, actionable disparities: for example, Latino neighborhoods are roughly twice as likely to face poor air quality and asthma-related ER visits compared with non-Latino White neighborhoods.</p>
+              <ul>
+                <li><strong>Launch:</strong> more than 500 people registered for the online community briefing, the Los Angeles Times covered it, and 745 people visited on launch day.</li>
+                <li><strong>Research:</strong> the subject of a peer-reviewed Health Affairs article (2026; 45(5): 570–579).</li>
+                <li><strong>Policy:</strong> the LA County factsheets went into the folders LPPI brought to five state legislative offices in Sacramento.</li>
+                <li><strong>Convenings:</strong> presented at NALEO’s 43rd Annual Conference, and used in LPPI’s 2026 Policy in Action Summit and community “policy plática” convenings to ground advocacy discussions.</li>
+                <li><strong>Reach:</strong> about 6,000 users in its first year.</li>
+                <li><strong>Credit:</strong> acknowledged by name in the dashboard’s official <a href="https://latino.ucla.edu/research/climate-health-dashboard-technical-doc/" target="_blank" rel="noopener">Technical Documentation</a> for the design of the factsheets.</li>
+              </ul>
+              <p>During testing, a program manager for CalEnviroScreen, the state’s environmental justice screening tool, said OEHHA could link to the dashboard from CalEnviroScreen and share it with the state’s CalHeatScore team.</p>
+
+              <h3>Follow-on work.</h3>
+              <p>I went on to design statewide California factsheets, a state data brief, a policy toolkit, a mobile prototype, event stickers, and a vertical conference banner. I built the mobile version on a proper auto-layout and component system in Figma, applying what I’d just learned in Google’s UX Design Certificate, which made it noticeably more rigorous and maintainable than my original files for the web build.</p>
+              <figure class="fig-wide">
+                <button class="cs-zoom" type="button" data-lightbox="assets/lchd/mobile.jpg">
+                  <img src="assets/lchd/mobile.jpg" alt="Three screens of the LCHD mobile prototype: the county profiles home with the map, the newsroom, and the data reference" loading="lazy" />
+                </button>
+                <figcaption>The mobile prototype: county profiles, newsroom, and data reference, built on auto-layout and components from the ground up.</figcaption>
+              </figure>
+            </section>
+
+            <!-- ============ WHAT I LEARNED ============ -->
+            <section class="cs-section" id="learned" aria-labelledby="learned-h">
+              <h2 class="cs-label cs-label-h2" id="learned-h">What I learned</h2>
+
+              <h3>Measure what people do, not just what they say.</h3>
+              <p>The confidence gap changed how I think about feedback. Ratings told us people felt fine; the tasks showed where they weren’t. I see the same gap in my teaching now: the exit tickets I designed for my sections pair confidence ratings with comprehension checks, and the two don’t always agree.</p>
+
+              <h3>Re-test the fix.</h3>
+              <p>We didn’t have time to re-run the tasks on the revised factsheets before launch, and the legend problem came back through our advisory committee. Next time I’d build a second round into the plan to confirm the changes worked instead of assuming they did.</p>
+
+              <h3>Test the whole product, not just the artifact.</h3>
+              <p>Budget and timeline put the factsheets first. I would have liked to run usability research on the website and map interaction too, since people use both.</p>
+
+              <h3>Design systems from day one.</h3>
+              <p>If I did it over, I’d set up a Figma component and color-token system at the start. I only did this well on the later mobile prototype, and the color-scheme rework is exactly the kind of pain a token system prevents.</p>
+
+              <h3>Facilitation is design work.</h3>
+              <p>Managing the tension between researchers’ desire to preserve their writing and the constraints of a legible page was as consequential as any single visual decision, and something I got measurably better at with each round.</p>
+            </section>
+
+            <div class="cs-outro">
+              <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
+            </div>
           </div>
         </div>
       </div>
