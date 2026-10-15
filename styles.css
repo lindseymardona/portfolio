@@ -1855,6 +1855,7 @@ footer { border-top: 5px solid var(--plum); }
 /* desktop: the new wrappers are invisible pass-throughs; mobile-only bits hidden */
 .daw-lane-scroll, .daw-rl-scroll, .daw-mtop { display: contents; }
 .daw-minimap, .daw-mhead { display: none; }
+.daw-note .dn-mobile { display: none; }
 
 @media (max-width: 640px) {
   /* copy swap + restored session filename */

@@ -359,13 +359,13 @@
 
     // drag a track by its name column to reorder — it lifts out and follows the
     // pointer, and a highlight zone marks where it will land (no rotation)
-    var dragT = null, grabOff = 0, ph = null;
+    var dragT = null, grabOff = 0, ph = null, cbX = 0, cbY = 0;
     var otherTracks = function () {
       return [].slice.call(timeline.querySelectorAll('.daw-track[data-track]')).filter(function (x) { return x !== dragT; });
     };
     var onDragMove = function (e) {
       if (!dragT) return;
-      dragT.style.top = (e.clientY - grabOff) + 'px';
+      dragT.style.top = (e.clientY - grabOff - cbY) + 'px';
       var rows = otherTracks(), placed = false;
       for (var i = 0; i < rows.length; i++) {
         var r = rows[i].getBoundingClientRect();
@@ -405,6 +405,13 @@
         t.style.top = r.top + 'px';
         t.style.position = 'fixed';
         t.style.zIndex = '30';
+        // a transformed ancestor turns "fixed" into relative-to-that-ancestor, so
+        // measure where it actually landed and cancel the offset
+        var land = t.getBoundingClientRect(), sw = land.width - r.width, sh = land.height - r.height;
+        cbX = land.left + sw / 2 - r.left;
+        cbY = land.top + sh / 2 - r.top;
+        t.style.left = (r.left - cbX) + 'px';
+        t.style.top = (r.top - cbY) + 'px';
         document.addEventListener('pointermove', onDragMove);
         document.addEventListener('pointerup', onDragEnd);
         document.addEventListener('pointercancel', onDragEnd);
