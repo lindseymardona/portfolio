@@ -79,40 +79,147 @@ h1, h2, h3, h4 { color: var(--ink); }
 /* cursive accent inside headings — rose, set apart from Inter */
 .script-accent { font-family: var(--script); color: var(--accent-script); font-size: 1.15em; line-height: 1; padding: 0 0.06em; }
 
-/* ---------------- HERO (home) ---------------- */
-.hero { background: var(--blush); padding: 100px 0 78px; }
-.hero-grid { display: grid; grid-template-columns: 1.02fr 1.1fr 0.86fr; gap: 48px; align-items: center; }
-.hello { font-family: var(--script); font-size: clamp(3.4rem, 7.5vw, 5.4rem); line-height: 1.02; margin: 0 0 4px; }
-.name { font-size: clamp(1.0rem, 2vw, 1.26rem); font-weight: 400; margin: 12px 0 8px; }
-.name b { font-weight: 700; }
-.roles { font-size: clamp(1.1rem, 2.6vw, 1.5rem); font-weight: 500; margin: 0; white-space: nowrap; }
-.squiggle { margin: 22px 0 24px; color: var(--ink); max-width: 300px; }
+/* ============================================================ HOME HERO ============================================================ */
+/* Everything for the home-page hero (index.html <section class="hero">) lives here,
+   in cascade order: base → desktop (≥921px) → stacked (≤920px) → reduced motion.
+   Add hero changes HERE rather than appending overrides further down: unconditional
+   rules placed after a media query silently beat it (that's how the stacked layout
+   broke once before).
+   Shared hooks this section relies on but doesn't own: "hello," gets .float-el /
+   .float-go from script.js (header-entrance system, ROUND 65/70), the ROUND 83
+   GPU-layer list, and the accFloat / accSpin keyframes (ROUND 68) that script.js
+   puts inline on the accents. */
 
-.welcome { border-left: 1.5px solid var(--line); padding-left: 44px; font-size: 1.03rem; }
-.welcome p { margin: 0 0 18px; }
-.welcome-btns { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin: 4px 0 18px; }
-.welcome .lovely { margin-top: 18px; }
+.hero { background: var(--blush); padding: 100px 0 80px; }   /* bottom: the sticker hangs below the portrait */
+.hero-grid { display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 48px; align-items: center; }
 
-/* portrait — tilted rounded square + framing squares + flower accents */
-.portrait { position: relative; justify-self: end; --pf: clamp(190px, 21vw, 244px); }
+/* ---- left column: hello / name / roles / squiggle grouped in .hl-top, socials below ---- */
+.hero-left { display: flex; flex-direction: column; justify-content: flex-start; }
+.hl-top { display: flex; flex-direction: column; }
+
+/* Borel's deep descent is why line-height is 1 and the bottom margin goes negative —
+   it pulls the name up under the glyph instead of under the font box */
+.hero-left .hello { font-family: var(--script); color: var(--plum); font-size: clamp(4.4rem, 9.5vw, 6.5rem); line-height: 1; margin: .5em 0 -0.21em; }
+
+/* the name is the page's <h1>: restate everything a UA stylesheet would set on h1 */
+.hero-left .name { font-family: var(--serif); font-weight: 400; font-size: clamp(2.3rem, 5vw, 3.25rem); line-height: 1.08; letter-spacing: -0.01em; margin: 0; }
+.hero-left .name b { font-weight: 400; }
+.hero-left .roles { font-family: var(--ui); font-size: clamp(1.05rem, 2vw, 1.22rem); font-weight: 400; color: rgba(54,49,51,.85); white-space: normal; margin: .55em 0 0; }
+
+.hero .squiggle { max-width: 300px; margin: 14px 0 16px; color: var(--plum); }
+.hero .squiggle path { stroke-dasharray: 340; stroke-dashoffset: 0; animation: draw 1.1s ease .5s both; }
+.hero .socials { margin-top: 24px; animation: fadeUp .65s ease .78s both; }
+
+/* ---- entrances: the name types itself out with a caret (script.js adds .name-anim);
+   the roles arrive word by word, each word a .rw span (.rw-go on the line starts them,
+   .rw-done frees each one for its hover) — tinted plum, settling to the usual gray ---- */
+.js .name-anim { opacity: 0; }   /* hidden until it starts typing (no flash of the full text) */
+.type-caret { display: inline-block; width: 2px; height: 1.02em; background: var(--plum); margin-left: 3px; vertical-align: -0.12em; animation: caretBlink 1.05s steps(1) infinite; }
+@keyframes caretBlink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+
+.js .roles .rw { display: inline-block; opacity: 0; }
+.roles.rw-go .rw { animation: rolePush .55s cubic-bezier(.2,.7,.3,1) both; }
+@keyframes rolePush {
+  0%   { opacity: 0; transform: translateY(10px); color: var(--plum); }
+  55%  { color: var(--plum); }
+  100% { opacity: 1; transform: translateY(0); color: rgba(54,49,51,.85); }
+}
+.rw-done { opacity: 1 !important; animation: none !important; }
+.roles .rw { transition: transform .2s ease, color .2s ease, text-shadow .2s ease; cursor: default; }
+.roles .rw:hover { transform: translateY(-3px); color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
+
+/* ---- portrait: a tilted 11:12 photo card, two framing squares with the same ratio
+   tucked behind it, two flowers + a dot, and the status sticker. --pf is the photo
+   width; everything around it is sized off it ---- */
+.portrait { position: relative; justify-self: end; transform: translateY(-20px); margin-right: 28px; --pf: clamp(280px, 31vw, 380px); }  /* margin: inset so the outline square + dot don't kiss the page edge */
+.hero .portrait { animation: fadeIn .8s ease .35s both; }
+
 .portrait .frame {
-  position: relative; z-index: 2; width: var(--pf); aspect-ratio: 1; border-radius: 28px; overflow: hidden;
+  position: relative; z-index: 2; width: var(--pf); aspect-ratio: 11 / 12; border-radius: 39px; overflow: hidden;
   box-shadow: var(--shadow); transform: rotate(-5deg); transition: transform .5s cubic-bezier(.34,1.56,.64,1);
   background: linear-gradient(135deg, var(--olive), var(--coral-soft)); display: flex; align-items: center; justify-content: center;
 }
 .portrait:hover .frame { transform: rotate(-1.5deg); }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
-.portrait .initials { font-family: var(--script); font-size: 3rem; color: #fff; }
-.portrait .frame-bg { position: absolute; top: 0; left: 0; width: var(--pf); aspect-ratio: 1; border-radius: 28px; z-index: 1; }
-.portrait .frame-bg.bg1 { background: rgba(195,201,141,0.55); transform: rotate(-13deg) translate(-18px,-6px); }
-.portrait .frame-bg.bg2 { border: 2.5px solid var(--coral); transform: rotate(5deg) translate(18px,18px); }
+.portrait .initials { font-family: var(--script); font-size: 3rem; color: #fff; }   /* fallback if the photo fails to load */
+
+/* framing squares: sage fill + white outline, both spread further on hover */
+.portrait .frame-bg { position: absolute; top: 0; left: 0; z-index: 1; width: var(--pf); aspect-ratio: 11 / 12; border-radius: 39px; transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+.portrait .frame-bg.bg1 { background: rgba(195,201,141,0.55); transform: rotate(-13deg) translate(-25px,-8px); }
+.portrait .frame-bg.bg2 { border: 3.5px solid #fff; transform: rotate(5deg) translate(25px,25px); }
+.portrait:hover .frame-bg.bg1 { transform: rotate(-19deg) translate(-36px,-17px); }
+.portrait:hover .frame-bg.bg2 { transform: rotate(10deg) translate(36px,34px); }
+
+/* flowers + dot: script.js adds the accFloat / accSpin drift inline (translate + rotate),
+   so the hover can own `transform` without the two fighting */
 .portrait .accent { position: absolute; z-index: 3; transition: transform .45s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
-.portrait .accent.f1 { top: -12px; left: -16px; width: 46px; }
-.portrait .accent.f2 { bottom: -20px; right: -12px; width: 54px; }
-.portrait .accent.sq { top: 36%; right: -24px; width: 30px; }
+.portrait .accent.f1 { top: -17px; left: -22px; width: 64px; }
+.portrait .accent.f2 { bottom: -28px; right: -17px; width: 76px; }
+.portrait .accent.sq { top: 36%; right: -34px; width: 42px; }
 .portrait:hover .accent.f1 { transform: rotate(-24deg) scale(1.12); }
 .portrait:hover .accent.f2 { transform: rotate(22deg) scale(1.12); }
 .portrait:hover .accent.sq { transform: rotate(18deg) scale(1.12); }
+
+/* status sticker: lives inside .portrait so it fades in with the photo and drifts on the
+   same accFloat keyframes as the flowers (offset in time so it reads as a separate layer).
+   The float uses `translate` and the tilt uses `transform`, so the two never fight; the
+   hover lives on the inner card. These base sizes are what the stacked layout uses; the
+   desktop block below shrinks the card and hangs it off the photo's left edge */
+.portrait .status-sticker { position: absolute; left: -84px; bottom: -24px; z-index: 4; transform: rotate(-7deg); animation: accFloat 6.4s ease-in-out -2.6s infinite; }
+.portrait .ss-inner { display: flex; flex-direction: column; gap: 3px; background: var(--plum); color: #fff; border-radius: 18px; padding: 18px 24px; box-shadow: 0 8px 18px rgba(54,49,51,.2); font-family: var(--ui); white-space: nowrap; transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+.portrait:hover .ss-inner { transform: rotate(-2deg) scale(1.04); }   /* hovers with the frames + flowers, not on its own */
+.portrait .ss-k { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #e6eabf; line-height: 1.2; }
+.portrait .ss-t { font-size: 21px; font-weight: 600; line-height: 1.2; }
+.portrait .ss-s { font-size: 15px; color: #f3dfe9; line-height: 1.3; }
+
+/* ---- desktop: a smaller sticker pushed out so only ~1/3 of it overlaps the photo; the
+   clamp pulls it back in on narrower desktops so it stays clear of the name ---- */
+@media (min-width: 921px) {
+  .portrait .status-sticker { left: clamp(-150px, -10vw, -96px); bottom: -40px; }
+  .portrait .ss-inner { padding: 13px 18px; border-radius: 14px; gap: 2px; }
+  .portrait .ss-k { font-size: 11px; }
+  .portrait .ss-t { font-size: 17px; }
+  .portrait .ss-s { font-size: 13px; }
+}
+
+/* ---- stacked (phones/tablets): one column capped at 600px so it centres on the page
+   (.wrap already has margin: 0 auto; phones are narrower than the cap). Photo first,
+   then the sticker, then the text, all on one centre line ---- */
+@media (max-width: 920px) {
+  .hero { padding-top: 60px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; align-items: start; max-width: 600px; }
+  .hero-left { justify-self: center; }
+  .portrait { order: -1; justify-self: center; transform: none; margin: 0 auto 4px; --pf: clamp(230px, 66vw, 328px); }  /* 66vw keeps the sage card + dot on-screen at 390px */
+  /* the sticker makes .portrait taller than the photo, so pin the bottom flower and the
+     side dot to the FRAME's height (--pf × 12/11) instead of the box */
+  .portrait .accent.f2 { bottom: auto; top: calc(var(--pf) * 12 / 11 - 48px); }
+  .portrait .accent.sq { top: calc(var(--pf) * 12 / 11 * .36); }
+  /* sticker: in flow below the photo. relative (not static) so z-index lifts it above the
+     white outline, centred via left + translateX (the float owns `translate`), and dropped
+     far enough to clear the outline's rotated bottom edge */
+  .portrait .status-sticker { position: relative; left: 50%; bottom: auto; width: max-content; margin: 64px 0 0; transform: translateX(-50%) rotate(-4deg); }
+  .portrait .ss-inner { padding: 16px 20px; }
+  .portrait .ss-t { font-size: 19px; }
+  .portrait .ss-s { font-size: 14px; }
+}
+
+/* ---- reduced motion (the global `*` rule in RESPONSIVE already drops animations and
+   transitions; these cover what needs more than that) ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hero .squiggle path { stroke-dashoffset: 0 !important; }
+  .roles .rw, .name-anim { opacity: 1 !important; animation: none !important; }
+  .type-caret { display: none; }
+  .portrait .status-sticker { animation: none !important; }
+  .portrait .ss-inner { transition: none; }
+  .portrait:hover .ss-inner { transform: none; }
+}
+
+/* legacy welcome column (not in the current home markup) */
+.hero .welcome { animation: fadeIn .8s ease both; animation-delay: .5s; }
+.welcome { border-left: 1.5px solid var(--line); padding-left: 44px; font-size: 1.03rem; }
+.welcome p { margin: 0 0 18px; }
+.welcome-btns { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin: 4px 0 18px; }
+.welcome .lovely { margin-top: 18px; }
 
 /* ---------------- WORKIN' LATE (olive) ---------------- */
 .late { background: var(--olive); padding: 60px 0 72px; }
@@ -255,15 +362,6 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 @keyframes draw { from { stroke-dashoffset: 340; } to { stroke-dashoffset: 0; } }
 @keyframes revealUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
 
-/* home hero load-in */
-.hero .hello { animation: fadeUp .65s ease both; animation-delay: .05s; }
-.hero .name  { animation: fadeUp .65s ease both; animation-delay: .22s; }
-.hero .roles { animation: fadeUp .65s ease both; animation-delay: .38s; }
-.hero .squiggle path { stroke-dasharray: 340; stroke-dashoffset: 0; animation: draw 1.1s ease .5s both; }
-.hero .socials { animation: fadeUp .65s ease both; animation-delay: .78s; }
-.hero .welcome { animation: fadeIn .8s ease both; animation-delay: .5s; }
-.hero .portrait { animation: fadeIn .8s ease both; animation-delay: .35s; }
-
 /* interior header: print pushes in, cursive fades in separately */
 .page-hero .eyebrow { animation: fadeUp .55s ease both; }
 .page-hero h1 .h-print { display: inline-block; animation: pushIn .6s ease both; animation-delay: .12s; }
@@ -280,10 +378,7 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 /* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 920px) {
   .wrap { padding: 0 24px; }
-  .hero { padding: 60px 0 60px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
   .welcome { border-left: none; padding-left: 0; border-top: 1.5px solid var(--hair); padding-top: 26px; }
-  .portrait { justify-self: start; order: -1; }
   .late-top { grid-template-columns: 1fr; gap: 30px; }
   .currently { border-left: none; padding-left: 0; border-top: 1.5px solid rgba(54,49,51,0.25); padding-top: 24px; }
   .projects, .cols, .grid-3, .skills-groups { grid-template-columns: 1fr; gap: 26px; }
@@ -319,18 +414,8 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 .card-go { color: var(--btn-text); }
 .card-go i { font-size: .95rem; line-height: 1; }
 
-/* hello sits closer to the name */
-.hello { margin: 0; line-height: .96; }
-.name { margin: 4px 0 8px; }
-
 /* olive section: design-gallery ghost button sweeps transparent green */
 .late .pill.ghost { background: linear-gradient(90deg, rgba(63,90,36,0.22) 50%, transparent 50%); background-size: 200% 100%; background-position: 100% 0; }
-
-/* portrait framing squares: white outline + react on hover */
-.portrait .frame-bg { transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
-.portrait .frame-bg.bg2 { border-color: #fff; }
-.portrait:hover .frame-bg.bg1 { transform: rotate(-19deg) translate(-26px,-12px); }
-.portrait:hover .frame-bg.bg2 { transform: rotate(10deg) translate(26px,24px); }
 
 /* keep welcome "here." and its arrow together */
 .welcome .nowrap { white-space: nowrap; }
@@ -408,20 +493,12 @@ footer { position: relative; }
 body { font-family: var(--body); }
 h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
 .section-quote { font-family: var(--serif); font-weight: 400; font-style: italic; }
-.hello { font-family: var(--script); color: var(--plum); }
 .script-accent { font-family: var(--script); color: var(--plum); }
-.hero .squiggle { color: var(--plum); }
 .nav-inner a, .pill, .chip, .page-hero .eyebrow, .cs-meta .k, .skills-groups h3,
 .quick, .to-top, .res-head .meta, .currently, .badge, .tile-flag,
 .proj-thumb .plabel, .proj-thumb .psub, .res-block > h2, .cs-back { font-family: var(--ui); }
 .res-block > h2 { font-weight: 700; }
 .cs-body p, .cs-body li { font-family: var(--read); }
-
-/* tighter hero rhythm (per design-doc 1a) */
-.hello { margin: 0; line-height: .9; }
-.name { margin: 8px 0 0; }
-.roles { margin: 2px 0 0; }
-.hero .squiggle { margin: 14px 0 16px; }
 
 /* project cards: fixed alignment so chips/labels line up */
 .proj { height: 100%; }
@@ -538,9 +615,7 @@ html, body { overflow-x: clip; }
 /* bigger project-card titles */
 .proj-body h3 { font-size: 1.42rem; line-height: 1.12; }
 
-/* hero: tighter stack + smaller, un-bold roles */
-.name { margin: 4px 0 0; }
-.roles { font-size: clamp(.92rem, 1.9vw, 1.1rem); font-weight: 400; margin: 1px 0 0; white-space: nowrap; }
+/* welcome: more air under the first line */
 .welcome p:first-of-type { margin-bottom: 30px; }
 
 /* marquee: truly seamless (global img max-width was breaking track width) */
@@ -750,9 +825,7 @@ body { animation: pagefade .18s ease both; }
 .about-outro .outro-btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .about-outro .lovely { font-size: 1rem; color: rgba(54,49,51,.8); margin: 0; }
 
-/* Home hero: tighten hello -> name, and split the welcome into two spaced lines */
-.hero-left .hello { line-height: .78; margin: 0; }
-.hero-left .name { margin-top: 0; }
+/* welcome: split into two spaced lines */
 .welcome .welcome-lead { margin: 0 0 26px; }
 
 /* Case study: bottom "back to projects" as a plain text link (no button box) */
@@ -794,9 +867,7 @@ body { animation: pagefade .18s ease both; }
 
 /* ============================================================ ROUND 14 ============================================================ */
 
-/* home hero: halve the hello -> name gap, and more air before the first button */
-.hero-left .hello { line-height: .72; margin: 0; }
-.hero-left .name { margin-top: -0.26em; }
+/* welcome: more air before the first button */
 .welcome .welcome-btns { margin-top: 30px; }
 
 /* ---- project cards: title row (title + status badge) and footer row (meta + view) ---- */
@@ -1021,12 +1092,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .cs-hero-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 
 /* ============================================================ ROUND 29 ============================================================ */
-/* home portrait: center it on mobile so the decorative squares/flowers don't
-   trail off into empty space on the right */
-@media (max-width: 920px) {
-  .portrait { justify-self: center; }
-}
-
 /* about: explicit grid so the photo/facts aside sits top-right on desktop, but on
    mobile the order becomes intro line -> photo + facts -> the chapter text blobs */
 .section.paper .about-grid { grid-template-columns: 1.2fr .8fr; align-items: start; }
@@ -1216,13 +1281,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .tile .tile-flag { background: rgba(255,255,255,.9); color: var(--ink); }
 .tile .tile-flag svg { color: var(--ink); }
 .tile .badge { background: var(--olive); color: var(--ink); }
-
-/* pfp (mobile): the 1a "contained collage" — a bigger, centered photo with the
-   flower/blob/dot collage kept inside a padded stage so nothing crops, and
-   "hello," already stacks below it (never across the face) */
-@media (max-width: 920px) {
-  .portrait { justify-self: center; --pf: clamp(216px, 60vw, 262px); margin: 4px auto 6px; }
-}
 
 /* ============================================================ ROUND 38 — project card layout ============================================================ */
 /* date/project-type meta stacks to two right-aligned lines (JS splits it), giving the title more room */
@@ -1530,8 +1588,7 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 /* the "+ new track" row is not draggable — don't offer the grab hand */
 .newtrack .daw-thead { cursor: default; }
 
-/* ---- 5a: simplified 2-column hero + scrolling olive welcome bar ---- */
-.hero-grid { grid-template-columns: 1.12fr 0.88fr; }
+/* ---- 5a: scrolling olive welcome bar ---- */
 .hello-bar { background: var(--olive); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
 .hello-bar .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
 .hello-bar .marquee-track { padding: 13px 0; }
@@ -1544,11 +1601,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .tile .tile-caption .t-title { font-size: 1.1rem; }
 .masonry .tile:hover, .masonry .tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(99,40,92,.16); }
 .masonry .tile:hover { background: #fff; }
-
-/* hero header, modeled on 5a: big serif name, small muted roles */
-.hero-left .name { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 4.4vw, 2.5rem); line-height: 1.08; letter-spacing: -0.01em; margin: .08em 0 0; }
-.hero-left .name b { font-weight: 400; }
-.hero-left .roles { font-family: var(--ui); font-size: clamp(.9rem, 1.5vw, 1rem); font-weight: 400; color: rgba(54,49,51,.78); white-space: normal; margin: .5em 0 0; }
 
 /* DAW drag: follow the pointer 1:1 while lifted (no easing lag) */
 .daw-track.dragging { transition: none; }
@@ -1604,16 +1656,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 /* work-section cards: outline-less like the gallery (transparent at rest, lift + shadow on hover) */
 .feat-card, .mini-card { border: none; background: transparent; }
 
-/* hero: pull the name up under "hello," and make the roles readable */
-.hero-left .hello { line-height: .72; margin: 0; }
-.hero-left .name { margin-top: -0.14em; }
-.hero-left .roles { font-family: var(--ui); font-size: clamp(1.05rem, 2vw, 1.22rem); font-weight: 400; color: rgba(54,49,51,.85); margin-top: .55em; }
-
-/* hero: left column spans the same vertical range as the portrait */
-.hero-grid { align-items: stretch; }
-.hero-left { display: flex; flex-direction: column; justify-content: space-between; }
-.hero-left .socials { margin-top: 8px; }
-
 /* singer: trim the pink space above the heading */
 .singer { padding-top: 34px; }
 
@@ -1634,11 +1676,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .mini-body .card-foot { margin-top: auto; }
 .feat-card .card-foot { margin-top: 4px; }
 .card-foot .tt-tags { font-family: var(--ui); font-size: .82rem; color: #6E645C; }
-
-/* hero: bigger portrait, grouped text so a single gap sits between it and the socials */
-.portrait { --pf: clamp(224px, 25vw, 300px); }
-.hl-top { display: flex; flex-direction: column; }
-.hero-left .socials { margin-top: 0; }
 
 /* MAAPP mini badge: give it the pill treatment (was unstyled in mini-thumb) */
 .mini-thumb .proj-status { font-family: var(--ui); font-weight: 600; font-size: .68rem; letter-spacing: .01em; color: var(--ink); background: rgba(255,255,255,.94); border: 1px solid #E7DCD3; border-radius: 999px; padding: 4px 11px; box-shadow: 0 2px 10px rgba(20,18,19,.16); }
@@ -1681,11 +1718,6 @@ footer { border-top: 5px solid var(--plum); }
 .olive-rule { display: none; }
 
 /* ============================================================ ROUND 55 — hero spacing, bottom-aligned titles, about header, karla leads ============================================================ */
-/* hero: center the text blob (more air above "hello,") and keep the socials tucked under the squiggle */
-.hero-grid { align-items: center; }
-.hero-left { justify-content: flex-start; }
-.hero-left .socials { margin-top: 24px; }
-
 /* projects cards: a 1-line title drops to the bottom of its 2-line reserved space */
 .proj-title { display: flex; align-items: flex-end; }
 
@@ -1698,10 +1730,6 @@ footer { border-top: 5px solid var(--plum); }
 /* arrangements track clip colour */
 .c-rose { background: #8E4E64; }
 .c-rose .clip-name { color: #fff; } .c-rose .clip-sub { color: rgba(239,206,204,.85); } .c-rose .wave i { background: rgba(239,206,204,.5); }
-
-/* hero: bump the portrait up a touch and trim the pink space below */
-.hero { padding-bottom: 44px; }
-.portrait { transform: translateY(-20px); }
 
 /* ============================================================ ROUND 57 — thumbnail hover zoom, DAW track-head alignment ============================================================ */
 /* home + gallery cards: thumbnail zooms on hover (like the projects cards) */
@@ -1805,14 +1833,6 @@ footer { border-top: 5px solid var(--plum); }
 .collab-trackx:hover { background: rgba(142,78,100,.9); color: #fff; }
 
 /* ============================================================ ROUND 61 — mobile hero stacking fix, continuous pink collab gradient ============================================================ */
-/* the hero must stack on phones — later unconditional 2-col rules were overriding the responsive rule */
-@media (max-width: 920px) {
-  .hero-grid { grid-template-columns: 1fr; align-items: start; }
-  .hero-left { justify-content: flex-start; }
-  /* right-align the pfp; leave room on the right so the white outline square clears the edge */
-  .portrait { order: -1; justify-self: end; transform: none; margin: 0 24px 4px 0; --pf: clamp(196px, 56vw, 262px); }
-}
-
 /* each collab clip has its own soft-pink → very-light-pink gradient; dark text like the a cappella clip */
 .collab-blob { background-image: linear-gradient(to right, #ECC1BE, #FBECEA); background-repeat: no-repeat;
   box-shadow: inset 0 0 0 1px rgba(54,49,51,.12), 0 1px 3px rgba(54,49,51,.14); }
@@ -1914,9 +1934,6 @@ footer { border-top: 5px solid var(--plum); }
 .js .resume-actions .pill.anim-done { animation: none !important; opacity: 1; }
 
 /* ============================================================ ROUND 65 — header entrances: cursive floats soft, home headings letter-bounce, everything else smooth ============================================================ */
-/* neutralize the old hero fades so the new entrances drive hello / name / roles */
-.hero .hello, .hero .name, .hero .roles { animation: none; }
-
 /* cursive words float in — soft, gentle, floaty (single easy overshoot, no hard dip) */
 .js .float-el, .js .seg-h .seg-float { opacity: 0; }
 .float-el.float-go { animation: floatIn 1.15s cubic-bezier(.26,1.45,.5,1) both; }
@@ -1945,24 +1962,8 @@ footer { border-top: 5px solid var(--plum); }
   100% { opacity: 1; transform: translate3d(0,0,0); }
 }
 
-/* roles: word by word, smooth (fade + gentle push, no bounce); glow + lift on hover */
-.js .roles .rw { display: inline-block; opacity: 0; }
-.roles.rw-go .rw { animation: smoothPush .55s cubic-bezier(.2,.7,.3,1) both; }
-@keyframes smoothPush { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
-.rw-done { opacity: 1 !important; animation: none !important; }
-.roles .rw { transition: transform .2s ease, color .2s ease, text-shadow .2s ease; cursor: default; }
-.roles .rw:hover { transform: translateY(-3px); color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
-
-/* the name is hidden until it starts typing (avoids a flash of the full text) */
-.js .name-anim { opacity: 0; }
-
-/* blinking caret for the typed name */
-.type-caret { display: inline-block; width: 2px; height: 1.02em; background: var(--plum); margin-left: 3px; vertical-align: -0.12em; animation: caretBlink 1.05s steps(1) infinite; }
-@keyframes caretBlink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
-
 @media (prefers-reduced-motion: reduce) {
-  .float-el, .seg-h .seg, .lb-h .ltr, .roles .rw, .name-anim, .lead-anim { opacity: 1 !important; animation: none !important; }
-  .type-caret { display: none; }
+  .float-el, .seg-h .seg, .lb-h .ltr, .lead-anim { opacity: 1 !important; animation: none !important; }
 }
 
 /* ============================================================ ROUND 66 — singer copy width + keep the spotify arrow attached ============================================================ */
@@ -2065,14 +2066,6 @@ footer { border-top: 5px solid var(--plum); }
 /* nudge the up-arrow glyph down a touch more so it sits centered in its key */
 .cdp-up .cdp-g { transform: translateY(2px); }
 
-/* roles animate in tinted plum, then settle to the usual dark gray */
-.roles.rw-go .rw { animation: rolePush .62s cubic-bezier(.2,.7,.3,1) both; }
-@keyframes rolePush {
-  0%   { opacity: 0; transform: translateY(10px); color: var(--plum); }
-  45%  { opacity: 1; transform: translateY(0); color: var(--plum); }
-  100% { opacity: 1; transform: translateY(0); color: rgba(54,49,51,.85); }
-}
-
 /* resume heading hover: the label lifts + glows, but the little underline stays put */
 .res-block > h2::after { transition: transform .2s ease; }
 .res-block > h2:hover::after { transform: translateY(3px); }
@@ -2089,14 +2082,6 @@ footer { border-top: 5px solid var(--plum); }
 .gal-wrap .marquee img:hover { transform: scale(1.2) translateY(-5px); z-index: 6; box-shadow: 0 16px 34px rgba(54,49,51,.4); }
 
 /* ============================================================ ROUND 73 — restore the gentle roles push; drop the about-cursive hover; lift the corgi hint clear of the footer bar ============================================================ */
-/* roles push travels the full duration again (gentle), still tinted plum then settling gray */
-.roles.rw-go .rw { animation: rolePush .55s cubic-bezier(.2,.7,.3,1) both; }
-@keyframes rolePush {
-  0%   { opacity: 0; transform: translateY(10px); color: var(--plum); }
-  55%  { color: var(--plum); }
-  100% { opacity: 1; transform: translateY(0); color: rgba(54,49,51,.85); }
-}
-
 /* no hover treatment on the life gallery / miss kaya cursive */
 .section h2 .script-accent,
 .section h2 .script-accent:hover { translate: 0 0; text-shadow: none; transition: none; }
@@ -2261,60 +2246,7 @@ footer { border-top: 5px solid var(--plum); }
 .feat-thumb { min-width: 0; }
 .feat-thumb img, .mini-thumb img { max-width: 100%; }
 
-/* ============================================================ ROUND 86 — bigger hero (hello ×1.35, name ×1.3, portrait ×1.4), h1 name, status sticker, thinner/slower welcome bar + pause button ============================================================ */
-/* more air under the hero; the sticker hangs 24px below the portrait */
-.hero { padding-bottom: 80px; }
-
-/* hello: ×1.35 (was clamp(3.4rem, 7.5vw, 5.4rem)). Borel's deep descent is why
-   line-height goes to 1 and the bottom margin goes negative — it pulls the name
-   up under the glyph instead of under the font box */
-.hero-left .hello { font-size: clamp(4.4rem, 9.5vw, 6.5rem); line-height: 1; margin: .5em 0 -0.21em; }
-
-/* name: now an <h1> — restate everything a UA stylesheet would set on h1 so it
-   looks identical to the old <p>; ×1.3 (was clamp(1.9rem, 4.4vw, 2.5rem)) */
-.hero-left .name { font-family: var(--serif); font-weight: 400; font-size: clamp(2.3rem, 5vw, 3.25rem); line-height: 1.08; letter-spacing: -0.01em; margin: 0; }
-
-/* portrait ×1.4 (was clamp(224px, 25vw, 300px)); the photo is now a slightly
-   tall card (11:12, matching the mock) rather than a square — the framing
-   squares follow the same ratio so they stay tucked behind it */
-.portrait { --pf: clamp(280px, 31vw, 380px); margin-right: 28px; }  /* inset so the outline square + dot don't kiss the page edge */
-.portrait .frame, .portrait .frame-bg { aspect-ratio: 11 / 12; border-radius: 39px; }
-.portrait .frame-bg.bg1 { transform: rotate(-13deg) translate(-25px,-8px); }
-.portrait .frame-bg.bg2 { border-width: 3.5px; transform: rotate(5deg) translate(25px,25px); }
-.portrait:hover .frame-bg.bg1 { transform: rotate(-19deg) translate(-36px,-17px); }
-.portrait:hover .frame-bg.bg2 { transform: rotate(10deg) translate(36px,34px); }
-.portrait .accent.f1 { top: -17px; left: -22px; width: 64px; }
-.portrait .accent.f2 { bottom: -28px; right: -17px; width: 76px; }
-.portrait .accent.sq { right: -34px; width: 42px; }
-
-/* status sticker: lives inside .portrait so it fades in with the photo and
-   drifts on the same accFloat keyframes as the flowers (offset in time so it
-   reads as a separate layer). float uses `translate`, the tilt uses
-   `transform`, so the two never fight; the hover lives on the inner card */
-.portrait .status-sticker { position: absolute; left: -84px; bottom: -24px; z-index: 4; transform: rotate(-7deg); animation: accFloat 6.4s ease-in-out -2.6s infinite; }
-.portrait .ss-inner { display: flex; flex-direction: column; gap: 3px; background: var(--plum); color: #fff; border-radius: 18px; padding: 18px 24px; box-shadow: 0 8px 18px rgba(54,49,51,.2); font-family: var(--ui); white-space: nowrap; transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
-.portrait:hover .ss-inner { transform: rotate(-2deg) scale(1.04); }   /* hovers with the frames + flowers, not on its own */
-.portrait .ss-k { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #e6eabf; line-height: 1.2; }
-.portrait .ss-t { font-size: 21px; font-weight: 600; line-height: 1.2; }
-.portrait .ss-s { font-size: 15px; color: #f3dfe9; line-height: 1.3; }
-
-/* stacked hero (phones/tablets): portrait ×1.25 (was clamp(196px, 56vw, 262px)),
-   a touch more right margin so the bigger outline square clears the edge, and
-   the sticker drops into flow BELOW the photo, left-aligned with it */
-@media (max-width: 920px) {
-  /* stacked: photo, sticker and text all share the left edge (right-aligning the
-     photo left it floating off on its own at tablet widths) */
-  .portrait { --pf: clamp(245px, 70vw, 328px); justify-self: start; margin: 0 0 4px 30px; }
-  .portrait .status-sticker { position: static; width: max-content; margin: 36px 0 0; transform: rotate(-4deg); }
-  /* the sticker makes .portrait taller than the photo, so pin the bottom flower
-     and the side dot to the FRAME's height (--pf × 12/11) instead of the box */
-  .portrait .accent.f2 { bottom: auto; top: calc(var(--pf) * 12 / 11 - 48px); }
-  .portrait .accent.sq { top: calc(var(--pf) * 12 / 11 * .36); }
-  .portrait .ss-inner { padding: 16px 20px; }
-  .portrait .ss-t { font-size: 19px; }
-  .portrait .ss-s { font-size: 14px; }
-}
-
+/* ============================================================ ROUND 86 — thinner/slower welcome bar + pause button (this round's hero changes now live in HOME HERO) ============================================================ */
 /* welcome bar: thinner, smaller type, ~30% slower (CSS fallback; JS speed is
    set in script.js), plus a pause/play button on the right edge */
 .hello-bar { position: relative; }
@@ -2327,38 +2259,8 @@ footer { border-top: 5px solid var(--plum); }
 @media (max-width: 620px) { .hello-bar .hm { font-size: .84rem; } .hello-bar .hb-toggle { right: 10px; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .portrait .status-sticker { animation: none !important; }
-  .portrait .ss-inner { transition: none; }
-  .portrait:hover .ss-inner { transform: none; }
   /* the bar is already frozen (and swipeable) under reduced motion — nothing to pause */
   .hello-bar .hb-toggle { display: none; }
-}
-
-/* ============================================================ ROUND 87 — smaller sticker hung off the photo's left edge; centered stacked hero column ============================================================ */
-/* desktop only (so the stacked sizes in ROUND 86 don't need restating):
-   smaller card, pushed further out so only ~1/3 of it overlaps the photo;
-   the clamp pulls it back in on narrower desktops so it stays clear of the name */
-@media (min-width: 921px) {
-  .portrait .status-sticker { left: clamp(-150px, -10vw, -96px); bottom: -40px; }
-  .portrait .ss-inner { padding: 13px 18px; border-radius: 14px; gap: 2px; }
-  .portrait .ss-k { font-size: 11px; }
-  .portrait .ss-t { font-size: 17px; }
-  .portrait .ss-s { font-size: 13px; }
-}
-
-/* stacked: cap the single column so it centers on the page (.wrap already has
-   margin: 0 auto); photo, sticker + text stay left-aligned inside it. Phones
-   are narrower than the cap, so they're unaffected */
-@media (max-width: 920px) {
-  .hero-grid { max-width: 600px; }
-  /* photo, sticker and text block share one centre line (left-aligned items
-     inside a centred column still read as lopsided) */
-  .portrait { justify-self: center; margin: 0 auto 4px; --pf: clamp(230px, 66vw, 328px); }  /* 66vw keeps the sage card + dot on-screen at 390px */
-  .hero-left { justify-self: center; }
-  /* sticker: relative (not static) so z-index lifts it above the white outline,
-     centred under the photo via left + translateX (the float owns `translate`),
-     and dropped far enough to clear the outline's rotated bottom edge */
-  .portrait .status-sticker { position: relative; z-index: 4; left: 50%; bottom: auto; margin: 64px 0 0; transform: translateX(-50%) rotate(-4deg); }
 }
 
 /* ============================================================ ROUND 88 — LCHD case study rebuild (case-study-lppi.html). Everything is scoped to body.cs-lchd except the shared lightbox polish at the end ============================================================ */
