@@ -1376,7 +1376,7 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 .nav-inner a.nav-logo { color: var(--plum); font-size: 1.82rem; }
 .nav.scrolled .nav-inner a.nav-logo { font-size: 1.6rem; }
 
-/* LCHD credibility line as a labelled row ("IMPACT  6,000+ users · cited in Health Affairs") */
+/* LCHD credibility line as a labelled row ("IMPACT  ~6,000 users · subject of a Health Affairs article") */
 .proj-metric { display: flex; align-items: baseline; gap: 10px; font-family: var(--ui); font-size: .82rem; line-height: 1.4; color: rgba(54,49,51,.9); margin: 0 0 12px; }
 .proj-metric .pm-label { flex: none; font-size: .64rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #6E645C; }
 .proj-metric .pm-val { color: rgba(54,49,51,.92); }
