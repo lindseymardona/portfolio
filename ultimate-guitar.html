@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Borel&display=swap" rel="stylesheet" />
   <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="css/case-study.css" />
 </head>
 <body id="top" class="cs-v2 cs-ug">
   <a class="skip-link" href="#main">skip to content</a>
@@ -50,11 +51,10 @@
             <img src="assets/proj-ultimateguitar.jpg" alt="The redesigned Ultimate Guitar interface: a purple header, a difficulty and tab-type filter sidebar, and genre panels for exploring tabs" />
           </figure>
         </div>
-        <div class="cs-meta">
+        <div class="cs-meta" style="--cs-meta-cols:5;">
           <div><div class="k cs-label">Role</div><div class="v">UX Designer &amp; Researcher (solo)</div></div>
           <div><div class="k cs-label">Timeline</div><div class="v">Spring 2022, 10 weeks</div></div>
           <div><div class="k cs-label">Context</div><div class="v">UCLA Digital Humanities 110, final project</div></div>
-          <div><div class="k cs-label">Team</div><div class="v">Solo</div></div>
           <div><div class="k cs-label">Tools</div><div class="v">Figma, Google Forms, Zoom, Spark (contrast checker)</div></div>
           <div><div class="k cs-label">Methods</div><div class="v">Heuristic evaluation, usability testing, contextual inquiry, personas, wireframe testing, cognitive walkthrough</div></div>
         </div>
@@ -93,19 +93,17 @@
             <section class="cs-section" id="glance" aria-labelledby="glance-h">
               <p class="cs-label">At a glance</p>
               <h2 id="glance-h">What I found, and what I changed.</h2>
-              <div class="heval-wrap">
-                <table class="heval cs-pairs-table">
-                  <thead>
-                    <tr><th scope="col">Finding</th><th scope="col">Design response</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>No difficulty shown while browsing tabs (usability test, contextual inquiry)</td><td class="fix">A difficulty filter in search</td></tr>
-                    <tr><td>Couldn’t find where to upload a cover video (usability test)</td><td class="fix">A guided tutorial for the Shots feature</td></tr>
-                    <tr><td>No way to exit the tutorial or close help (wireframe test)</td><td class="fix">Explicit close controls on both</td></tr>
-                    <tr><td>Wanted to sort results (wireframe test)</td><td class="fix">Sorting by relevance, alphabetical order, and newest</td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <table class="cs-pairs">
+                <thead>
+                  <tr><th scope="col">Finding</th><th scope="col" class="cs-pairs-arrow"><span class="sr-only">leads to</span></th><th scope="col">Design response</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>No difficulty shown while browsing tabs<span class="cs-pairs-src">usability test, contextual inquiry</span></td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">A difficulty filter in search</td></tr>
+                  <tr><td>Couldn’t find where to upload a cover video<span class="cs-pairs-src">usability test</span></td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">A guided tutorial for the Shots feature</td></tr>
+                  <tr><td>No way to exit the tutorial or close help<span class="cs-pairs-src">wireframe test</span></td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">Explicit close controls on both</td></tr>
+                  <tr><td>Wanted to sort results<span class="cs-pairs-src">wireframe test</span></td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">Sorting by relevance, alphabetical order, and newest</td></tr>
+                </tbody>
+              </table>
               <figure class="cs-pair fig-wide">
                 <div class="cs-pair-grid">
                   <div class="cs-pair-item">
@@ -222,8 +220,12 @@
               <h3>3. Watching how a musician really learns.</h3>
               <p>For the contextual inquiry, I asked a musician to pick a song he wanted to learn and show me his process over a 30-minute screen share. He searched for tabs, opened Ultimate Guitar as the first result, and moved on almost immediately: its chords-over-lyrics format wasn’t what he needed. He settled on Songsterr, praising its difficulty indicator, playback, and looping.</p>
               <p>His process confirmed the difficulty gap independently, and his explanations went further:</p>
+              <blockquote class="cs-quote">
+                <p>“…working with the instrument, not working with learning the instrument.”</p>
+                <cite>Contextual inquiry participant, self-taught guitarist and drummer</cite>
+              </blockquote>
               <ul>
-                <li><strong>Tools should stay out of the way.</strong> He chooses resources that are free and simple, because the point is “working with the instrument, not working with learning the instrument.”</li>
+                <li><strong>Tools should stay out of the way.</strong> He chooses resources that are free and simple.</li>
                 <li><strong>Search time is a dealbreaker.</strong> He gives a tab search “10 minutes max” before giving up and learning by ear.</li>
                 <li><strong>Difficulty only helps if it means something.</strong> Star ratings for difficulty are subjective, since “different people have different skill levels.”</li>
                 <li><strong>Versions help people choose.</strong> He wanted to compare versions of the same song and “choose an easier version of the song as you’re learning it.”</li>
@@ -237,35 +239,35 @@
             <section class="cs-section" id="evolution" aria-labelledby="evolution-h">
               <h2 class="cs-label cs-label-h2" id="evolution-h">How the design evolved</h2>
 
+              <p class="cs-label cs-stage-label">Personas</p>
               <h3>Personas: two ends of the user range.</h3>
               <p>I built two personas, each with an empathy map, a scenario, and a journey map. Bradley is a 35-year-old chef learning acoustic guitar who wants the process to feel painless. Liam is a 52-year-old professional keyboardist who is tech-averse and just wants lead sheets he can pull up fast. Designing for both kept the full range of comfort with technology in view.</p>
               <figure class="cs-thumbs fig-wide">
                 <ul class="cs-thumb-grid">
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="0" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-bradley.jpg" alt="Persona: Bradley Tandiono, 35, a chef from Jakarta learning acoustic guitar who wants a beginner-friendly, aesthetic tool" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Persona</p></li>
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="1" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-bradley.jpg" alt="Empathy map for Bradley: what he says, thinks, does, and feels about learning guitar online" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Empathy map</p></li>
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="2" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-bradley.jpg" alt="Bradley’s journey map across challenges, frustration, solution, and action while finding a tab-learning tool" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Journey map</p></li>
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="3" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-liam.jpg" alt="Persona: Liam Anderson, 52, a professional keyboard player from Nashville who is tech-averse and wants simple lead sheets" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Persona</p></li>
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="4" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-liam.jpg" alt="Empathy map for Liam: what he says, thinks, does, and feels about music-learning tech" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Empathy map</p></li>
-                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="5" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-liam.jpg" alt="Liam’s journey map across challenges, frustration, solution, and action while finding lead sheets to gig with" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Journey map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="0" aria-label="Open Bradley persona full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-bradley.jpg" alt="Persona: Bradley Tandiono, 35, a chef from Jakarta learning acoustic guitar who wants a beginner-friendly, aesthetic tool" loading="lazy" /></button><p class="cs-label">Bradley · Persona</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="1" aria-label="Open Bradley empathy map full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-bradley.jpg" alt="Empathy map for Bradley: what he says, thinks, does, and feels about learning guitar online" loading="lazy" /></button><p class="cs-label">Bradley · Empathy map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="2" aria-label="Open Bradley journey map full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-bradley.jpg" alt="Bradley’s journey map across challenges, frustration, solution, and action while finding a tab-learning tool" loading="lazy" /></button><p class="cs-label">Bradley · Journey map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="3" aria-label="Open Liam persona full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-liam.jpg" alt="Persona: Liam Anderson, 52, a professional keyboard player from Nashville who is tech-averse and wants simple lead sheets" loading="lazy" /></button><p class="cs-label cs-label-olive">Liam · Persona</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="4" aria-label="Open Liam empathy map full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-liam.jpg" alt="Empathy map for Liam: what he says, thinks, does, and feels about music-learning tech" loading="lazy" /></button><p class="cs-label cs-label-olive">Liam · Empathy map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="5" aria-label="Open Liam journey map full size" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-liam.jpg" alt="Liam’s journey map across challenges, frustration, solution, and action while finding lead sheets to gig with" loading="lazy" /></button><p class="cs-label cs-label-olive">Liam · Journey map</p></li>
                 </ul>
-                <figcaption>Bradley, the beginner who wants it painless. Liam, the pro who would rather go back to pen and paper. Each one’s empathy map and journey from challenge to frustration to solution.</figcaption>
+                <figcaption>Bradley, the beginner who wants it painless. Liam, the pro who would rather go back to pen and paper. Each one’s empathy map and journey from challenge to frustration to solution. Click any image to see it full size.</figcaption>
               </figure>
               <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-04/persona.md" target="_blank" rel="noopener">Personas and scenarios write-up</a></p>
 
+              <p class="cs-label cs-stage-label">Lo-fi</p>
               <h3>Lo-fi: paper wireflows, tested.</h3>
               <p>I sketched both tasks as hand-drawn wireflows, then tested them with someone new to music learning: find the easy guitar tab for Ed Sheeran’s “Happier,” switch to the chord sheet, and open the Shots tutorial. They finished both tasks without confusion, and their three pieces of feedback each became a revision:</p>
-              <div class="heval-wrap">
-                <table class="heval cs-pairs-table">
-                  <thead>
-                    <tr><th scope="col">Feedback</th><th scope="col">Revision</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>Wanted to sort artists alphabetically</td><td class="fix">Added sorting by relevance, alphabetical order, and newest</td></tr>
-                    <tr><td>Unclear how to close the help window</td><td class="fix">Made closing it explicit, instead of only clicking outside</td></tr>
-                    <tr><td>No way to leave the tutorial partway through</td><td class="fix">Added a close button to the tutorial overlay</td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <table class="cs-pairs">
+                <thead>
+                  <tr><th scope="col">Feedback</th><th scope="col" class="cs-pairs-arrow"><span class="sr-only">leads to</span></th><th scope="col">Revision</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Wanted to sort artists alphabetically</td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">Added sorting by relevance, alphabetical order, and newest</td></tr>
+                  <tr><td>Unclear how to close the help window</td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">Made closing it explicit, instead of only clicking outside</td></tr>
+                  <tr><td>No way to leave the tutorial partway through</td><td class="cs-pairs-arrow"><span aria-hidden="true">→</span></td><td class="cs-pairs-to">Added a close button to the tutorial overlay</td></tr>
+                </tbody>
+              </table>
               <figure>
                 <button class="cs-zoom" type="button" data-lightbox="assets/ug/wireflow-search.jpg">
                   <img src="assets/ug/wireflow-search.jpg" alt="Hand-drawn low-fidelity wireflow for the search, filter, and tab-type task, with arrows tracing the paths between screens" loading="lazy" />
@@ -274,8 +276,25 @@
               </figure>
               <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-05/lowfidelityprototype.md" target="_blank" rel="noopener">Low-fi prototype write-up</a></p>
 
+              <p class="cs-label cs-stage-label">Mid-fi</p>
               <h3>Mid-fi: a visual system with contrast checks.</h3>
               <p>I mocked up three typefaces (Montserrat, Raleway, Work Sans), three corner radii, and light and dark modes, then ran an impression test. The participant preferred dark mode and the least rounded corners, which matched the search bar. They leaned toward Work Sans but liked Raleway too, and I chose Raleway for its readability across sizes. A contrast check caught the header text failing WCAG AAA at 6.22:1, so I adjusted the color until it passed at 7.8:1. A UX designer friend also reviewed the layout, and the revision that followed removed distracting drop shadows, enlarged and centered text, darkened the genre panels for readability, simplified the login area, and evened out the spacing. For color, I made purple the main color and kept Ultimate Guitar’s signature yellow for small accents, so the site still felt like itself.</p>
+              <figure class="cs-pair cs-pair-small">
+                <div class="cs-pair-grid">
+                  <div class="cs-pair-item">
+                    <p class="cs-label cs-label-muted">Fails AAA · 6.22:1</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/ug/contrast-header-fail.png">
+                      <img src="assets/ug/contrast-header-fail.png" alt="Contrast check for the original header color: ratio 6.22:1, passing AA for normal and large text and AAA for large text, but failing AAA for normal text" loading="lazy" />
+                    </button>
+                  </div>
+                  <div class="cs-pair-item">
+                    <p class="cs-label">Passes AAA · 7.8:1</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/ug/contrast-header-pass.png">
+                      <img src="assets/ug/contrast-header-pass.png" alt="Contrast check for the adjusted header color: ratio 7.8:1, passing AA and AAA for both normal and large text" loading="lazy" />
+                    </button>
+                  </div>
+                </div>
+              </figure>
               <figure>
                 <button class="cs-zoom" type="button" data-lightbox="assets/ug/design-system.jpg">
                   <img src="assets/ug/design-system.jpg" alt="The redesign’s design system: a Raleway type scale and a color palette with hex values" loading="lazy" />
@@ -284,6 +303,7 @@
               </figure>
               <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-06/interfacedesign.md" target="_blank" rel="noopener">Interface design write-up</a> · <a href="https://www.figma.com/file/4UFE4J6DPuM7hFXYf34K00/DH110---As6?node-id=2%3A13" target="_blank" rel="noopener">Screen design tests (Figma)</a> · <a href="https://youtu.be/s8qyd5lGtUw" target="_blank" rel="noopener">Impression test video</a></p>
 
+              <p class="cs-label cs-stage-label">Hi-fi</p>
               <h3>Hi-fi: an interactive prototype, and a walkthrough I misread.</h3>
               <p>I built both tasks as an interactive Figma prototype and ran it through a remote cognitive walkthrough. The reviewer treated the prototype like a tutorial site. They were also outside my target age range, so at the time I decided they had misunderstood what Ultimate Guitar was for and didn’t change anything.</p>
               <p>Looking back, the reviewer probably read my design correctly. I had added a guided tutorial, built a persona with no music background, and tested my wireframes with a beginner. The design was signaling “learning site,” and I treated the reviewer’s confusion as their mistake instead of a finding.</p>
@@ -313,7 +333,7 @@
                 </button>
                 <figcaption>Task 2: find Shots and step through its tutorial.</figcaption>
               </figure>
-              <p class="cs-proto-link"><a href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener"><strong>▶ try the interactive prototype ↗</strong></a></p>
+              <p class="cs-proto-link"><a href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener" class="cs-proto-pill">▶ try the interactive prototype ↗</a></p>
               <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-09/pitch.md" target="_blank" rel="noopener">Pitch write-up</a> · <a href="https://youtu.be/G9QvFX7EuBQ" target="_blank" rel="noopener">Pitch video</a></p>
             </section>
 
