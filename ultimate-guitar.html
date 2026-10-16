@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reimagining Ultimate Guitar — Lindsey Mardona</title>
-  <meta name="description" content="UX case study: my first end-to-end UX project — a heuristic evaluation, usability testing, a contextual inquiry, personas, and journey maps for a redesign of Ultimate Guitar. UCLA Digital Humanities 110." />
+  <meta name="description" content="My first end-to-end UX project: a research-first redesign of one of the internet’s biggest guitar tab sites, from heuristic evaluation and user research to an interactive Figma prototype." />
   <link rel="canonical" href="https://lindseymardona.com/ultimate-guitar.html" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
   <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body id="top">
+<body id="top" class="cs-v2 cs-ug">
   <a class="skip-link" href="#main">skip to content</a>
 
   <nav class="nav" aria-label="Primary">
@@ -35,145 +35,309 @@
     </div>
     <header class="cs-hero">
       <div class="wrap">
-        <h1><span class="h-print">Reimagining Ultimate Guitar</span></h1>
-        <p class="cs-tagline">My first end-to-end UX project — a redesign of Ultimate Guitar. The real value was learning to run the whole process: heuristic evaluation, usability testing, a contextual inquiry, personas, and my first working Figma prototype.</p>
-        <div class="cs-meta">
-          <div><div class="k">Date</div><div class="v">Spring 2022</div></div>
-          <div><div class="k">Context</div><div class="v">Academic — UCLA Digital Humanities 110, final project</div></div>
-          <div><div class="k">Team</div><div class="v">Solo</div></div>
-          <div><div class="k">My role</div><div class="v">Everything: research, evaluation, personas, wireframes, UI, prototype, pitch</div></div>
-          <div><div class="k">Tools</div><div class="v">Figma, Google Docs &amp; Forms, YouTube</div></div>
+        <div class="cs-hero-grid">
+          <div class="cs-hero-copy">
+            <h1><span class="h-print">Reimagining Ultimate Guitar</span></h1>
+            <p class="cs-tagline">My first end-to-end UX project: a research-first redesign of one of the internet’s biggest guitar tab sites, from heuristic evaluation and user research to an interactive Figma prototype.</p>
+            <div class="cs-hero-links">
+              <a class="pill ghost" href="https://lindseymardona.github.io/22s-dh110/" target="_blank" rel="noopener">full write-up ↗</a>
+              <a class="pill ghost" href="https://github.com/lindseymardona/22s-dh110" target="_blank" rel="noopener">GitHub repo ↗</a>
+              <a class="pill ghost" href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener">prototype ↗</a>
+              <a class="pill ghost" href="https://youtu.be/G9QvFX7EuBQ" target="_blank" rel="noopener">pitch video ↗</a>
+            </div>
+          </div>
+          <figure class="cs-hero-card">
+            <img src="assets/proj-ultimateguitar.jpg" alt="The redesigned Ultimate Guitar interface: a purple header, a difficulty and tab-type filter sidebar, and genre panels for exploring tabs" />
+          </figure>
         </div>
-        <div class="cs-hero-links">
-          <a class="pill ghost" href="https://lindseymardona.github.io/22s-dh110/" target="_blank" rel="noopener">full write-up ↗</a>
-          <a class="pill ghost" href="https://github.com/lindseymardona/22s-dh110" target="_blank" rel="noopener">GitHub repo ↗</a>
-          <a class="pill ghost" href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener">prototype ↗</a>
-          <a class="pill ghost" href="https://youtu.be/G9QvFX7EuBQ" target="_blank" rel="noopener">pitch video ↗</a>
+        <div class="cs-meta">
+          <div><div class="k cs-label">Role</div><div class="v">UX Designer &amp; Researcher (solo)</div></div>
+          <div><div class="k cs-label">Timeline</div><div class="v">Spring 2022, 10 weeks</div></div>
+          <div><div class="k cs-label">Context</div><div class="v">UCLA Digital Humanities 110, final project</div></div>
+          <div><div class="k cs-label">Team</div><div class="v">Solo</div></div>
+          <div><div class="k cs-label">Tools</div><div class="v">Figma, Google Forms, Zoom, Spark (contrast checker)</div></div>
+          <div><div class="k cs-label">Methods</div><div class="v">Heuristic evaluation, usability testing, contextual inquiry, personas, wireframe testing, cognitive walkthrough</div></div>
         </div>
       </div>
     </header>
+
+    <!-- data snapshot -->
+    <section class="section cs-snapshot" style="padding:38px 0;">
+      <div class="wrap">
+        <div class="cs-stats cs-stats-3">
+          <div class="cs-stat reveal"><span class="n">12</span><span class="l">usability problems found in a heuristic evaluation</span></div>
+          <div class="cs-stat reveal"><span class="n">3</span><span class="l">research methods that each confirmed or added to the last</span></div>
+          <div class="cs-stat reveal"><span class="n">2</span><span class="l">core tasks taken from paper wireflows to an interactive prototype</span></div>
+        </div>
+      </div>
+    </section>
 
     <article class="cs-body">
       <div class="wrap">
         <div class="cs-layout">
           <nav class="cs-rail" aria-label="Case study sections">
-            <a href="#context">Context</a>
+            <p class="cs-label cs-rail-label">On this page</p>
+            <a href="#glance">At a glance</a>
+            <a href="#problem">Problem</a>
+            <a href="#audience">Who it’s for</a>
             <a href="#role">Role</a>
-            <a href="#process">Process</a>
+            <a href="#redesign">The redesign</a>
+            <a href="#research">Research</a>
+            <a href="#evolution">How it evolved</a>
             <a href="#outcome">Outcome</a>
-            <a href="#reflection">Reflection</a>
+            <a href="#learned">What I learned</a>
           </nav>
           <div class="cs-read">
-            <p style="font-size:1.1rem;line-height:1.7;margin-top:0;">UCLA's DH-110 course consisted of a 10-week exploration of the UX design process. We jumped in headfirst, learning by doing, as it was for many of us (myself included) our first exposure to UX in any sort of practical capacity. Our project was to be a redesign of an app or website of our choosing, and I chose Ultimate Guitar. I use the site, so the frustration was firsthand, and it made a good first target for taking a UX process all the way through and both learning and applying the methods on my own for the first time.</p>
 
-            <h2 id="context">Context</h2>
-            <p>Ultimate Guitar is where a lot of people go for guitar tabs and chords. At the time I worked on this, it had already been around for over two decades and it had a huge library, but the site itself had barely changed, and it showed. The interface was dated, and the features beyond the tabs themselves were easy to miss and confusing to use, especially if you weren't not particularly tech-comfortable.</p>
-            <p>I use the site, so the frustration was firsthand. I wanted to keep it recognizably Ultimate Guitar, but the goal I set was to simplify how you move through it, cut the confusion, and make the non-tab features approachable enough that people would actually try them, so you spend your time learning music instead of fighting the website.</p>
+            <!-- ============ AT A GLANCE ============ -->
+            <section class="cs-section" id="glance" aria-labelledby="glance-h">
+              <p class="cs-label">At a glance</p>
+              <h2 id="glance-h">What I found, and what I changed.</h2>
+              <div class="heval-wrap">
+                <table class="heval cs-pairs-table">
+                  <thead>
+                    <tr><th scope="col">Finding</th><th scope="col">Design response</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>No difficulty shown while browsing tabs (usability test, contextual inquiry)</td><td class="fix">A difficulty filter in search</td></tr>
+                    <tr><td>Couldn’t find where to upload a cover video (usability test)</td><td class="fix">A guided tutorial for the Shots feature</td></tr>
+                    <tr><td>No way to exit the tutorial or close help (wireframe test)</td><td class="fix">Explicit close controls on both</td></tr>
+                    <tr><td>Wanted to sort results (wireframe test)</td><td class="fix">Sorting by relevance, alphabetical order, and newest</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figure class="cs-pair fig-wide">
+                <div class="cs-pair-grid">
+                  <div class="cs-pair-item">
+                    <p class="cs-label cs-label-muted">Before · 2022</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/ug/before-2022.jpg">
+                      <img src="assets/ug/before-2022.jpg" alt="Ultimate Guitar’s 2022 homepage: a dark, crowded layout with a sale banner, large side ads, a users-online box, and dense lists of top tabs, Shots, and backing tracks" loading="lazy" />
+                    </button>
+                  </div>
+                  <div class="cs-pair-item">
+                    <p class="cs-label">After · Redesign</p>
+                    <button class="cs-zoom" type="button" data-lightbox="assets/ug/after-redesign.jpg">
+                      <img src="assets/ug/after-redesign.jpg" alt="The redesigned homepage: a purple header with search, a sidebar filtering by tab type and difficulty, and large genre panels for exploring tabs" loading="lazy" />
+                    </button>
+                  </div>
+                </div>
+                <figcaption>Before: the 2022 homepage. After: the redesign, with a difficulty filter in the sidebar and the clutter cleared out.</figcaption>
+              </figure>
+            </section>
 
-            <h2 id="role">Role</h2>
-            <p>Solo project. I did the research, the evaluations, the personas and journey maps, the wireframes, the interface design, the prototype, and the final pitch.</p>
+            <!-- ============ THE PROBLEM ============ -->
+            <section class="cs-section" id="problem" aria-labelledby="problem-h">
+              <p class="cs-label">The problem</p>
+              <h2 id="problem-h">A huge library behind an interface that hadn’t kept up.</h2>
+              <p>Ultimate Guitar is where a lot of people go for guitar tabs and chords. By 2022 it had been around for more than two decades and had an enormous crowdsourced library, but the site itself had barely changed. The interface was dated, and features beyond the tabs, like requesting a tab or sharing a cover video, were easy to miss and confusing to use.</p>
+              <p>I use the site, so the frustration was firsthand. My question was: where does the site get in the way of musicians learning new songs? The goal was to keep it recognizably Ultimate Guitar while making it easier to find the right tab and approachable enough that people would try the other features, so they spend their time playing instead of fighting the website.</p>
+            </section>
 
-            <h2 id="process">Process</h2>
-            <p><strong>Evaluating what's already there.</strong> I started with a heuristic evaluation of Ultimate Guitar against Songsterr, a cleaner competitor, scoring the current site across Nielsen's ten usability heuristics (severity 1 = minor, 3 = major). The comparison made the gaps concrete: you couldn't tell where you are on the site, several flows dead-ended with no clear way back, and it wasn't obvious what was locked behind the paywall until you hit it.</p>
+            <!-- ============ WHO IT'S FOR ============ -->
+            <section class="cs-section" id="audience" aria-labelledby="audience-h">
+              <p class="cs-label">Who it’s for</p>
+              <h2 id="audience-h">Musicians learning songs, with varying comfort with technology.</h2>
+              <p>Ultimate Guitar mostly serves people who already play and use tabs to learn new songs, from hobbyists to working musicians. I set out to design for that range, with extra attention to people who aren’t comfortable with technology, since the site’s dated, cluttered interface hit them hardest.</p>
+              <p>The research sharpened that picture. My contextual inquiry participant had taught himself guitar and drums over about 8 to 10 years. He knew exactly what he wanted from a tab, and his biggest frustrations were time spent searching, ads, and paywalls. As I note later, my design drifted toward total beginners anyway, and that gap is one of the biggest things I’d do differently.</p>
+            </section>
 
-            <div class="heval-wrap">
-              <table class="heval">
-                <thead>
-                  <tr><th scope="col">Heuristic</th><th scope="col">Sev</th><th scope="col">Finding &amp; recommendation</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td class="heu"><span class="num">01</span>Visibility of system status</td><td><span class="sev sev-2">2</span></td><td>Tab transitions are quick, but it's hard to tell where you are on the site. <span class="fix">Fix:</span> highlight the active tab and add a breadcrumb path.</td></tr>
-                  <tr><td class="heu"><span class="num">02</span>Match with the real world</td><td><span class="sev sev-1">1</span></td><td>Tab names are self-explanatory and the icons are standard. <span class="fix">Fix:</span> good as-is.</td></tr>
-                  <tr><td class="heu"><span class="num">03</span>User control &amp; freedom</td><td><span class="sev sev-3">3</span></td><td>Selecting one tab type collapses the others; "Publish Tab" and "Pro" jump to a different page structure with no clear way back. <span class="fix">Fix:</span> keep the other types visible, and hold the structure (or open those in new tabs).</td></tr>
-                  <tr><td class="heu"><span class="num">04</span>Consistency &amp; standards</td><td><span class="sev sev-1">1</span></td><td>Color and layout are consistent and standard; the Shots background breaks from the rest of the site. <span class="fix">Fix:</span> tone down the harsh yellow and match the Shots background.</td></tr>
-                  <tr><td class="heu"><span class="num">05</span>Error prevention</td><td><span class="sev sev-3">3</span></td><td>Member- and subscription-locked tabs aren't flagged before you click them. <span class="fix">Fix:</span> add a lock icon and make the Pro requirement clear up front.</td></tr>
-                  <tr><td class="heu"><span class="num">06</span>Recognition over recall</td><td><span class="sev sev-1">1</span></td><td>Tab submission guides you step by step, and tab actions stay pinned while scrolling. <span class="fix">Fix:</span> good as-is.</td></tr>
-                  <tr><td class="heu"><span class="num">07</span>Flexibility &amp; efficiency</td><td><span class="sev sev-2">2</span></td><td>Strong shortcuts (edit / playlist / favorite / PDF, version switching, Top Tabs, history), but Shots can't be uploaded from its own tab and doesn't signal scroll or arrow-key navigation. <span class="fix">Fix:</span> add a recommendations tab; let users upload and navigate Shots from the Shots tab.</td></tr>
-                  <tr><td class="heu"><span class="num">08</span>Aesthetic &amp; minimalist design</td><td><span class="sev sev-2">2</span></td><td>Simple to navigate, but ad placement is distracting and the Forums list every active user. <span class="fix">Fix:</span> rework the color scheme, drop the active-users list, and redesign the dated Forums.</td></tr>
-                  <tr><td class="heu"><span class="num">09</span>Help users recover from errors</td><td><span class="sev sev-1">1</span></td><td>Search handles typos and empty results, and locked content is clearly explained on click. <span class="fix">Fix:</span> minor cosmetic room.</td></tr>
-                  <tr><td class="heu"><span class="num">10</span>Help &amp; documentation</td><td><span class="sev sev-2">2</span></td><td>The footer has About / rules / support, but there's no per-tab explanation and the Forums are unintuitive. <span class="fix">Fix:</span> add a short blurb per tab and a Forums help section.</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-01/heuristic-evaluation.md" target="_blank" rel="noopener">Full heuristic evaluation</a></p>
+            <!-- ============ ROLE ============ -->
+            <section class="cs-section" id="role" aria-labelledby="role-h">
+              <p class="cs-label">Role</p>
+              <h2 id="role-h">Solo, from first evaluation to final pitch.</h2>
+              <p>UCLA’s DH 110 was a 10-week course that taught the UX process by doing it. For most of us, me included, it was our first practical exposure to UX. Each student redesigned an app or website of their choice, and I did every part of mine:</p>
+              <ul>
+                <li><strong>Research:</strong> heuristic evaluation, a moderated usability test with my own script and questionnaires, and a contextual inquiry.</li>
+                <li><strong>Synthesis:</strong> personas, empathy maps, scenarios, and journey maps.</li>
+                <li><strong>Design:</strong> low-fidelity wireflows, a color and type system, and a high-fidelity interactive prototype in Figma.</li>
+                <li><strong>Testing and communication:</strong> a wireframe test, a cognitive walkthrough, and a final pitch as a web document and recorded video.</li>
+              </ul>
+            </section>
 
-            <p><strong>Watching people actually use it.</strong> Heuristics only get you so far, so I wrote a moderator script and a survey and ran a pilot usability test remotely with real tasks, then did a contextual inquiry — a remote interview where I gave someone activities and watched how they reacted. That surfaced things an expert pass misses: tabs don't show any difficulty rating, the Forums are intimidating, the Shots tab is barely usable, ads get in the way, and switching between versions of the same song is a pain. Two feature ideas came out of it too: MIDI playback so you can hear a tab while you learn it, and multi-language support.</p>
+            <!-- ============ THE REDESIGN ============ -->
+            <section class="cs-section" id="redesign" aria-labelledby="redesign-h">
+              <p class="cs-label">The redesign</p>
+              <h2 id="redesign-h">Two tasks, rebuilt around what the research found.</h2>
+              <p>The prototype focuses on the two problems my research surfaced most clearly:</p>
+              <ol class="cs-steps">
+                <li><strong>Finding a tab you can actually play.</strong> Search for a song, filter results by difficulty and tab type, and switch between a song’s chords and tabs. This answers the biggest gap from testing: while browsing tabs, the site showed a star rating but nothing about difficulty, so you had to open tabs one by one to find out.</li>
+                <li><strong>Learning the Shots feature.</strong> Find Shots, Ultimate Guitar’s space for user cover videos, and step through a short guided tutorial, including where to upload your own video. This answers the most confusing flow in testing.</li>
+              </ol>
+              <p>Across both, I kept the site recognizably Ultimate Guitar while modernizing the color palette and simplifying navigation. I deliberately left out a login screen: sites that force you to sign up before exploring push people away, and the usability problems were more urgent.</p>
+            </section>
 
-            <figure>
-              <img src="assets/ug/usability-test.jpg" alt="A remote usability-test session: the moderator script in one window, the Ultimate Guitar site in another, and the participant on webcam" loading="lazy" />
-              <figcaption>Running the remote usability test and contextual inquiry — watching real tasks in real time surfaced what an expert review couldn't. <a href="https://github.com/lindseymardona/22s-dh110/tree/main/week-03" target="_blank" rel="noopener">week 3 write-up →</a></figcaption>
-            </figure>
-            <p class="cs-materials"><strong>Materials:</strong> <a href="https://docs.google.com/forms/d/e/1FAIpQLSd-DFG_bpyKe67cEwCsKAX9dfhpknoZEAk4cqNtAbB0BJXRNw/viewform" target="_blank" rel="noopener">Moderator script &amp; survey</a> · <a href="https://youtu.be/xz_8mPhnNmI" target="_blank" rel="noopener">Pilot UT recording</a> · <a href="https://docs.google.com/document/d/1E6w9fPAWbljCwtAZF6OQsE6wmw0_SpHjyifBuiiC0yM/edit" target="_blank" rel="noopener">Field-study guide</a> · <a href="https://youtu.be/aEGrp3EMzzQ" target="_blank" rel="noopener">Interview recording</a></p>
+            <!-- ============ RESEARCH ============ -->
+            <section class="cs-section" id="research" aria-labelledby="research-h">
+              <p class="cs-label">Research</p>
+              <h2 id="research-h">Three methods, each one checking the last.</h2>
 
-            <p><strong>Figuring out who I was designing for.</strong> I built two personas, with empathy maps, scenarios, and journey maps for each. Bradley is a moderately tech-comfortable beginner who wants to learn pieces and get better. Liam is an older, tech-averse gigging player who just wants lead sheets he can pull up fast. Designing for both ends — someone fluent with tech and someone actively frustrated by it — kept me honest about who really uses the site. From there I narrowed to two tasks: searching for a song and filtering it by difficulty and tab type, and finding and using the tutorial for the Shots feature.</p>
+              <h3>1. Evaluating what’s already there.</h3>
+              <p>I started with a heuristic evaluation, scoring Ultimate Guitar against Songsterr, a cleaner competitor, across Nielsen’s ten usability heuristics (severity 1 = minor, 3 = major). It surfaced 12 usability problems. (One small validation: a week after I recommended that Songsterr mark its paywalled features with an icon, Songsterr added exactly that.) The most severe problems on Ultimate Guitar: you couldn’t tell where you were on the site, several flows dead-ended with no clear way back, and nothing signaled what was locked behind the paywall until you hit it.</p>
 
-            <figure>
-              <img src="assets/ug/persona-bradley.jpg" alt="Persona: Bradley Tandiono, 35, a chef from Jakarta learning acoustic guitar who wants a beginner-friendly, aesthetic tool" loading="lazy" />
-              <figcaption>Bradley — the beginner who wants the process to feel painless.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/persona-liam.jpg" alt="Persona: Liam Anderson, 52, a professional keyboard player from Nashville who is tech-averse and wants simple lead sheets" loading="lazy" />
-              <figcaption>Liam — the pro who'd rather go back to pen and paper.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/empathy-bradley.jpg" alt="Empathy map for Bradley — what he says, thinks, does, and feels about learning guitar online" loading="lazy" />
-              <figcaption>Bradley's empathy map.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/empathy-liam.jpg" alt="Empathy map for Liam — what he says, thinks, does, and feels about music-learning tech" loading="lazy" />
-              <figcaption>Liam's empathy map.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/journey-bradley.jpg" alt="Bradley's journey map across challenges, frustration, solution, and action while finding a tab-learning tool" loading="lazy" />
-              <figcaption>Bradley's journey — challenges → frustration → solution → action.</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/journey-liam.jpg" alt="Liam's journey map across challenges, frustration, solution, and action while finding lead sheets to gig with" loading="lazy" />
-              <figcaption>Liam's journey. <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-04/persona.md" target="_blank" rel="noopener">week 4 write-up →</a></figcaption>
-            </figure>
+              <div class="heval-wrap">
+                <table class="heval">
+                  <thead>
+                    <tr><th scope="col">Heuristic</th><th scope="col">Sev</th><th scope="col">Finding &amp; recommendation</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="heu"><span class="num">01</span>Visibility of system status</td><td><span class="sev sev-2">2</span></td><td>Tab transitions are quick, but it's hard to tell where you are on the site. <span class="fix">Fix:</span> highlight the active tab and add a breadcrumb path.</td></tr>
+                    <tr><td class="heu"><span class="num">02</span>Match with the real world</td><td><span class="sev sev-1">1</span></td><td>Tab names are self-explanatory and the icons are standard. <span class="fix">Fix:</span> good as-is.</td></tr>
+                    <tr><td class="heu"><span class="num">03</span>User control &amp; freedom</td><td><span class="sev sev-3">3</span></td><td>Selecting one tab type collapses the others; "Publish Tab" and "Pro" jump to a different page structure with no clear way back. <span class="fix">Fix:</span> keep the other types visible, and hold the structure (or open those in new tabs).</td></tr>
+                    <tr><td class="heu"><span class="num">04</span>Consistency &amp; standards</td><td><span class="sev sev-1">1</span></td><td>Color and layout are consistent and standard; the Shots background breaks from the rest of the site. <span class="fix">Fix:</span> tone down the harsh yellow and match the Shots background.</td></tr>
+                    <tr><td class="heu"><span class="num">05</span>Error prevention</td><td><span class="sev sev-3">3</span></td><td>Member- and subscription-locked tabs aren't flagged before you click them. <span class="fix">Fix:</span> add a lock icon and make the Pro requirement clear up front.</td></tr>
+                    <tr><td class="heu"><span class="num">06</span>Recognition over recall</td><td><span class="sev sev-1">1</span></td><td>Tab submission guides you step by step, and tab actions stay pinned while scrolling. <span class="fix">Fix:</span> good as-is.</td></tr>
+                    <tr><td class="heu"><span class="num">07</span>Flexibility &amp; efficiency</td><td><span class="sev sev-2">2</span></td><td>Strong shortcuts (edit / playlist / favorite / PDF, version switching, Top Tabs, history), but Shots can't be uploaded from its own tab and doesn't signal scroll or arrow-key navigation. <span class="fix">Fix:</span> add a recommendations tab; let users upload and navigate Shots from the Shots tab.</td></tr>
+                    <tr><td class="heu"><span class="num">08</span>Aesthetic &amp; minimalist design</td><td><span class="sev sev-2">2</span></td><td>Simple to navigate, but ad placement is distracting and the Forums list every active user. <span class="fix">Fix:</span> rework the color scheme, drop the active-users list, and redesign the dated Forums.</td></tr>
+                    <tr><td class="heu"><span class="num">09</span>Help users recover from errors</td><td><span class="sev sev-1">1</span></td><td>Search handles typos and empty results, and locked content is clearly explained on click. <span class="fix">Fix:</span> minor cosmetic room.</td></tr>
+                    <tr><td class="heu"><span class="num">10</span>Help &amp; documentation</td><td><span class="sev sev-2">2</span></td><td>The footer has About / rules / support, but there's no per-tab explanation and the Forums are unintuitive. <span class="fix">Fix:</span> add a short blurb per tab and a Forums help section.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-01/heuristic-evaluation.md" target="_blank" rel="noopener">Full heuristic evaluation</a></p>
 
-            <p><strong>Designing it.</strong> I wireframed both tasks as low-fidelity flows first. Testing those flows caught missing pieces, so I added sorting and a way to close the tutorial partway through. Then I worked through the interface — visual directions, color-contrast checks for accessibility, and an impression test — and locked a color and type system before building a high-fidelity, interactive prototype in Figma.</p>
+              <h3>2. Watching someone actually use it.</h3>
+              <p>An expert review only gets you so far, so I designed a pilot usability test around the three most severe problems and ran it remotely over Zoom. The participant thought aloud through three tasks, each broken into steps:</p>
+              <ol class="cs-steps">
+                <li>Find a challenging tab for Laufey’s “Like The Movies,” check its difficulty, and find the hardest version.</li>
+                <li>Request a tab for a song that isn’t on the site.</li>
+                <li>Find other users’ cover videos, scroll to the end, and find where to upload your own.</li>
+              </ol>
+              <p>Before the tasks, he rated how easy and trustworthy the homepage looked. After them, he rated each task’s ease and time, answered the ten System Usability Scale statements, and picked five words from a set of product reaction cards to describe the site.</p>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/ug/usability-test.jpg">
+                  <img src="assets/ug/usability-test.jpg" alt="A remote usability test session: the moderator script in one window, the Ultimate Guitar site in another, and the participant on webcam" loading="lazy" />
+                </button>
+                <figcaption>The moderator script, the site, and the participant on webcam during the remote test.</figcaption>
+              </figure>
+              <p><strong>What it found:</strong></p>
+              <ul>
+                <li><strong>A problem the heuristic evaluation missed.</strong> He found the star rating easily, but that’s a satisfaction rating. Nothing in the search results showed how hard a tab was; difficulty only appeared after opening a tab.</li>
+                <li><strong>Features in the wrong place.</strong> He looked for tab requests under Tabs. They live in Forums, which he found intimidating.</li>
+                <li><strong>A dead end.</strong> He couldn’t find where to upload a cover video, and scrolling through the videos took several tries.</li>
+                <li><strong>A rough first impression.</strong> He found the homepage slightly intimidating and untrustworthy.</li>
+              </ul>
+              <p>One honest limit: it was a single-participant pilot, and he was a young adult, not the middle-aged players I had first planned to focus on.</p>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://docs.google.com/forms/d/e/1FAIpQLSd-DFG_bpyKe67cEwCsKAX9dfhpknoZEAk4cqNtAbB0BJXRNw/viewform" target="_blank" rel="noopener">Moderator script &amp; survey</a> · <a href="https://youtu.be/xz_8mPhnNmI" target="_blank" rel="noopener">Pilot UT recording</a> · <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-02/usability-testing.md" target="_blank" rel="noopener">Usability test write-up</a></p>
 
-            <figure>
-              <img src="assets/ug/wireflow-search.jpg" alt="Hand-drawn low-fidelity wireflow for the search, filter, and tab-type task, with arrows tracing the paths between screens" loading="lazy" />
-              <figcaption>The low-fi search → filter → switch-tab-type wireflow. Testing it caught the missing sort control and the dead-end tutorial. <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-05/lowfidelityprototype.md" target="_blank" rel="noopener">week 5 write-up →</a></figcaption>
-            </figure>
-            <figure>
-              <img src="assets/ug/design-system.jpg" alt="The redesign's design system — Raleway type scale and a color palette with hex values" loading="lazy" />
-              <figcaption>The type and color system, after contrast checks and an impression test. <a href="https://github.com/lindseymardona/22s-dh110/tree/main/week-06" target="_blank" rel="noopener">week 6 write-up →</a></figcaption>
-            </figure>
+              <h3>3. Watching how a musician really learns.</h3>
+              <p>For the contextual inquiry, I asked a musician to pick a song he wanted to learn and show me his process over a 30-minute screen share. He searched for tabs, opened Ultimate Guitar as the first result, and moved on almost immediately: its chords-over-lyrics format wasn’t what he needed. He settled on Songsterr, praising its difficulty indicator, playback, and looping.</p>
+              <p>His process confirmed the difficulty gap independently, and his explanations went further:</p>
+              <ul>
+                <li><strong>Tools should stay out of the way.</strong> He chooses resources that are free and simple, because the point is “working with the instrument, not working with learning the instrument.”</li>
+                <li><strong>Search time is a dealbreaker.</strong> He gives a tab search “10 minutes max” before giving up and learning by ear.</li>
+                <li><strong>Difficulty only helps if it means something.</strong> Star ratings for difficulty are subjective, since “different people have different skill levels.”</li>
+                <li><strong>Versions help people choose.</strong> He wanted to compare versions of the same song and “choose an easier version of the song as you’re learning it.”</li>
+                <li><strong>Language matters.</strong> The popular Japanese song he chose had no Japanese lyrics on the site.</li>
+              </ul>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://docs.google.com/document/d/1E6w9fPAWbljCwtAZF6OQsE6wmw0_SpHjyifBuiiC0yM/edit" target="_blank" rel="noopener">Field-study guide</a> · <a href="https://youtu.be/aEGrp3EMzzQ" target="_blank" rel="noopener">Interview recording</a> · <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-03/contextual-inquiry.md" target="_blank" rel="noopener">Contextual inquiry write-up</a></p>
+              <p><strong>Pulling it together.</strong> Across all three methods, I landed on three priorities, all ahead of the paid Pro tier: simplicity, support for learning beyond the chord sheet, and open access. As I wrote at the time, without an appealing free version of the site, the Pro version wouldn’t succeed.</p>
+            </section>
 
-            <p><strong>The test that didn't go to plan.</strong> I ran the hi-fi prototype through a peer cognitive walkthrough, but the reviewer didn't really understand what Ultimate Guitar was for, so their feedback wasn't usable and I didn't make changes off it. It was frustrating at the time, but it taught me that testing with someone who doesn't match your user gets you noise, not signal.</p>
+            <!-- ============ HOW THE DESIGN EVOLVED ============ -->
+            <section class="cs-section" id="evolution" aria-labelledby="evolution-h">
+              <h2 class="cs-label cs-label-h2" id="evolution-h">How the design evolved</h2>
 
-            <h2 id="outcome">Outcome</h2>
-            <ul>
-              <li>A redesign grounded in a heuristic evaluation, a usability test, and a contextual inquiry, so the changes trace back to observed problems rather than taste.</li>
-              <li>Two personas with journey maps that kept the design tied to real user types instead of a generic "user."</li>
-              <li>A full progression from low-fidelity wireflows to an interface system to an interactive Figma prototype of the two core tasks.</li>
-              <li>A pitch — a web document plus a recorded presentation — walking through the reasoning and demoing the prototype.</li>
-            </ul>
+              <h3>Personas: two ends of the user range.</h3>
+              <p>I built two personas, each with an empathy map, a scenario, and a journey map. Bradley is a 35-year-old chef learning acoustic guitar who wants the process to feel painless. Liam is a 52-year-old professional keyboardist who is tech-averse and just wants lead sheets he can pull up fast. Designing for both kept the full range of comfort with technology in view.</p>
+              <figure class="cs-thumbs fig-wide">
+                <ul class="cs-thumb-grid">
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="0" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-bradley.jpg" alt="Persona: Bradley Tandiono, 35, a chef from Jakarta learning acoustic guitar who wants a beginner-friendly, aesthetic tool" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Persona</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="1" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-bradley.jpg" alt="Empathy map for Bradley: what he says, thinks, does, and feels about learning guitar online" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Empathy map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="2" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-bradley.jpg" alt="Bradley’s journey map across challenges, frustration, solution, and action while finding a tab-learning tool" loading="lazy" /></button><p class="cs-label cs-label-muted">Bradley · Journey map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="3" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/persona-liam.jpg" alt="Persona: Liam Anderson, 52, a professional keyboard player from Nashville who is tech-averse and wants simple lead sheets" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Persona</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="4" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/empathy-liam.jpg" alt="Empathy map for Liam: what he says, thinks, does, and feels about music-learning tech" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Empathy map</p></li>
+                  <li class="cs-thumb reveal"><button class="cs-zoom" type="button" data-start="5" data-lightbox='["assets/ug/persona-bradley.jpg","assets/ug/empathy-bradley.jpg","assets/ug/journey-bradley.jpg","assets/ug/persona-liam.jpg","assets/ug/empathy-liam.jpg","assets/ug/journey-liam.jpg"]' data-captions='["Bradley · Persona","Bradley · Empathy map","Bradley · Journey map","Liam · Persona","Liam · Empathy map","Liam · Journey map"]'><img src="assets/ug/journey-liam.jpg" alt="Liam’s journey map across challenges, frustration, solution, and action while finding lead sheets to gig with" loading="lazy" /></button><p class="cs-label cs-label-muted">Liam · Journey map</p></li>
+                </ul>
+                <figcaption>Bradley, the beginner who wants it painless. Liam, the pro who would rather go back to pen and paper. Each one’s empathy map and journey from challenge to frustration to solution.</figcaption>
+              </figure>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-04/persona.md" target="_blank" rel="noopener">Personas and scenarios write-up</a></p>
 
-            <p>The two task flows I prototyped end to end:</p>
-            <figure class="fig-wide">
-              <img src="assets/ug/flow-search.jpg" alt="The search-task flow across four hi-fi screens: explore tabs, search results, the chords page, and switching tab types" loading="lazy" />
-              <figcaption>Task 1 — search a song, filter by difficulty, and switch between tab types.</figcaption>
-            </figure>
-            <figure class="fig-wide">
-              <img src="assets/ug/flow-shots.jpg" alt="The Shots-tutorial task flow across the hi-fi prototype screens" loading="lazy" />
-              <figcaption>Task 2 — find and step through the tutorial for the Shots feature.</figcaption>
-            </figure>
+              <h3>Lo-fi: paper wireflows, tested.</h3>
+              <p>I sketched both tasks as hand-drawn wireflows, then tested them with someone new to music learning: find the easy guitar tab for Ed Sheeran’s “Happier,” switch to the chord sheet, and open the Shots tutorial. They finished both tasks without confusion, and their three pieces of feedback each became a revision:</p>
+              <div class="heval-wrap">
+                <table class="heval cs-pairs-table">
+                  <thead>
+                    <tr><th scope="col">Feedback</th><th scope="col">Revision</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Wanted to sort artists alphabetically</td><td class="fix">Added sorting by relevance, alphabetical order, and newest</td></tr>
+                    <tr><td>Unclear how to close the help window</td><td class="fix">Made closing it explicit, instead of only clicking outside</td></tr>
+                    <tr><td>No way to leave the tutorial partway through</td><td class="fix">Added a close button to the tutorial overlay</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/ug/wireflow-search.jpg">
+                  <img src="assets/ug/wireflow-search.jpg" alt="Hand-drawn low-fidelity wireflow for the search, filter, and tab-type task, with arrows tracing the paths between screens" loading="lazy" />
+                </button>
+                <figcaption>The search to filter to tab-type wireflow. Testing it caught the missing sort control and the tutorial with no exit.</figcaption>
+              </figure>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-05/lowfidelityprototype.md" target="_blank" rel="noopener">Low-fi prototype write-up</a></p>
 
-            <p style="margin:22px 0 26px;"><a href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener"><strong>▶ try the interactive prototype ↗</strong></a></p>
+              <h3>Mid-fi: a visual system with contrast checks.</h3>
+              <p>I mocked up three typefaces (Montserrat, Raleway, Work Sans), three corner radii, and light and dark modes, then ran an impression test. The participant preferred dark mode and the least rounded corners, which matched the search bar. They leaned toward Work Sans but liked Raleway too, and I chose Raleway for its readability across sizes. A contrast check caught the header text failing WCAG AAA at 6.22:1, so I adjusted the color until it passed at 7.8:1. A UX designer friend also reviewed the layout, and the revision that followed removed distracting drop shadows, enlarged and centered text, darkened the genre panels for readability, simplified the login area, and evened out the spacing. For color, I made purple the main color and kept Ultimate Guitar’s signature yellow for small accents, so the site still felt like itself.</p>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/ug/design-system.jpg">
+                  <img src="assets/ug/design-system.jpg" alt="The redesign’s design system: a Raleway type scale and a color palette with hex values" loading="lazy" />
+                </button>
+                <figcaption>The Raleway type scale and color palette, after contrast checks and an impression test.</figcaption>
+              </figure>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-06/interfacedesign.md" target="_blank" rel="noopener">Interface design write-up</a> · <a href="https://www.figma.com/file/4UFE4J6DPuM7hFXYf34K00/DH110---As6?node-id=2%3A13" target="_blank" rel="noopener">Screen design tests (Figma)</a> · <a href="https://youtu.be/s8qyd5lGtUw" target="_blank" rel="noopener">Impression test video</a></p>
 
-            <h2 id="reflection">Reflection</h2>
-            <p>This was my first UX project from start to finish, and the part I actually value is the process. Running a heuristic evaluation, writing a moderator script and a survey, doing a pilot usability test and a contextual inquiry, building personas and journey maps, shipping my first real Figma prototype — that's where the terms stopped being a list and turned into methods I could actually run.</p>
-            <p>I'll be honest about the rest: looking back, I don't stand behind a lot of the specific design decisions or the polish of the final screens. It was four years ago and my first time doing any of this, and it shows. But that gap between knowing the process and having the craft to execute it well is exactly what the project taught me to <em>see</em>, and closing it is a lot of what I've been doing since.</p>
-            <p>The lessons that stuck weren't the tidy ones. Watching one person hunt for a difficulty rating that wasn't there told me more than the entire heuristic pass did. And the walkthrough that fell apart because I tested with the wrong person taught me that recruiting is part of the work, not an afterthought. It's a student project and a proposal, not a shipped product — but it's the first time I turned "this site is frustrating" into a specific, researched redesign, and it's why I kept going.</p>
-            <p class="cs-materials"><strong>Materials:</strong> <a href="https://lindseymardona.github.io/22s-dh110/" target="_blank" rel="noopener">Full write-up</a> · <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-09/pitch.md" target="_blank" rel="noopener">Pitch conclusions</a> · <a href="https://youtu.be/G9QvFX7EuBQ" target="_blank" rel="noopener">Pitch video</a></p>
+              <h3>Hi-fi: an interactive prototype, and a walkthrough I misread.</h3>
+              <p>I built both tasks as an interactive Figma prototype and ran it through a remote cognitive walkthrough. The reviewer treated the prototype like a tutorial site. They were also outside my target age range, so at the time I decided they had misunderstood what Ultimate Guitar was for and didn’t change anything.</p>
+              <p>Looking back, the reviewer probably read my design correctly. I had added a guided tutorial, built a persona with no music background, and tested my wireframes with a beginner. The design was signaling “learning site,” and I treated the reviewer’s confusion as their mistake instead of a finding.</p>
+              <p>The reviewer also suggested showing search results as buttons instead of links. I worried buttons could look dated and proposed a middle ground: rounded panels, like Reddit’s. I also weighed renaming menu labels for clarity against keeping Ultimate Guitar’s branding.</p>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-07/highfidelityprototype.md" target="_blank" rel="noopener">High-fi prototype write-up</a> · <a href="https://docs.google.com/document/d/12yOpcXmBWoEWWdrIUuy7uShqwW7C-VQ8SSxFVydRpu8/edit" target="_blank" rel="noopener">Cognitive walkthrough evidence</a></p>
+            </section>
 
-            <p class="cs-redesign-note">Note: I'm currently in the process of rolling out a design and copy refresh for this case study. Check back soon for the updated version!</p>
+            <!-- ============ OUTCOME ============ -->
+            <section class="cs-section" id="outcome" aria-labelledby="outcome-h">
+              <p class="cs-label">Outcome</p>
+              <h2 id="outcome-h">A researched proposal, start to finish.</h2>
+              <p>This was a student project, not a shipped product. What it produced:</p>
+              <ul>
+                <li><strong>A redesign that traces back to evidence.</strong> The difficulty filter, the sort controls, and the Shots tutorial each answer a problem I observed in testing.</li>
+                <li><strong>An interactive Figma prototype</strong> of both core tasks.</li>
+                <li><strong>A pitch,</strong> as a web document and a recorded presentation, walking through the reasoning and demoing the prototype.</li>
+              </ul>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/ug/flow-search.jpg">
+                  <img src="assets/ug/flow-search.jpg" alt="The search task flow across four hi-fi screens: explore tabs, search results, the chords page, and switching tab types" loading="lazy" />
+                </button>
+                <figcaption>Task 1: search for a song, filter by difficulty, and switch between tab types.</figcaption>
+              </figure>
+              <figure>
+                <button class="cs-zoom" type="button" data-lightbox="assets/ug/flow-shots.jpg">
+                  <img src="assets/ug/flow-shots.jpg" alt="The Shots tutorial task flow across the hi-fi prototype screens" loading="lazy" />
+                </button>
+                <figcaption>Task 2: find Shots and step through its tutorial.</figcaption>
+              </figure>
+              <p class="cs-proto-link"><a href="https://www.figma.com/proto/WpPnwhxJy0ErkxYoLNbHYG/DH110---As6-(Copy)?node-id=103%3A80&amp;starting-point-node-id=103%3A80" target="_blank" rel="noopener"><strong>▶ try the interactive prototype ↗</strong></a></p>
+              <p class="cs-materials"><strong>Materials:</strong> <a href="https://github.com/lindseymardona/22s-dh110/blob/main/week-09/pitch.md" target="_blank" rel="noopener">Pitch write-up</a> · <a href="https://youtu.be/G9QvFX7EuBQ" target="_blank" rel="noopener">Pitch video</a></p>
+            </section>
 
-            <div style="margin-top:36px;">
+            <!-- ============ WHAT I LEARNED ============ -->
+            <section class="cs-section" id="learned" aria-labelledby="learned-h">
+              <h2 class="cs-label cs-label-h2" id="learned-h">What I learned</h2>
+
+              <h3>One observed user can beat an expert pass.</h3>
+              <p>Watching one person hunt for a difficulty rating that wasn’t there told me more than the whole heuristic evaluation did. That’s when the methods stopped being a list of terms and became something I could actually run.</p>
+
+              <h3>Understand why something exists before simplifying it.</h3>
+              <p>I flattened the site’s filtering to make it simpler. My redesigned filter offered only tab type and three difficulty levels, and dropped the genre, decade, and version choices people use to narrow a catalog that size. People needed that filtering, especially to choose between crowdsourced versions of the same song, and my own participant said so. Now I’d keep the capability and make it friendlier: sensible defaults like showing the highest-rated version first, basic filters up front with advanced ones a click away, and difficulty and rating shown on every version so people can compare at a glance. The same goes for ads: I left them out of my mockups entirely, but a free site like Ultimate Guitar depends on them, so a real redesign would need to plan where they go.</p>
+
+              <h3>When feedback seems off, ask what in the design caused it.</h3>
+              <p>I dismissed the cognitive walkthrough because the reviewer treated my prototype like a tutorial site. The reviewer was reading what I’d designed. The same pull shows up in my personas: my research participant was an experienced player, but I designed toward total beginners anyway.</p>
+
+              <h3>Define users by what they do.</h3>
+              <p>I defined my target user by age, middle-aged men, and then neither my pilot participant nor my walkthrough reviewer fit. If I redid this, I’d define users by experience and goals, like “plays already and learns new songs from tabs,” because that’s what actually shaped how people used the site. Every study also ran with a single person, which is normal for a class pilot, but now I plan who I need to hear from as carefully as what I’ll ask them.</p>
+
+              <h3>Process first, craft second.</h3>
+              <p>Looking back four years later, I don’t stand behind every design decision or the polish of the final screens. But this project gave me the process, and seeing the gap between knowing the process and executing it well is a lot of what I’ve been working on since.</p>
+            </section>
+
+            <div class="cs-outro">
               <a class="cs-outro-back" href="projects.html"><span class="bk" aria-hidden="true">←</span> back to projects</a>
             </div>
           </div>
