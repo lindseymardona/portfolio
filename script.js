@@ -58,6 +58,45 @@
     });
   }
 
+  /* ---- version strip: Page 1 / Page 2 switch. Swaps every thumbnail (src + alt,
+     from data-src2 / data-alt2) and rewrites each button's data-lightbox and
+     data-captions, so the lightbox opens on that page's versions. Runs before the
+     lightbox setup, which reads those attributes at click time ---- */
+  [].slice.call(document.querySelectorAll('.cs-strip')).forEach(function (strip) {
+    var tog = strip.querySelector('.cs-pagetoggle');
+    if (!tog) return;
+    var items = [].slice.call(strip.querySelectorAll('.cs-strip-item')).map(function (li) {
+      var img = li.querySelector('img'), lbl = li.querySelector('.cs-label');
+      return { btn: li.querySelector('[data-lightbox]'), img: img, label: lbl ? lbl.textContent.trim() : '',
+               src: [img.getAttribute('src'), img.getAttribute('data-src2')],
+               alt: [img.getAttribute('alt'), img.getAttribute('data-alt2')] };
+    });
+    var num = strip.querySelector('.cs-pagenum');
+    function setPage(p) {   // p: 0 = page 1, 1 = page 2
+      var srcs = items.map(function (it) { return it.src[p]; });
+      var caps = items.map(function (it) { return it.label + ' · page ' + (p + 1); });
+      items.forEach(function (it) {
+        it.img.src = it.src[p]; it.img.alt = it.alt[p];
+        it.btn.setAttribute('data-lightbox', JSON.stringify(srcs));
+        it.btn.setAttribute('data-captions', JSON.stringify(caps));
+      });
+      [].slice.call(tog.querySelectorAll('button')).forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-page') === String(p + 1)));
+      });
+      if (num) num.textContent = p + 1;
+    }
+    tog.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-page]');
+      if (b) setPage(parseInt(b.getAttribute('data-page'), 10) - 1);
+    });
+    // warm the page-2 images (~750 KB) only once someone reaches for the switch
+    var warm = function () {
+      tog.removeEventListener('pointerenter', warm); tog.removeEventListener('focusin', warm);
+      items.forEach(function (it) { if (it.src[1]) { var pre = new Image(); pre.src = it.src[1]; } });
+    };
+    tog.addEventListener('pointerenter', warm); tog.addEventListener('focusin', warm);
+  });
+
   /* ---- lightbox carousel (anything with data-lightbox: gallery tiles, case-study
      figure buttons). Optional: data-captions (JSON), data-alts (JSON), data-start.
      Focus moves into the dialog, Tab stays inside it, and focus returns to the

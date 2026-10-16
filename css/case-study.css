@@ -119,6 +119,13 @@
 .cs-v2 .cs-strip-item img { aspect-ratio: 17 / 22; object-fit: cover; object-position: top; }
 .cs-v2 .cs-strip-item .cs-label { font-size: 12.5px; margin: 10px 0 0; }
 .cs-v2 .cs-read .cs-strip-final img { border: 2px solid var(--plum); }
+/* page 1 / page 2 switch above the strip (JS-only; without JS the strip just shows page 1) */
+.cs-pagetoggle { display: none; }
+.js .cs-pagetoggle { display: inline-flex; gap: 4px; padding: 4px; margin: 0 0 14px; border-radius: 999px; background: rgba(99,40,92,.08); }
+.cs-pagetoggle button { font-family: var(--ui); font-size: 13px; font-weight: 600; color: var(--plum); background: transparent; border: 0; border-radius: 999px; padding: 6px 14px; min-height: 32px; cursor: pointer; transition: background .2s ease, color .2s ease; }
+.cs-pagetoggle button[aria-pressed="true"] { background: var(--plum); color: #fff; }
+.cs-pagetoggle button:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+ (prefers-reduced-motion: reduce) { .cs-pagetoggle button { transition: none; } }
 
 
 /* ---------- Bar chart: bar length = value / 10 of the track (minus room for the label) ---------- */

@@ -218,12 +218,16 @@
             <section class="cs-section" id="evolution" aria-labelledby="evolution-h">
               <p class="cs-label">How the factsheet evolved</p>
               <figure class="cs-strip fig-wide">
+                <div class="cs-pagetoggle" role="group" aria-label="Factsheet page">
+                  <button type="button" aria-pressed="true" data-page="1">Page 1</button>
+                  <button type="button" aria-pressed="false" data-page="2">Page 2</button>
+                </div>
                 <ol class="cs-strip-list">
                   <li class="cs-strip-item reveal">
                     <button class="cs-zoom" type="button" data-start="0"
                       data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
                       data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
-                      <img src="assets/version-1-1.png" alt="Page 1 of the December 2024 Extreme Heat factsheet draft" loading="lazy" />
+                      <img src="assets/version-1-1.png" alt="Page 1 of the December 2024 Extreme Heat factsheet draft" data-src2="assets/version-1-2.png" data-alt2="Page 2 of the December 2024 Extreme Heat factsheet draft" loading="lazy" />
                     </button>
                     <p class="cs-label cs-label-muted">Dec 2024 · Drafts</p>
                   </li>
@@ -231,7 +235,7 @@
                     <button class="cs-zoom" type="button" data-start="1"
                       data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
                       data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
-                      <img src="assets/version-2-v5-1.png" alt="Page 1 of version 5 of the Extreme Heat factsheet, the version used in comprehension testing" loading="lazy" />
+                      <img src="assets/version-2-v5-1.png" alt="Page 1 of version 5 of the Extreme Heat factsheet, the version used in comprehension testing" data-src2="assets/version-2-v5-2.png" data-alt2="Page 2 of version 5 of the Extreme Heat factsheet, the version used in comprehension testing" loading="lazy" />
                     </button>
                     <p class="cs-label cs-label-muted">V5 · Tested</p>
                   </li>
@@ -239,7 +243,7 @@
                     <button class="cs-zoom" type="button" data-start="2"
                       data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
                       data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
-                      <img src="assets/version-3-post-test-1.png" alt="Page 1 of the Extreme Heat factsheet revised after testing" loading="lazy" />
+                      <img src="assets/version-3-post-test-1.png" alt="Page 1 of the Extreme Heat factsheet revised after testing" data-src2="assets/version-3-post-test-2.png" data-alt2="Page 2 of the Extreme Heat factsheet revised after testing" loading="lazy" />
                     </button>
                     <p class="cs-label cs-label-muted">Post-test revision</p>
                   </li>
@@ -247,12 +251,12 @@
                     <button class="cs-zoom" type="button" data-start="3"
                       data-lightbox='["assets/version-1-1.png","assets/version-2-v5-1.png","assets/version-3-post-test-1.png","assets/version-4-final-1.png"]'
                       data-captions='["Dec 2024 · Drafts","V5 · Tested","Post-test revision","Final"]'>
-                      <img src="assets/version-4-final-1.png" alt="Page 1 of the final Extreme Heat factsheet" loading="lazy" />
+                      <img src="assets/version-4-final-1.png" alt="Page 1 of the final Extreme Heat factsheet" data-src2="assets/version-4-final-2.png" data-alt2="Page 2 of the final Extreme Heat factsheet" loading="lazy" />
                     </button>
                     <p class="cs-label">Final</p>
                   </li>
                 </ol>
-                <figcaption>Page 1 of each version. Click any version to see it full size.</figcaption>
+                <figcaption>Page <span class="cs-pagenum">1</span> of each version. Click any version to see it full size.</figcaption>
               </figure>
 
               <h2 id="evolution-h">The hardest problem was restraint.</h2>
