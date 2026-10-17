@@ -237,3 +237,97 @@
   .cs-pairs .cs-pairs-arrow { display: none; }
   .cs-pairs .cs-pairs-to { padding-left: 0; }
 }
+
+
+/* ============================================================
+   Ginkgo additions: portrait phone hero, source line, metric callout,
+   comparison table, one-line statement, phone screen row, image + text
+   split, concept cards
+   ============================================================ */
+/* more full-column elements */
+.cs-v2 .cs-section > .cs-metric:not(.cs-metric-small),
+.cs-v2 .cs-section > .cs-table-scroll,
+.cs-v2 .cs-section > .cs-split,
+.cs-v2 .cs-section > .cs-concepts { max-width: none; }
+
+/* hero for a mobile app: the landing screen as a tilted phone, a sage card peeking out behind it */
+.cs-hero-phone { position: relative; margin: 0; justify-self: center; width: 210px; animation: fadeUp .6s ease both; animation-delay: .42s; }
+.cs-hero-phone::before { content: ""; position: absolute; z-index: 0; left: -46px; top: 58px; width: 240px; height: 380px; border-radius: 32px; background: #C3C98D; transform: rotate(-5deg); }
+.cs-hero-phone img { position: relative; z-index: 1; width: 210px; aspect-ratio: 9 / 19.5; object-fit: cover; object-position: top; border-radius: 28px; border: 1px solid rgba(54,49,51,0.12); box-shadow: 0 16px 34px rgba(99,40,92,0.18); transform: rotate(2deg); }
+
+/* small source line under a stat or callout */
+.cs-v2 .cs-read .cs-source { font-family: var(--ui); font-size: 13px; line-height: 1.4; color: #6b6266; margin: 10px 0 30px; }
+
+/* metric callout: label beside the statement (above it on phones); the small one sits in a text column */
+.cs-metric { display: flex; align-items: baseline; gap: 8px 22px; background: #eef0dc; border-radius: 18px; padding: 24px 28px; margin: 22px 0 8px; }
+.cs-v2 .cs-metric .cs-label { flex: none; margin: 0; color: #4f5a26; }
+.cs-v2 .cs-read .cs-metric-text { font-family: var(--serif); font-size: 28px; line-height: 1.2; color: var(--ink); margin: 0; }
+.cs-metric.cs-metric-small { display: block; padding: 16px 18px; border-radius: 14px; margin: 18px 0 0; }
+.cs-v2 .cs-metric-small .cs-label { margin: 0 0 6px; }
+.cs-v2 .cs-read .cs-metric-small .cs-metric-text { font-family: var(--read); font-size: 1rem; line-height: 1.55; }
+
+/* comparison table: label-style header row, bold row headers, hairline dividers.
+   Scrolls sideways if a narrow tablet squeezes it; becomes labeled cards on phones */
+.cs-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 24px 0 18px; }
+.cs-table { width: 100%; min-width: 640px; border-collapse: collapse; }
+.cs-v2 .cs-table thead th { font-family: var(--ui); font-weight: 700; font-size: 13px; line-height: 1.3; letter-spacing: .08em; text-transform: uppercase; color: var(--plum); text-align: left; vertical-align: bottom; padding: 0 16px 12px 0; border-bottom: 1px solid rgba(54,49,51,0.15); }
+.cs-table tbody th, .cs-table td { text-align: left; vertical-align: top; padding: 16px 16px 16px 0; border-bottom: 1px solid rgba(54,49,51,0.15); font-family: var(--read); font-size: .95rem; line-height: 1.5; color: rgba(54,49,51,.92); }
+.cs-table tbody th { width: 20%; font-weight: 700; color: var(--ink); }
+.cs-table td:last-child { padding-right: 0; }
+
+/* one-line takeaway in display type */
+.cs-v2 .cs-read .cs-statement { font-family: var(--serif); font-size: 22px; line-height: 1.3; color: var(--plum); margin: 6px 0 30px; }
+
+/* a row of phone screens; each opens the lightbox */
+.cs-v2 .cs-body .cs-screen-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 16px; }
+.cs-v2 .cs-body .cs-screen { margin: 0; padding: 0; font-size: inherit; }
+.cs-v2 .cs-body .cs-screen::before { content: none; }
+.cs-v2 .cs-read .cs-screen img,
+.cs-v2 .cs-read .cs-split-media img { aspect-ratio: 9 / 19.5; object-fit: cover; object-position: top; border-radius: 22px; border: 1px solid rgba(54,49,51,0.12); box-shadow: 0 10px 22px rgba(54,49,51,0.12); }
+.cs-screen .cs-zoom, .cs-split-media .cs-zoom { border-radius: 22px; }
+.cs-v2 .cs-screen .cs-label { font-size: 12.5px; margin: 12px 0 0; }
+
+/* image + text split: a phone screen on the left, heading and text on the right */
+.cs-split { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 36px; align-items: center; margin: 48px 0 8px; }
+.cs-split-media { margin: 0; }
+.cs-v2 .cs-split-text h3 { margin-top: 0; }
+.cs-v2 .cs-read .cs-split-caption { font-family: var(--ui); font-size: .82rem; line-height: 1.5; color: #6b6266; margin: 0; }
+
+/* persona thumbnails that are portrait, not 16:9 */
+.cs-v2 .cs-thumbs-tall .cs-thumb img { aspect-ratio: 9 / 10; object-position: top; }
+
+/* concept cards: ideas that came after the prototype, so a dashed "not built" outline */
+.cs-v2 .cs-body .cs-concepts { list-style: none; margin: 26px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.cs-v2 .cs-body .cs-concept { margin: 0; padding: 22px; border: 2px dashed rgba(99,40,92,0.45); border-radius: 16px; font-size: inherit; }
+.cs-v2 .cs-body .cs-concept::before { content: none; }
+.cs-concept-tag { display: inline-block; margin: 0 0 12px; padding: 3px 10px; border-radius: 999px; background: #f6e7e6; color: #63285C; font-family: var(--ui); font-weight: 700; font-size: 12px; line-height: 1.3; letter-spacing: .08em; text-transform: uppercase; }
+.cs-v2 .cs-read .cs-concept h3 { font-family: var(--read); font-weight: 700; font-size: 17px; line-height: 1.35; letter-spacing: 0; margin: 0 0 8px; }
+.cs-v2 .cs-body .cs-concept p { font-size: .97rem; line-height: 1.6; margin: 0; }
+.cs-chips { display: inline-flex; flex-wrap: wrap; gap: 6px; vertical-align: middle; margin: 2px 0; }
+.cs-chip { display: inline-block; padding: 4px 11px; border-radius: 999px; background: #eef0dc; color: #3f4820; font-family: var(--ui); font-weight: 600; font-size: 14px; line-height: 1.3; white-space: nowrap; }
+
+/* references keep their original small heading on v2 pages (the shared h2 is 34px) */
+.cs-v2 .cs-read .cs-refs h2 { font-size: 1.2rem; line-height: 1.3; margin: 16px 0 8px; }
+
+@media (max-width: 600px) {
+  .cs-metric { display: block; padding: 20px 22px; }
+  .cs-v2 .cs-metric .cs-label { margin: 0 0 6px; }
+  .cs-v2 .cs-read .cs-metric-text { font-size: 24px; }
+  /* comparison table: one labeled card per row, no sideways scroll */
+  .cs-table-scroll { overflow: visible; }
+  .cs-table { min-width: 0; }
+  .cs-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .cs-table tr { display: block; padding: 16px 0; border-bottom: 1px solid rgba(54,49,51,0.15); }
+  .cs-table tbody tr:first-child { border-top: 1px solid rgba(54,49,51,0.15); }
+  .cs-table tbody th, .cs-table td { display: block; width: auto; padding: 0; border: 0; }
+  .cs-table tbody th { font-size: 1.02rem; }
+  .cs-table td { margin-top: 10px; }
+  .cs-table td::before { content: attr(data-label); display: block; margin-bottom: 2px; font-family: var(--ui); font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--plum); }
+  .cs-v2 .cs-body .cs-screen-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-split { grid-template-columns: 1fr; gap: 24px; }
+  .cs-split-media { max-width: 220px; }
+  .cs-v2 .cs-body .cs-concepts { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-hero-phone { animation: none; }
+}
