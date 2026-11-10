@@ -22,9 +22,6 @@
 .cs-v2 .cs-hero h1 { line-height: 1.1; }   /* the title wraps to two lines here; body's 1.6 left a gap between them */
 .cs-hero-card { margin: 0; justify-self: end; width: 100%; max-width: 400px; animation: fadeUp .6s ease both; animation-delay: .42s; }
 .cs-hero-card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; transform: rotate(2deg); box-shadow: 0 16px 34px rgba(99,40,92,0.18); }
-/* LCHD's hero is a crop of the final factsheet, wider than 4:3: show it whole so the
-   map title and the 60 vs. 37 days callout aren't trimmed at the edges */
-.cs-lchd .cs-hero-card img { aspect-ratio: 865 / 599; }
 .cs-hero-card figcaption { font-family: var(--ui); font-size: 13px; color: rgba(54,49,51,.8); text-align: center; margin-top: 18px; }
 
 
