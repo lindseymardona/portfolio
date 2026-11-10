@@ -2278,3 +2278,9 @@ footer { border-top: 5px solid var(--plum); }
 
 /* ============================================================ ROUND 89 — "being redesigned" note at the end of case studies still on the original layout ============================================================ */
 .cs-read .cs-redesign-note { margin: 44px 0 0; padding-top: 18px; border-top: 1px solid var(--hair); font-family: var(--ui); font-size: .92rem; line-height: 1.55; color: #6b6266; }
+
+/* ============================================================ ROUND 90 — LCHD card thumbnail is now a crop of the final Extreme Heat factsheet ============================================================ */
+/* the card shapes run from ~1.9:1 (home, desktop) to ~1.2:1 (home, phone), so a cover crop always trimmed
+   something, on phones the "37 days" half of the callout. Show the whole crop and fill the spare space
+   with the factsheet's own sage panel colour so it reads as part of the sheet, not letterboxing */
+.feat-thumb img.thumb-whole, .proj-thumb img.thumb-whole { object-fit: contain; background: #AFC9C5; }
