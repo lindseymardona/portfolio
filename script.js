@@ -1146,7 +1146,17 @@
     var dog = document.createElement('div'); dog.className = 'corgi';
     stage.appendChild(dog); footEl.appendChild(stage);
 
+    // fetch + decode every pose's sheet up front: the CSS only requests a sheet the first time
+    // its state class is applied, so a pose she hadn't used yet (jump, sit, sniff-walk…) blinked
+    // out while it loaded. Kept in `sheets` so they stay in memory.
+    var sheets = ['idle1', 'idle2', 'walk', 'run', 'sniff', 'sniffwalk', 'sit', 'jump'].map(function (s) {
+      var im = new Image(); im.src = 'assets/corgi-' + s + '.png';
+      if (im.decode) im.decode().catch(function () {});
+      return im;
+    });
+
     var CW = 64;
+    var MID = 28.44;   // her body's centre in the 64px box (64/144 sprite px); she flips around this (see .corgi)
     var x = 24, dir = 1, state = '', mode = 'auto';   // 'auto' | 'control'
     var jumpVX = 0;                                    // horizontal speed while mid-jump
     var SPEED = { walk: 26, sniffwalk: 15, run: 80 };
@@ -1159,9 +1169,12 @@
       if (right + w <= footEl.clientWidth - 6) hintEl.style.left = Math.round(right) + 'px';
       else hintEl.style.left = Math.round(Math.max(6, x - 10 - w)) + 'px';
     };
+    // x moves in fractional pixels every frame; drawing the downscaled pixel-art sheet at
+    // sub-pixel offsets made her shimmer, so snap what's drawn to whole device pixels
+    var snap = function (v) { var r = window.devicePixelRatio || 1; return Math.round(v * r) / r; };
     var place = function () {
-      dog.style.transform = 'translateX(' + x + 'px) scaleX(' + dir + ')';
-      if (padEl) padEl.style.left = Math.round(x + CW / 2) + 'px';
+      dog.style.transform = 'translateX(' + snap(x) + 'px) scaleX(' + dir + ')';
+      if (padEl) padEl.style.left = Math.round(x + MID) + 'px';
       if (hintEl) positionHint();
     };
     var setState = function (s) { if (s !== state) { state = s; dog.className = 'corgi a-' + s; } };

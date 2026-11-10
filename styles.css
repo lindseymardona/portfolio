@@ -2284,3 +2284,9 @@ footer { border-top: 5px solid var(--plum); }
    the fanned pages. Show the whole image and fill the spare space with its own sage background so the
    extra room is seamless, not letterboxing */
 .feat-thumb img.thumb-whole, .proj-thumb img.thumb-whole { object-fit: contain; background: #D5E4E1; }
+
+/* ============================================================ ROUND 91 — smoother Kaya under keyboard control ============================================================ */
+/* her body sits left of centre in each 144px sprite frame (centre ~64, not 72), so flipping around the
+   box centre hopped her ~7px sideways on every turn. Flip around her body instead (64/144 of 64px);
+   script.js uses the same 28.44px for the D-pad. */
+.corgi { transform-origin: 28.44px 100%; }
