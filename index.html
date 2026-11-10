@@ -48,6 +48,7 @@
             <p class="hello">hello,</p>
             <h1 class="name">my name is <b>Lindsey</b></h1>
             <p class="roles">designer. developer. musician.</p>
+            <p class="tagline">i find the harmony between people and the tech they use.</p>
             <svg class="squiggle" viewBox="0 0 300 22" fill="none" aria-hidden="true">
               <path d="M2 12 C 30 2, 55 2, 82 12 S 140 22, 168 12 S 224 2, 252 12 S 296 18, 298 11"
                     stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -82,26 +83,15 @@
       </div>
     </section>
 
-    <!-- SCROLLING WELCOME BAR -->
-    <div class="hello-bar reveal">
-      <div class="marquee">
-        <div class="marquee-track">
-          <!-- first copy is read by screen readers; the separators + repeats are decorative -->
-          <span class="hm">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">welcome, thanks for stopping by!</span><span class="hm sep" aria-hidden="true">✦</span>
-          <span class="hm" aria-hidden="true">have a lovely day ♥</span><span class="hm sep" aria-hidden="true">✦</span>
-        </div>
+    <!-- NOW PLAYING (static; replaced the scrolling welcome ticker) -->
+    <div class="now-playing reveal">
+      <div class="wrap np-inner">
+        <p class="np-line">
+          <span class="np-head"><span class="np-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="np-label">now playing</span><span class="sr-only">:</span></span>
+          <span class="np-dot" aria-hidden="true">·</span>
+          <span class="np-item">hci ms @ ucsc</span><span class="np-sep"><span aria-hidden="true">✦</span><span class="sr-only">, </span></span><span class="np-item">building my commissions site</span><span class="np-sep"><span aria-hidden="true">✦</span><span class="sr-only">, </span></span><span class="np-item">fresh off the ucsc × google designathon</span>
+        </p>
       </div>
-      <button class="hb-toggle" type="button" aria-label="Pause banner"><i class="fa-solid fa-pause" aria-hidden="true"></i></button>
     </div>
 
     <!-- WORKIN' LATE -->

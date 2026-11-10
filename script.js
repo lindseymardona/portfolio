@@ -3,6 +3,20 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- music-note glyphs (Kaya's floating note, the case-study staff rail). One 16×26 box;
+     the note head is centred at (5.5, 20), so a staff line drawn through y=20 runs through it.
+     Colour comes from currentColor; a half note is always hollow ---- */
+  function noteSVG(kind) {
+    var head = kind === 'half'
+      ? '<ellipse cx="5.5" cy="20" rx="3.9" ry="2.7" transform="rotate(-22 5.5 20)" fill="none" stroke="currentColor" stroke-width="1.7"/>'
+      : '<ellipse cx="5.5" cy="20" rx="4.7" ry="3.4" transform="rotate(-22 5.5 20)"/>';
+    var stem = '<rect x="8.7" y="3" width="1.5" height="16.6"/>';
+    var flag1 = '<path d="M10.2 3 C10.6 7.2 15.4 8.4 13.6 14 C13.4 10.6 12 9.6 10.2 9 Z"/>';
+    var flag2 = '<path d="M10.2 7.6 C10.6 11.6 15.2 12.8 13.6 18 C13.4 14.8 12 13.9 10.2 13.4 Z"/>';
+    var body = head + stem + (kind === 'eighth' ? flag1 : '') + (kind === 'sixteenth' ? flag1 + flag2 : '');
+    return '<svg viewBox="0 0 16 26" fill="currentColor" aria-hidden="true" focusable="false">' + body + '</svg>';
+  }
+
   /* ---- scroll reveal (cards/tiles fade+rise as they enter) ---- */
   var reveals = [].slice.call(document.querySelectorAll('.reveal'));
   if (reduce || !('IntersectionObserver' in window)) {
@@ -191,22 +205,13 @@
       track.style.animation = 'none';
       track.style.willChange = 'transform';
       var reverse = m.classList.contains('rev');
-      // the welcome bar runs ~30% slower than the photo galleries; `held` is the
-      // user's pause button, `paused` is hover — either one stops the strip
-      var bar = m.closest('.hello-bar');
-      var x = 0, speed = bar ? 0.315 : 0.45, paused = false, held = false;
+      // `paused` is hover — it stops the strip
+      var x = 0, speed = 0.45, paused = false;
       m.addEventListener('mouseenter', function () { paused = true; });
       m.addEventListener('mouseleave', function () { paused = false; });
-      var toggle = bar && bar.querySelector('.hb-toggle');
-      if (toggle) toggle.addEventListener('click', function () {
-        held = !held;
-        bar.classList.toggle('is-paused', held);
-        toggle.setAttribute('aria-label', held ? 'Play banner' : 'Pause banner');
-        var ic = toggle.querySelector('i'); if (ic) ic.className = held ? 'fa-solid fa-play' : 'fa-solid fa-pause';
-      });
       function outerW(el) { var s = getComputedStyle(el); return el.offsetWidth + (parseFloat(s.marginRight) || 0) + (parseFloat(s.marginLeft) || 0); }
       function step() {
-        if (!paused && !held) {
+        if (!paused) {
           if (!reverse) {
             x -= speed;
             var first = track.firstElementChild;
@@ -834,7 +839,7 @@
     var fl = document.createElement('link');
     fl.id = 'lm-fonts';
     fl.rel = 'stylesheet';
-    fl.href = 'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Familjen+Grotesk:wght@400;500;600;700&family=Karla:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap';
+    fl.href = 'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Familjen+Grotesk:wght@400;500;600;700&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap';
     document.head.appendChild(fl);
   }
 
@@ -843,6 +848,7 @@
   if (footInner) {
     footInner.innerHTML =
       '<a class="to-top" href="#top"><span class="up" aria-hidden="true">↑</span> return to top</a>' +
+      '<p class="foot-signoff">thanks for stopping by!</p>' +
       '<div class="quick"><span class="label">quick nav</span>' +
       '<a href="index.html">home</a><a href="resume.html">resume</a>' +
       '<a href="projects.html">projects</a><a href="gallery.html">gallery</a>' +
@@ -983,7 +989,89 @@
     }
     csMq.addEventListener('change', function () { mLastTop = null; syncMobileBar(); });
 
+    /* ---- the staff rail (design "the harmony line"): one plum line with a note per section,
+       sticky at the top of the reading column; on phones a compact copy (no labels — the
+       section picker already names the current one) is the section bar's second row.
+       Colour carries the state: read = plum, current = hot pink (a bit larger), ahead = soft plum.
+       Note values: the five standard sections use context ♪ · role ♬ · process 𝅗𝅥 · outcome ♩ ·
+       reflection ♪; any other set is mapped by section length (longest → half note) ---- */
+    var staffNotes = [];   // every note link, both staffs: { a, i }
+    var STD = ['context', 'role', 'process', 'outcome', 'reflection'];
+    var STD_KIND = ['eighth', 'sixteenth', 'half', 'quarter', 'eighth'];
+    var sectionIds = railLinks.map(function (a) { return a.getAttribute('href').slice(1); });
+    var isStd = sectionIds.length === 5 && sectionIds.every(function (id, i) { return id === STD[i]; });
+    var noteKinds = function () {
+      if (isStd) return STD_KIND.slice();
+      var read = document.querySelector('.cs-read');
+      var end = read ? read.getBoundingClientRect().bottom : 0;
+      var lens = railHeads.map(function (h, i) {
+        if (!h) return 0;
+        var next = railHeads[i + 1];
+        return (next ? next.getBoundingClientRect().top : end) - h.getBoundingClientRect().top;
+      });
+      var order = lens.map(function (l, i) { return i; }).sort(function (a, b) { return lens[b] - lens[a]; });
+      var n = order.length, q = Math.max(1, Math.round(n * 0.25));
+      var kinds = [];
+      order.forEach(function (idx, rank) {
+        kinds[idx] = rank === 0 ? 'half' : rank <= q ? 'quarter' : rank >= n - q ? 'sixteenth' : 'eighth';
+      });
+      return kinds;
+    };
+    var buildStaff = function (compact) {
+      var nav = document.createElement('nav');
+      nav.className = 'cs-staff' + (compact ? ' cs-staff-compact' : '');
+      nav.setAttribute('aria-label', 'Case study progress');   // only one of the two is ever displayed
+      var ol = document.createElement('ol'); ol.className = 'cs-staff-notes';
+      railLinks.forEach(function (link, i) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.className = 'cs-note'; a.href = link.getAttribute('href');
+        a.innerHTML = '<span class="cs-note-g" aria-hidden="true"></span>' +
+          (compact ? '' : '<span class="cs-note-l" aria-hidden="true"></span>');
+        if (!compact) a.querySelector('.cs-note-l').textContent = link.textContent;
+        a.addEventListener('click', function () { onRailClick(i); });
+        li.appendChild(a); ol.appendChild(li);
+        staffNotes.push({ a: a, i: i });
+      });
+      nav.appendChild(ol);
+      return nav;
+    };
+    var drawNotes = function () {
+      var kinds = noteKinds();
+      staffNotes.forEach(function (s) { s.a.querySelector('.cs-note-g').innerHTML = noteSVG(kinds[s.i] || 'eighth'); });
+    };
+    var csRead = document.querySelector('.cs-body .cs-read');
+    var staff = null;
+    if (csRead) {
+      staff = buildStaff(false);
+      csRead.insertBefore(staff, csRead.firstChild);
+      document.body.classList.add('cs-staff-on');
+      if (railLinks.length > 9) staff.classList.add('dense');
+    }
+    if (mbar) { mbar.appendChild(buildStaff(true)); mbar.classList.add('has-staff'); }
+    drawNotes();
+    window.addEventListener('load', drawNotes);   // section lengths settle once images have loaded
+    // stick just under the site nav (its height changes as it shrinks); labels hide when the
+    // column is too narrow for them all (the current one always shows)
+    var fitStaff = function () {
+      if (!staff) return;
+      staff.style.top = (csNav ? csNav.offsetHeight : 0) + 'px';
+      var slot = staff.clientWidth / Math.max(1, railLinks.length);
+      staff.classList.toggle('tight', slot < 64);
+    };
+    window.addEventListener('resize', fitStaff);
+    fitStaff();
+    var paintStaff = function (idx) {
+      staffNotes.forEach(function (s) {
+        var st = s.i < idx ? 'read' : s.i === idx ? 'current' : 'ahead';
+        s.a.className = 'cs-note is-' + st;
+        var name = railLinks[s.i].textContent;
+        s.a.setAttribute('aria-label', 'Jump to ' + name + (st === 'current' ? ' (current section)' : st === 'read' ? ' (read)' : ''));
+      });
+    };
+
     var setActive = function (idx) {
+      paintStaff(idx);
       railLinks.forEach(function (a, i) { a.classList.toggle('active', i === idx); });
       if (mName && railLinks[idx]) {
         mName.textContent = railLinks[idx].textContent;
@@ -994,6 +1082,7 @@
     var clickLock = false, clickTimer = null;
     var onRailScroll = function () {
       syncMobileBar();
+      if (staff && csNav) { var nh = csNav.offsetHeight + 'px'; if (staff.style.top !== nh) staff.style.top = nh; }
       if (clickLock) return; // don't let scroll override a just-clicked link mid-animation
       var current = 0;
       var line = Math.max(150, window.innerHeight * 0.33);
@@ -1137,13 +1226,147 @@
     } else { jobs.forEach(run); }
   })();
 
-  /* ---- the footer corgi: an animated sprite that wanders on its own. On desktop,
-     click it to take the controls and drive it with the keyboard arrow keys ---- */
+  /* ---- wave hover (social icons, outlined pills, the résumé downloads): a plum wave rises
+     from the bottom and fills the shape. The content is drawn twice — the plum original
+     under the wave, and a white copy on top clipped to exactly where the wave has reached —
+     so the icon/label never turns white against the light background before the wave gets
+     there. Both added layers are aria-hidden; the link keeps its own accessible name ---- */
+  var WAVE_SVG = '<svg viewBox="0 0 200 130" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+    '<path d="M0 9 Q12.5 0 25 9 T50 9 T75 9 T100 9 T125 9 T150 9 T175 9 T200 9 V130 H0 Z" fill="currentColor"/></svg>';
+  [].slice.call(document.querySelectorAll('.socials a, a.pill.ghost, a.pill[download]')).forEach(function (a) {
+    if (a.querySelector('.wv')) return;
+    var copy = a.innerHTML;
+    a.classList.add('wave-btn');
+    if (a.closest('.socials')) a.classList.add('wave-circle');
+    var wv = document.createElement('span'); wv.className = 'wv'; wv.setAttribute('aria-hidden', 'true'); wv.innerHTML = WAVE_SVG;
+    var top = document.createElement('span'); top.className = 'wv-top'; top.setAttribute('aria-hidden', 'true'); top.innerHTML = copy;
+    a.appendChild(wv); a.appendChild(top);
+  });
+
+  /* ---- external text links: 2px plum underline; on hover/focus a blush highlight rises
+     behind the text and the ↗ nudges up-right. Links without a ↗ get one (decorative) ---- */
+  [].slice.call(document.querySelectorAll('main a[target="_blank"]')).forEach(function (a) {
+    if (a.matches('.pill, .wave-btn, .daw-clip, .daw-file, .tile, .cs-proto-pill') || a.closest('.socials, .daw, .tile')) return;
+    if (!a.closest('p, li, figcaption, td, dd, .l')) return;
+    a.classList.add('ext-link');
+    var ext = a.querySelector('.ext');
+    if (!ext) {
+      // find the link's last text node (it may sit inside a <strong>); if it already ends in a
+      // typed ↗, swap that for the animatable span in the same place, otherwise add one
+      var walker = document.createTreeWalker(a, NodeFilter.SHOW_TEXT), t, last = null;
+      while ((t = walker.nextNode())) if (t.nodeValue.trim()) last = t;
+      var host = a;
+      if (last && /↗\s*$/.test(last.nodeValue)) { last.nodeValue = last.nodeValue.replace(/\s*↗\s*$/, ''); host = last.parentNode; }
+      host.appendChild(document.createTextNode(' '));
+      ext = document.createElement('span'); ext.className = 'ext'; ext.setAttribute('aria-hidden', 'true'); ext.textContent = '↗';
+      host.appendChild(ext);
+    }
+    // on a blush background the blush highlight would vanish: use the deeper blush there
+    for (var el = a.parentElement; el && el !== document.body; el = el.parentElement) {
+      var bg = getComputedStyle(el).backgroundColor;
+      if (bg && bg !== 'transparent' && !/rgba\(\s*0,\s*0,\s*0,\s*0\s*\)/.test(bg)) {
+        if (/rgb\(\s*239,\s*206,\s*204/.test(bg)) a.classList.add('on-blush');
+        break;
+      }
+    }
+  });
+
+  /* ---- home hero proofs: hovering or focusing "designer." / "developer." / "musician."
+     shows a speech bubble of proof under the word (role="tooltip", wired with
+     aria-describedby). Touch: tap a word to toggle its bubble, tap anywhere else to close.
+     Escape closes. Sits on top of the entrance + hover above — it never touches either ---- */
+  var heroRoles = document.querySelector('.hero .roles');
+  if (heroRoles) (function proofs () {
+    var PROOFS = {
+      designer: 'sole designer of UCLA’s Latino Climate & Health Dashboard, featured in Health Affairs.',
+      developer: 'a.s. in computer science. i prototype in code and built this site myself.',
+      musician: 'i arrange vocal harmonies on commission and still sing in a community choir.'
+    };
+    var words = [].slice.call(heroRoles.querySelectorAll('.rw'));
+    if (!words.length) {
+      // reduced motion: the entrance didn't split the line into words, so split it here (no animation)
+      var ws = heroRoles.textContent.trim().split(/\s+/);
+      heroRoles.textContent = '';
+      ws.forEach(function (w, k) {
+        if (k) heroRoles.appendChild(document.createTextNode(' '));
+        var s = document.createElement('span'); s.className = 'rw rw-done'; s.textContent = w;
+        heroRoles.appendChild(s); words.push(s);
+      });
+    }
+    heroRoles.removeAttribute('aria-label');   // the words are real focusable text now
+    var tips = [], open = -1, hideT = null, lastPointer = '', lastPointerAt = 0;
+    words = words.filter(function (w) { return PROOFS[w.textContent.replace(/[^a-z]/gi, '').toLowerCase()]; });
+    words.forEach(function (w, i) {
+      var key = w.textContent.replace(/[^a-z]/gi, '').toLowerCase();
+      var tip = document.createElement('span');
+      tip.className = 'proof'; tip.id = 'proof-' + key; tip.setAttribute('role', 'tooltip');
+      tip.innerHTML = '<span class="proof-tail" aria-hidden="true"></span>';
+      tip.appendChild(document.createTextNode(PROOFS[key]));
+      heroRoles.appendChild(tip); tips.push(tip);
+      w.setAttribute('tabindex', '0');
+      w.setAttribute('aria-describedby', tip.id);
+    });
+    var place = function (i) {
+      var w = words[i], tip = tips[i];
+      var box = heroRoles.getBoundingClientRect(), wr = w.getBoundingClientRect();
+      var vw = document.documentElement.clientWidth, tw = tip.offsetWidth;
+      var centre = wr.left + wr.width / 2;
+      // centred under the word, but not left of the text column, and always 16px inside the screen
+      var minLeft = Math.max(16, box.left + tw <= vw - 16 ? box.left : 16);
+      var left = Math.max(minLeft, Math.min(centre - tw / 2, vw - 16 - tw));
+      tip.style.left = Math.round(left - box.left) + 'px';
+      tip.style.top = Math.round(wr.bottom - box.top + 12) + 'px';
+      tip.style.setProperty('--tail', Math.round(centre - left) + 'px');   // the tail still points at the word
+    };
+    var show = function (i) {
+      clearTimeout(hideT);
+      if (open > -1 && open !== i) tips[open].classList.remove('on');
+      place(i); tips[i].classList.add('on'); open = i;
+    };
+    var hide = function () { clearTimeout(hideT); if (open > -1) tips[open].classList.remove('on'); open = -1; };
+    var hideSoon = function () { clearTimeout(hideT); hideT = setTimeout(hide, 140); };
+    var fromTouch = function () { return lastPointer && lastPointer !== 'mouse' && Date.now() - lastPointerAt < 800; };
+    words.forEach(function (w, i) {
+      w.addEventListener('pointerdown', function (e) { lastPointer = e.pointerType; lastPointerAt = Date.now(); });
+      w.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') show(i); });
+      w.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hideSoon(); });
+      w.addEventListener('focus', function () { if (!fromTouch()) show(i); });
+      w.addEventListener('blur', function () { if (!fromTouch()) hideSoon(); });
+      w.addEventListener('click', function () { if (fromTouch()) { if (open === i) hide(); else show(i); } });
+      // moving from the word onto its bubble keeps it open
+      tips[i].addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') clearTimeout(hideT); });
+      tips[i].addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') hideSoon(); });
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (open > -1 && !(e.target.closest && e.target.closest('.roles .rw, .roles .proof'))) hide();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && open > -1) hide(); });
+    window.addEventListener('resize', function () { if (open > -1) place(open); });
+  })();
+
+  /* ---- the footer corgi: an animated sprite that wanders on its own, walking on the
+     bottom line of the footer staff. She's a real <button> ("play with Kaya"): on desktop,
+     click it (or Enter/Space) to take the controls and drive her with the arrow keys;
+     Escape or another click hands them back. On touch, a tap makes her hop. Each thing
+     a visitor does to her (a click, a tap, a jump) floats up one small eighth note;
+     she stays silent while she wanders on her own ---- */
   var footEl = document.querySelector('footer');
   if (footEl && !footEl.querySelector('.corgi')) {
     var touch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-    var stage = document.createElement('div'); stage.className = 'corgi-stage'; stage.setAttribute('aria-hidden', 'true');
-    var dog = document.createElement('div'); dog.className = 'corgi';
+    var stage = document.createElement('div'); stage.className = 'corgi-stage';
+    // under reduced motion she's a still picture with nothing to do, so she stays decorative
+    var dog = document.createElement(reduce ? 'div' : 'button'); dog.className = 'corgi';
+    if (reduce) stage.setAttribute('aria-hidden', 'true');
+    else { dog.type = 'button'; dog.setAttribute('aria-label', 'play with Kaya'); }
+    // the fermata she wears while sitting: pixel art on her own 3px art grid (30×15 sheet px),
+    // drawn at the sprite's scale and flipped with her (it's symmetric). CSS shows it only in .a-sit
+    var ferm = document.createElement('span'); ferm.className = 'corgi-fermata'; ferm.setAttribute('aria-hidden', 'true');
+    ferm.innerHTML = '<svg viewBox="0 0 30 15" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><g fill="currentColor">' +
+      '<rect x="9" y="0" width="12" height="3"/><rect x="3" y="3" width="24" height="3"/>' +
+      '<rect x="2" y="6" width="6" height="3"/><rect x="22" y="6" width="6" height="3"/>' +
+      '<rect x="2" y="9" width="3" height="4"/><rect x="25" y="9" width="3" height="4"/>' +
+      '<rect x="12" y="9" width="6" height="6"/></g></svg>';
+    dog.appendChild(ferm);
     stage.appendChild(dog); footEl.appendChild(stage);
 
     // fetch + decode every pose's sheet up front: the CSS only requests a sheet the first time
@@ -1157,17 +1380,29 @@
 
     var CW = 64;
     var MID = 28.44;   // her body's centre in the 64px box (64/144 sprite px); she flips around this (see .corgi)
+    var HEAD = 37.8;   // her head's centre when facing right (85/144 sprite px), for the floating note
     var x = 24, dir = 1, state = '', mode = 'auto';   // 'auto' | 'control'
     var jumpVX = 0;                                    // horizontal speed while mid-jump
+    var hopping = false;                               // a tap-hop (touch) is in progress
     var SPEED = { walk: 26, sniffwalk: 15, run: 80 };
     var maxX = function () { return Math.max(20, footEl.clientWidth - CW - 10); };
-    var padEl = null, hintEl = null;
-    var positionHint = function () {
-      if (!hintEl) return;
-      var w = hintEl.offsetWidth || 150;
-      var right = x + CW + 10;
-      if (right + w <= footEl.clientWidth - 6) hintEl.style.left = Math.round(right) + 'px';
-      else hintEl.style.left = Math.round(Math.max(6, x - 10 - w)) + 'px';
+    var padEl = null, hintEl = null, psstEl = null;
+
+    // the cues beside her (the "psst" pill, or the D-pad + "use arrow keys" pill) sit level
+    // with the staff, to her right — or to her left when there's no room — never above her
+    var positionCues = function () {
+      var items = psstEl ? [psstEl] : [padEl, hintEl].filter(Boolean);
+      if (!items.length) return;
+      var GAP = 10;
+      var widths = items.map(function (el) { return el.offsetWidth || 120; });
+      var total = widths.reduce(function (a, b) { return a + b; }, 0) + GAP * (items.length - 1);
+      var right = x + CW + 4;
+      var fitsRight = right + total <= footEl.clientWidth - 6;
+      var left = fitsRight ? right : Math.max(6, x - 4 - total);
+      // keep the D-pad next to her on either side: reverse the order on the left
+      var order = fitsRight ? items : items.slice().reverse();
+      var ow = fitsRight ? widths : widths.slice().reverse();
+      order.forEach(function (el, i) { el.style.left = Math.round(left) + 'px'; left += ow[i] + GAP; });
     };
     // x moves in fractional pixels every frame. At walking pace, drawing the downscaled pixel-art
     // sheet at slowly creeping sub-pixel offsets makes her shimmer, so slow gaits snap to whole
@@ -1177,19 +1412,32 @@
     var place = function () {
       var fast = state === 'run' || state === 'jump';
       dog.style.transform = 'translateX(' + (fast ? x : snap(x)) + 'px) scaleX(' + dir + ')';
-      if (padEl) padEl.style.left = Math.round(x + MID) + 'px';
-      if (hintEl) positionHint();
+      positionCues();
     };
     var setState = function (s) { if (s !== state) { state = s; dog.className = 'corgi a-' + s; } };
     var rnd = function (a, b) { return a + Math.random() * (b - a); };
     place(); setState('idle2');
+
+    // one small plum eighth note floats up from above her head and fades (only for things a
+    // visitor does — never while she wanders)
+    var floatNote = function () {
+      if (reduce) return;
+      var n = document.createElement('span'); n.className = 'corgi-note'; n.setAttribute('aria-hidden', 'true');
+      n.innerHTML = noteSVG('eighth');
+      var headX = x + (dir === 1 ? HEAD : 2 * MID - HEAD);
+      n.style.left = Math.round(headX - 6) + 'px';
+      stage.appendChild(n);
+      var done = function () { if (n.parentNode) n.parentNode.removeChild(n); };
+      n.addEventListener('animationend', done);
+      setTimeout(done, 1200);   // in case animationend never fires (hidden tab)
+    };
 
     // movement loop
     if (!reduce) {
       var cLast = 0;
       (function loop (ts) {
         if (!cLast) cLast = ts;
-        var dt = (ts - cLast) / 1000; cLast = ts;
+        var dt = Math.min(0.1, (ts - cLast) / 1000); cLast = ts;
         var vx = SPEED[state] ? SPEED[state] * dir : (state === 'jump' ? jumpVX : 0);
         if (vx) {
           x += vx * dt;
@@ -1205,22 +1453,33 @@
     var cyc = null;
     var CYCLE = ['idle2', 'walk', 'run', 'sniff', 'sniffwalk', 'sit', 'walk', 'idle2'];
     var wander = function () {
-      if (mode !== 'auto') return;
+      if (mode !== 'auto' || hopping) return;
       var s = CYCLE[Math.floor(Math.random() * CYCLE.length)];
       if (s === 'walk' || s === 'run' || s === 'sniffwalk') {
-        // if he's already at a wall, always head away from it; otherwise pick a way at random
+        // if she's already at a wall, always head away from it; otherwise pick a way at random
         if (x >= maxX() - 6) dir = -1;
         else if (x <= 16) dir = 1;
         else if (Math.random() < 0.5) dir = -dir;
       }
       if (s === 'run') {
-        // he leaps into a run rather than snapping straight to top speed
+        // she leaps into a run rather than snapping straight to top speed
         jumpVX = dir * SPEED.run * 0.85; setState('jump');
-        setTimeout(function () { if (mode === 'auto') { jumpVX = 0; setState('run'); } }, 560);
+        setTimeout(function () { if (mode === 'auto' && !hopping) { jumpVX = 0; setState('run'); } }, 560);
       } else { setState(s); }
       cyc = setTimeout(wander, rnd(2200, 4800));
     };
     if (!reduce) wander();
+
+    // ---- touch: a tap makes her hop in place (no keyboard control on touch) ----
+    var hop = function () {
+      if (hopping) return;
+      hopping = true; clearTimeout(cyc); jumpVX = 0;
+      setState('idle2'); void dog.offsetWidth; setState('jump');   // restart the leap even if she was mid-leap
+      setTimeout(function () {
+        hopping = false; setState('idle2');
+        cyc = setTimeout(wander, 900);
+      }, 680);
+    };
 
     // ---- keyboard control (desktop only) ----
     var arrows = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
@@ -1253,6 +1512,7 @@
       var d = dirHeld(); if (d) dir = d;
       jumpVX = d ? d * SPEED.run * 0.85 : 0;       // leap toward the held direction
       setState('jump');
+      floatNote();
       setTimeout(function () {
         jumping = false; jumpVX = 0;
         if (mode !== 'control') return;
@@ -1260,16 +1520,19 @@
         resolve();
       }, 640);
     };
+    var removeEl = function (el) { if (el && el.parentNode) el.parentNode.removeChild(el); };
     // the intro cue: a D-pad diagram + "use arrow keys to move", both gone on first press
     var dismissIntro = function () {
-      if (padEl) { padEl.parentNode && padEl.parentNode.removeChild(padEl); padEl = null; }
-      if (hintEl) { hintEl.parentNode && hintEl.parentNode.removeChild(hintEl); hintEl = null; }
+      removeEl(padEl); padEl = null;
+      removeEl(hintEl); hintEl = null;
     };
+    var dismissPsst = function () { removeEl(psstEl); psstEl = null; };
     var enterControl = function () {
       if (touch || reduce || mode === 'control') return;
       mode = 'control'; clearTimeout(cyc); keys = {}; jumping = false; satLatched = false; running = false; jumpVX = 0;
       setState('idle2'); entryY = window.pageYOffset; entryTime = Date.now();
-      padEl = document.createElement('div'); padEl.className = 'corgi-dpad';
+      dismissPsst();
+      padEl = document.createElement('div'); padEl.className = 'corgi-dpad'; padEl.setAttribute('aria-hidden', 'true');
       // SVG arrows (perfectly centered in a 24x24 box) instead of font glyphs, which
       // sit at inconsistent heights depending on the typeface
       var arrowPath = {
@@ -1285,7 +1548,9 @@
         el.appendChild(g); padEl.appendChild(el);
       });
       hintEl = document.createElement('div'); hintEl.className = 'corgi-hint'; hintEl.textContent = 'use arrow keys to move';
+      hintEl.setAttribute('aria-hidden', 'true');
       stage.appendChild(padEl); stage.appendChild(hintEl); place();
+      dog.setAttribute('aria-pressed', 'true');
       requestAnimationFrame(function () { if (padEl) padEl.classList.add('in'); if (hintEl) hintEl.classList.add('in'); });
       scheduleSniff();
     };
@@ -1293,16 +1558,44 @@
       if (mode !== 'control') return;
       mode = 'auto'; keys = {}; jumping = false; satLatched = false; running = false; jumpVX = 0; clearTimeout(sniffT);
       dismissIntro();
+      dog.setAttribute('aria-pressed', 'false');
       wander();
     };
 
+    if (!reduce) {
+      // first hover (once per visit): a quiet "psst, click me" pill beside her, gone after the first click
+      var psstSeen = false;
+      try { psstSeen = sessionStorage.getItem('kaya-psst') === '1'; } catch (e) {}
+      if (!touch) {
+        dog.setAttribute('aria-pressed', 'false');
+        dog.addEventListener('mouseenter', function () {
+          if (psstSeen || mode === 'control') return;
+          psstSeen = true;
+          try { sessionStorage.setItem('kaya-psst', '1'); } catch (e) {}
+          psstEl = document.createElement('div'); psstEl.className = 'corgi-psst'; psstEl.textContent = 'psst, click me';
+          psstEl.setAttribute('aria-hidden', 'true');
+          stage.appendChild(psstEl); positionCues();
+          requestAnimationFrame(function () { if (psstEl) psstEl.classList.add('in'); });
+        });
+      }
+
+      dog.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dismissPsst();
+        floatNote();
+        if (touch) { hop(); return; }
+        if (mode === 'control') exitControl(); else enterControl();
+      });
+    }
+
     if (!touch && !reduce) {
-      dog.addEventListener('click', function (e) { e.stopPropagation(); if (mode === 'control') exitControl(); else enterControl(); });
       document.addEventListener('click', function (e) { if (mode === 'control' && !(e.target && e.target.closest && e.target.closest('.corgi'))) exitControl(); });
       window.addEventListener('scroll', function () { if (mode === 'control' && Date.now() - entryTime > 450 && Math.abs(window.pageYOffset - entryY) > 40) exitControl(); }, { passive: true });
       document.addEventListener('keydown', function (e) {
-        if (mode !== 'control' || arrows.indexOf(e.key) < 0) return;
-        e.preventDefault();
+        if (mode !== 'control') return;
+        if (e.key === 'Escape') { exitControl(); return; }
+        if (arrows.indexOf(e.key) < 0) return;
+        e.preventDefault();                          // arrows drive her, they don't scroll the page
         if (e.repeat) return;
         keys[e.key] = true; dismissIntro();
         if (held('Up') && held('Down')) {           // up + down together → sit, and stay sat

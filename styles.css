@@ -128,6 +128,28 @@ h1, h2, h3, h4 { color: var(--ink); }
 .roles .rw { transition: transform .2s ease, color .2s ease, text-shadow .2s ease; cursor: default; }
 .roles .rw:hover { transform: translateY(-3px); color: var(--plum); text-shadow: 0 1px 16px rgba(99,40,92,.28); }
 
+/* ---- tagline under the three words; it arrives once the last word has landed ---- */
+.hero-left .tagline { font-family: var(--ui); font-size: clamp(1rem, 1.7vw, 1.1rem); line-height: 1.45; color: var(--ink); margin: .4em 0 0; max-width: 44ch; }
+.js .hero-left .tagline { animation: fadeUp .65s ease 3.05s both; }
+
+/* ---- hover proofs: each role word is focusable and shows a speech bubble under it
+   (script.js builds .proof and sets left/top/--tail so it stays 16px inside the screen) ---- */
+.hero .roles { position: relative; }
+.roles .rw:focus { outline: none; }
+.roles .rw:focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; border-radius: 3px; }
+.roles .proof {
+  position: absolute; left: 0; top: 100%; z-index: 30; width: min(340px, calc(100vw - 32px)); box-sizing: border-box;
+  padding: 13px 18px 14px; background: #F8E6E4; border: 1.5px solid var(--plum); border-radius: 18px;
+  font-family: var(--ui); font-size: 15px; font-weight: 400; line-height: 1.45; color: var(--ink); text-align: left; white-space: normal;
+  box-shadow: 0 12px 26px -16px rgba(99,40,92,.45);
+  opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+}
+.roles .proof.on { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .3s ease, transform .3s ease, visibility 0s; }
+/* the tail: a rotated square bordered on its top-left edges, pointing up at the word */
+.roles .proof-tail { position: absolute; top: -7.5px; left: var(--tail, 50%); width: 13px; height: 13px; background: #F8E6E4;
+  border-left: 1.5px solid var(--plum); border-top: 1.5px solid var(--plum); border-top-left-radius: 3px; transform: translateX(-50%) rotate(45deg); }
+
 /* ---- portrait: a tilted 11:12 photo card, two framing squares with the same ratio
    tucked behind it, two flowers + a dot, and the status sticker. --pf is the photo
    width; everything around it is sized off it ---- */
@@ -208,6 +230,8 @@ h1, h2, h3, h4 { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) {
   .hero .squiggle path { stroke-dashoffset: 0 !important; }
   .roles .rw, .name-anim { opacity: 1 !important; animation: none !important; }
+  .js .hero-left .tagline { animation: none; }
+  .roles .proof, .roles .proof.on { transition: none; transform: none; }
   .type-caret { display: none; }
   .portrait .status-sticker { animation: none !important; }
   .portrait .ss-inner { transition: none; }
@@ -446,8 +470,6 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 .gal-wrap { position: relative; margin: 8px 0 10px; }
 .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
 .marquee-track { display: flex; gap: 18px; width: max-content; animation: scrollx 46s linear infinite; }
-/* only the welcome-bar marquee pauses on band hover; the galleries pause per-photo in JS */
-.hello-bar .marquee:hover .marquee-track, .hello-bar .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee img { height: 300px; width: auto; border-radius: 14px; box-shadow: var(--shadow); -webkit-user-drag: none; user-select: none; }
 @keyframes scrollx { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .gal-accent { position: absolute; z-index: 3; pointer-events: none; transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
@@ -465,17 +487,12 @@ footer { background: var(--gray); border-top: 5px solid var(--coral); padding: 2
 .dog-tile:hover img { transform: scale(1.05); }
 .dog-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; padding: 18px; color: var(--mocha, #7a6a55); background: repeating-linear-gradient(45deg, #f3efe6, #f3efe6 12px, #eee7da 12px, #eee7da 24px); font-size: .9rem; color: rgba(54,49,51,.6); }
 
-/* footer whimsy: a little corgi peeking over the top */
+/* footer: positioning context for the corgi stage */
 footer { position: relative; }
-.footer-corgi { position: absolute; right: 6%; top: -46px; width: 76px; z-index: 5; transform-origin: bottom center; animation: corgi-bob 3.4s ease-in-out infinite; }
-.footer-corgi:hover { animation: corgi-wiggle .5s ease-in-out; }
-@keyframes corgi-bob { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-2deg); } }
-@keyframes corgi-wiggle { 0%,100%{transform:rotate(0);} 25%{transform:rotate(-7deg);} 75%{transform:rotate(7deg);} }
 
-@media (max-width: 600px) { .footer-corgi { width: 60px; top: -38px; right: 8%; } .marquee img { height: 220px; } }
+@media (max-width: 600px) { .marquee img { height: 220px; } }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none !important; }
-  .footer-corgi { animation: none !important; }
 }
 
 /* ============================================================ ROUND 6 — fonts, plum, fixes ============================================================ */
@@ -584,21 +601,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; letter-spacing: -0
 /* second marquee (dog gallery) scrolls the other way */
 .marquee.rev .marquee-track { animation-direction: reverse; }
 
-/* ---- walking pixel corgi along the footer ---- */
+/* footer spacing */
 footer { overflow: hidden; padding-top: 46px; }
-.corgi-walk { position: absolute; top: 5px; left: 0; z-index: 6; width: 54px; animation: walkAcross 15s linear infinite; }
-.corgi-bob { animation: bob .3s ease-in-out infinite; }
-@keyframes walkAcross { from { transform: translateX(-72px); } to { transform: translateX(calc(100vw + 30px)); } }
-@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-.corgi-walk .legs-b { opacity: 0; }
-@keyframes legA { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
-@keyframes legB { 0%,49% { opacity: 0; } 50%,100% { opacity: 1; } }
-.corgi-walk .legs-a { animation: legA .3s steps(1) infinite; }
-.corgi-walk .legs-b { animation: legB .3s steps(1) infinite; }
-@media (prefers-reduced-motion: reduce) {
-  .corgi-walk { animation: none; left: 16px; }
-  .corgi-bob, .corgi-walk .legs-a, .corgi-walk .legs-b { animation: none; }
-}
 
 /* ============================================================ ROUND 8 ============================================================ */
 html, body { overflow-x: clip; }
@@ -643,9 +647,8 @@ html, body { overflow-x: clip; }
   100% { transform: translateY(var(--pf,820px)) translateX(var(--pd,40px)) rotate(320deg); opacity: 0; }
 }
 
-/* corgi walks ON TOP of the plum line above the footer */
+/* footer: room above the plum rule (the JS corgi walks on it) */
 footer { overflow: visible; padding-top: 30px; }
-.corgi-walk { top: -32px; }
 
 @media (prefers-reduced-motion: reduce) { .petal { display: none; } }
 
@@ -657,10 +660,6 @@ footer { overflow: visible; padding-top: 30px; }
 /* consistent title weight across projects + case studies */
 .proj-body h3, .cs-card h3, .cs-hero h1, .page-hero h1, .cs-body h2 { font-weight: 500; }
 
-/* corgi: feet resting on the plum line + calmer walk */
-.corgi-walk { top: -35px; }
-.corgi-bob { animation: bob .5s ease-in-out infinite; }
-@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); } }
 
 /* lower the life-gallery square so it doesn't cover a photo */
 .gal-accent.a6 { top: auto; bottom: -16px; left: 20%; }
@@ -727,8 +726,6 @@ body { animation: pagefade .18s ease both; }
 .proj:hover .thumb-chips, .proj:focus-visible .thumb-chips { transform: translateY(0); }
 .thumb-chips .chip { background: rgba(255,255,255,.18); border-color: transparent; color: #fff; font-size: .72rem; padding: 3px 9px; }
 
-/* corgi sits fully on top of the plum line */
-.corgi-walk { top: -40px; }
 
 /* about columns: balanced, top-aligned so the bio fills its side */
 .section.paper .cols { align-items: start; grid-template-columns: 1.2fr .8fr; }
@@ -929,12 +926,6 @@ body { animation: pagefade .18s ease both; }
 /* section anchors clear the sticky nav when the rail jumps to them */
 .cs-read h2[id] { scroll-margin-top: 92px; }
 
-/* whimsy: the walking corgi hops when you mouse over it */
-@media (prefers-reduced-motion: no-preference) {
-  .corgi-walk { cursor: pointer; }
-  .corgi-walk:hover .corgi-bob { animation: corgiJump .55s cubic-bezier(.25,.85,.35,1); }
-  @keyframes corgiJump { 0%,100% { transform: translateY(0); } 42% { transform: translateY(-17px); } 70% { transform: translateY(-3px); } }
-}
 
 /* ============================================================ ROUND 18 ============================================================ */
 /* statistic snapshot body text a bit bigger */
@@ -988,9 +979,6 @@ body { animation: pagefade .18s ease both; }
   box-shadow: 0 9px 24px -12px rgba(99,40,92,.65); }
 .cs-backbar .cs-back:hover, .cs-backbar .cs-back:focus-visible { background: #7a3f72; color: #fff; }
 
-/* corgi: JS-driven one-shot hop that always finishes (no snap-to-ground when the mouse leaves) */
-.corgi-walk:hover .corgi-bob { animation: bob .5s ease-in-out infinite; }
-.corgi-bob.jump { animation: corgiJump .62s cubic-bezier(.25,.85,.35,1) !important; }
 
 /* ============================================================ ROUND 22 ============================================================ */
 
@@ -1588,13 +1576,6 @@ a.cs-card:hover .cs-card-go, a.cs-card:focus-visible .cs-card-go { text-decorati
 /* the "+ new track" row is not draggable — don't offer the grab hand */
 .newtrack .daw-thead { cursor: default; }
 
-/* ---- 5a: scrolling olive welcome bar ---- */
-.hello-bar { background: var(--olive); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
-.hello-bar .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
-.hello-bar .marquee-track { padding: 13px 0; }
-.hello-bar .hm { font-family: var(--ui); font-size: .98rem; color: rgba(54,49,51,.92); margin-right: 34px; white-space: nowrap; }
-.hello-bar .hm.sep { color: rgba(54,49,51,.45); }
-@media (max-width: 620px) { .hello-bar .hm { font-size: .92rem; margin-right: 26px; } }
 
 /* ============================================================ ROUND 51 — gallery title/hover, hero type, 5a work section ============================================================ */
 /* gallery: bigger serif title; revert hover to the standard site card behavior (no pink) */
@@ -2247,22 +2228,7 @@ footer { border-top: 5px solid var(--plum); }
 .feat-thumb { min-width: 0; }
 .feat-thumb img, .mini-thumb img { max-width: 100%; }
 
-/* ============================================================ ROUND 86 — thinner/slower welcome bar + pause button (this round's hero changes now live in HOME HERO) ============================================================ */
-/* welcome bar: thinner, smaller type, ~30% slower (CSS fallback; JS speed is
-   set in script.js), plus a pause/play button on the right edge */
-.hello-bar { position: relative; }
-.hello-bar .marquee-track { padding: 9px 0; animation-duration: 66s; }
-.hello-bar .hm { font-size: .9rem; }
-.hello-bar.is-paused .marquee-track { animation-play-state: paused; }
-.hello-bar .hb-toggle { position: absolute; right: 14px; top: 50%; translate: 0 -50%; z-index: 2; width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 1px solid rgba(54,49,51,.3); background: rgba(253,252,251,.88); color: var(--ink); font-size: 10px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-.hello-bar .hb-toggle:hover { background: #fff; }
-.hello-bar .hb-toggle:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
-@media (max-width: 620px) { .hello-bar .hm { font-size: .84rem; } .hello-bar .hb-toggle { right: 10px; } }
-
-@media (prefers-reduced-motion: reduce) {
-  /* the bar is already frozen (and swipeable) under reduced motion — nothing to pause */
-  .hello-bar .hb-toggle { display: none; }
-}
+/* ============================================================ ROUND 86 — (welcome bar removed in ROUND 92: replaced by the static "now playing" bar) ============================================================ */
 
 /* ============================================================ ROUND 88 — the redesigned case-study layout (body.cs-v2) now lives in css/case-study.css; only its site-wide pieces stay here ============================================================ */
 /* 821–920px gets the section bar too, but the site nav only auto-hides at 820px and
@@ -2290,3 +2256,214 @@ footer { border-top: 5px solid var(--plum); }
    box centre hopped her ~7px sideways on every turn. Flip around her body instead (64/144 of 64px);
    script.js uses the same 28.44px for the D-pad. */
 .corgi { transform-origin: 28.44px 100%; }
+
+/* ============================================================ ROUND 92 — "the harmony line" brand pass ============================================================
+   Palette for this pass: plum #63285C (var --plum), hover plum #8a4a80, hot pink #FF4557,
+   blush #EFCECC, sage #C3C98D, off-white #F8F8F8, ink #363133, soft plum #B9A3B5 ("ahead"). */
+:root { --hl-plum-hover: #8a4a80; --hl-pink: #FF4557; --hl-soft-plum: #B9A3B5; --hl-blush-soft: #F8E6E4; }
+
+/* ---- 1 · footer: the plum rule is the bottom line of a five-line staff. The staff lives at
+   the top of the footer itself (so it never runs into page content above): four thin lines
+   15px apart, then the 5px plum rule, which Kaya keeps walking on. Layout, from the footer's
+   top edge: thin lines at 6 / 21 / 36 / 51px, the plum rule at 66–71px ---- */
+footer { border-top: 0; padding-top: 101px; }
+footer::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 65px; pointer-events: none;
+  background:
+    linear-gradient(var(--plum), var(--plum)) 0 100% / 100% 5px no-repeat,
+    repeating-linear-gradient(to bottom, rgba(99,40,92,.35) 0 1px, transparent 1px 15px) 0 0 / 100% 46px no-repeat;
+}
+/* her stage: feet 2px below the plum rule's bottom edge, as before (stage bottom = 73px) */
+.corgi-stage { top: 25px; }
+/* she no longer stands in the space above the footer, so the DAW needs no extra clearance for her */
+.daw { padding-bottom: 28px; }
+@media (max-width: 640px) { .daw { padding-bottom: 32px; } }
+
+/* sign-off: Borel, plum, centred between "return to top" and the quick nav */
+.foot .foot-signoff { margin: 0; font-family: var(--script); color: var(--plum); font-size: 1.28rem; line-height: 1.3; text-align: center; white-space: nowrap; }
+@media (min-width: 1080px) {
+  .foot { grid-template-columns: auto 1fr auto; grid-template-areas: "top sign quick" "top sign email"; column-gap: 24px; row-gap: 4px; }
+  .foot .to-top { grid-area: top; }
+  .foot .foot-signoff { grid-area: sign; justify-self: center; }
+  .foot .quick { grid-area: quick; justify-self: end; text-align: right; }
+  .foot .quick a:last-child { margin-right: 0; }
+  .foot .foot-email { grid-area: email; justify-self: end; }
+}
+@media (min-width: 721px) and (max-width: 1079px) {
+  .foot { grid-template-columns: auto 1fr auto; grid-template-areas: "top sign email" "quick quick quick"; column-gap: 20px; row-gap: 14px; }
+  .foot .to-top { grid-area: top; }
+  .foot .foot-signoff { grid-area: sign; justify-self: center; }
+  .foot .quick { grid-area: quick; justify-self: center; }
+  .foot .foot-email { grid-area: email; justify-self: end; }
+}
+@media (min-width: 641px) and (max-width: 720px) {
+  .foot .foot-signoff { order: 2; }
+}
+@media (max-width: 640px) {
+  .foot .foot-signoff { order: 3; font-size: 1.2rem; padding: 2px 0 4px; }
+  .foot .to-top { order: 4; }
+}
+
+/* ---- 2 · Kaya: she's a <button> now (reset the UA button look; keep a visible focus ring) ---- */
+.corgi { -webkit-appearance: none; appearance: none; border: 0; padding: 0; margin: 0; background-color: transparent; font: inherit; color: var(--plum); border-radius: 6px; }
+.corgi:focus { outline: none; }
+.corgi:focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; }
+
+/* the fermata she wears while sitting: her own pixel scale (sheet px × 44/99), centred over
+   her ears (sheet x 72–102, one art pixel of air above them), bobbing gently */
+.corgi-fermata { position: absolute; left: 32px; top: -9.33px; width: 13.33px; height: 6.67px; display: none; pointer-events: none; color: var(--plum); }
+.corgi-fermata svg { display: block; width: 100%; height: 100%; }
+.corgi.a-sit .corgi-fermata { display: block; animation: fermIn .25s ease .45s both, fermBob 2.4s ease-in-out .7s infinite; }
+@keyframes fermIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fermBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* one eighth note per visitor action: floats ~24px up from above her head, gone in .8s */
+.corgi-note { position: absolute; bottom: 44px; width: 12px; height: 19.5px; color: var(--plum); pointer-events: none; animation: noteUp .8s ease-out forwards; }
+.corgi-note svg { display: block; width: 100%; height: 100%; }
+@keyframes noteUp { 0% { opacity: 0; transform: translateY(4px); } 15% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px); } }
+
+/* the cues sit beside her, level with the staff (script.js sets `left`) — never above her */
+.corgi-dpad { bottom: 9px; transform: none; }
+.corgi-hint { bottom: 20px; }
+/* first hover: a quieter "psst, click me" than the solid arrow-keys pill */
+.corgi-psst { position: absolute; bottom: 12px; height: 34px; display: flex; align-items: center; padding: 0 15px; white-space: nowrap;
+  font-family: var(--ui); font-style: italic; font-weight: 500; font-size: 15px; line-height: 1; color: var(--plum);
+  border: 1.5px dashed var(--plum); border-radius: 999px; background: rgba(248,248,248,.55);
+  opacity: 0; transition: opacity .2s ease; pointer-events: none; z-index: 7; }
+.corgi-psst.in { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .corgi.a-sit .corgi-fermata { animation: none; }
+  .corgi-note { display: none; }
+  .corgi-psst, .corgi-hint, .corgi-dpad { transition: none; }
+}
+
+/* ---- 4 · "now playing" bar (replaces the scrolling welcome ticker): static, sage, one line ---- */
+.now-playing { background: var(--olive); color: var(--ink); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
+.np-line { margin: 0; padding: 13px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; font-family: var(--ui); font-size: 16px; line-height: 1; color: var(--ink); }
+.np-head { display: inline-flex; align-items: center; gap: 14px; }   /* 6px + ~8px extra between the waveform and the label */
+.np-label { font-weight: 600; }
+.np-dot { padding: 0 10px; }
+.np-sep > [aria-hidden="true"] { color: var(--plum); padding: 0 18px; }
+/* the waveform: four plum bars, 2.6px wide with rounded ends, bouncing out of step */
+.np-eq { display: inline-flex; align-items: center; gap: 2.4px; height: 18px; }
+.np-eq i { display: block; width: 2.6px; height: 18px; border-radius: 2px; background: var(--plum); animation: npEq 1.05s ease-in-out infinite; }
+.np-eq i:nth-child(1) { animation-duration: 1.1s;  animation-delay: -.2s; }
+.np-eq i:nth-child(2) { animation-duration: .85s;  animation-delay: -.55s; }
+.np-eq i:nth-child(3) { animation-duration: 1.25s; animation-delay: -.9s; }
+.np-eq i:nth-child(4) { animation-duration: .95s;  animation-delay: -.35s; }
+@keyframes npEq { 0%, 100% { height: 6px; } 50% { height: 18px; } }
+/* phones: stack instead of scrolling — the label, then one item per line */
+@media (max-width: 760px) {
+  .np-line { flex-direction: column; gap: 10px; padding: 15px 0 16px; text-align: center; }
+  .np-line .np-head { margin-bottom: 4px; }
+  .np-dot, .np-sep > [aria-hidden="true"] { display: none; }
+  .np-item { line-height: 1.15; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .np-eq i { animation: none; }
+  .np-eq i:nth-child(1) { height: 9px; } .np-eq i:nth-child(2) { height: 16px; }
+  .np-eq i:nth-child(3) { height: 12px; } .np-eq i:nth-child(4) { height: 18px; }
+}
+
+/* ---- 5 · icons + wave hover. At rest: plum glyph/label in an empty shape with a 1.5px plum
+   ring. Hover/focus: a plum wave rises from the bottom (.wv) and a white copy of the content
+   (.wv-top), clipped to the same moving edge, sits on top — see script.js ---- */
+.wave-btn { position: relative; overflow: hidden; isolation: isolate; }
+.wave-btn .wv { position: absolute; left: 0; top: 0; width: 200%; height: 130%; z-index: 1; pointer-events: none; color: var(--plum);
+  transform: translateY(100%); transition: transform .95s cubic-bezier(.45,.05,.25,1); }
+.wave-btn .wv svg { display: block; width: 100%; height: 100%; animation: wvDrift 2.6s linear infinite; }
+@keyframes wvDrift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.wave-btn .wv-top { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; gap: inherit; pointer-events: none;
+  color: #fff; clip-path: inset(139% 0 0 0); transition: clip-path .95s cubic-bezier(.45,.05,.25,1); }
+.wave-btn:hover .wv, .wave-btn:focus-visible .wv { transform: translateY(-12%); }
+.wave-btn:hover .wv-top, .wave-btn:focus-visible .wv-top { clip-path: inset(-6% 0 0 0); }
+
+/* social icons: 56px rings, 24px glyphs */
+.socials a.wave-circle { width: 56px; height: 56px; border-radius: 50%; background: transparent; border: 1.5px solid var(--plum); color: var(--plum); transform: none; }
+.socials a.wave-circle:hover, .socials a.wave-circle:focus-visible { background: transparent; transform: none; }
+.socials a.wave-circle i { font-size: 24px; color: var(--plum); }
+.socials a.wave-circle .wv-top i { color: #fff; }
+.socials a.wave-circle:focus { outline: none; }
+.socials a.wave-circle:focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; }
+
+/* outlined text buttons + the résumé downloads: the ring + wave replace the colour sweep */
+.pill.wave-btn, .late .pill.wave-btn { color: var(--plum); border: 1.5px solid var(--plum); background: transparent; }
+.pill.wave-btn:hover, .pill.wave-btn:focus-visible, .late .pill.wave-btn:hover, .late .pill.wave-btn:focus-visible { background: transparent; }
+.pill.wave-btn .wv-top { padding: inherit; letter-spacing: inherit; font: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-btn .wv svg { animation: none; }
+  .wave-btn .wv, .wave-btn .wv-top { transition: none; }
+}
+
+/* ---- 6 · external text links: 2px plum underline at rest; a blush highlight rises behind the
+   text on hover/focus and the ↗ nudges up-right ---- */
+a.ext-link.ext-link { color: var(--plum); padding: 0; font-weight: 400; text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--plum); text-underline-offset: 3px;
+  background-image: linear-gradient(var(--ext-hl, #EFCECC), var(--ext-hl, #EFCECC)); background-repeat: no-repeat; background-position: 0 100%; background-size: 100% 0;
+  border-radius: 2px; transition: background-size .35s ease; }
+a.ext-link.on-blush { --ext-hl: var(--blush-deep); }
+a.ext-link.ext-link:hover, a.ext-link.ext-link:focus-visible { color: var(--plum); background-color: transparent; background-image: linear-gradient(var(--ext-hl, #EFCECC), var(--ext-hl, #EFCECC)); background-size: 100% 100%; text-underline-offset: 3px; }
+a.ext-link .ext { display: inline-block; transition: transform .35s ease; }
+a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5px, -2.5px); }
+@media (prefers-reduced-motion: reduce) {
+  a.ext-link, a.ext-link .ext { transition: none; }
+  a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: none; }
+}
+
+/* ---- 3 · case-study staff rail: one 3px plum line, one note per section sitting on it
+   (script.js builds it; the note head is at y=20/26 of the glyph, so the line runs
+   through every head). State by colour: read plum, current hot pink + larger, ahead soft plum ---- */
+.cs-staff { --g: 30px; position: sticky; top: 72px; z-index: 35; margin: 0 0 30px; padding: 2px 0 10px;
+  background: rgba(255,255,255,.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hair); }
+.cs-staff-notes { position: relative; list-style: none; margin: 0; padding: 0; display: flex; }
+.cs-staff-notes::before { content: ""; position: absolute; left: 0; right: 0; top: calc(8px + var(--g) * 20 / 26 - 1.5px); height: 3px; border-radius: 2px; background: var(--plum); }
+.cs-staff-notes li, .cs-body .cs-staff-notes li { flex: 1 1 0; min-width: 0; display: flex; justify-content: center; margin: 0; padding: 0; font-size: inherit; }
+.cs-staff-notes li::before, .cs-body .cs-staff-notes li::before { content: none; display: none; }
+.cs-note, .cs-body .cs-read a.cs-note, .cs-mobilebar a.cs-note { text-decoration: none; padding: 8px 3px 0; border-radius: 8px; background: none; transition: none; }
+.cs-body .cs-read a.cs-note:hover { background: none; }
+.cs-note { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 8px 3px 0; text-decoration: none; color: var(--hl-soft-plum); border-radius: 8px; }
+.cs-note-g { display: block; height: var(--g); width: calc(var(--g) * 16 / 26); transform-origin: 34% 77%; transition: transform .25s ease, color .25s ease; }
+.cs-note-g svg { display: block; width: 100%; height: 100%; }
+.cs-note.is-read { color: var(--plum); }
+.cs-note.is-current { color: var(--hl-pink); }
+.cs-note.is-current .cs-note-g { transform: scale(1.22); }
+.cs-note-l { font-family: var(--ui); font-size: 15px; line-height: 1.2; color: #6b6266; text-align: center; white-space: normal; }
+.cs-note.is-current .cs-note-l { font-weight: 700; color: var(--plum); }
+.cs-note:hover .cs-note-l { color: var(--plum); }
+.cs-note:focus { outline: none; }
+.cs-note:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+.cs-staff.dense .cs-note-l { font-size: 14px; }
+/* too narrow for every label: show the current one (and any you hover/focus) */
+.cs-staff.tight .cs-note:not(.is-current):not(:hover):not(:focus-visible) .cs-note-l { visibility: hidden; }
+.cs-staff.tight .cs-note-l { white-space: nowrap; }
+/* the staff is now the reading column's first child */
+.cs-v2 .cs-read > .cs-staff + .cs-section .cs-pair { margin-top: 0; }
+.cs-body .cs-read > .cs-staff + h2 { margin-top: 0; }
+
+/* desktop: the staff replaces the sidebar list of sections (the back pill keeps the left column) */
+@media (min-width: 921px) {
+  body.cs-staff-on .cs-body .cs-layout .cs-rail { display: none; }
+  body.cs-staff-on .cs-body .cs-layout .cs-read { grid-column: 2; }
+  body.cs-staff-on .cs-read h2[id], body.cs-staff-on.cs-v2 .cs-section { scroll-margin-top: 172px; }
+}
+/* phones/tablets: the staff lives in the section bar as a compact second row (no labels) */
+.cs-mobilebar .cs-staff-compact { display: none; }
+@media (max-width: 920px) {
+  .cs-body .cs-read > .cs-staff:not(.cs-staff-compact) { display: none; }
+  .cs-mobilebar.has-staff { height: auto; flex-wrap: wrap; row-gap: 0; padding: 8px 12px 0; }
+  .cs-mobilebar .cs-staff-compact { --g: 22px; display: block; flex: 1 0 100%; position: static; margin: 0; padding: 0 2px 4px; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border: 0; }
+  .cs-mobilebar .cs-staff-compact a.cs-note { padding: 4px 4px 2px; min-width: 24px; }
+  .cs-staff-compact .cs-staff-notes::before { top: calc(4px + var(--g) * 20 / 26 - 1.5px); }
+  body.cs-staff-on .cs-read h2[id], body.cs-staff-on.cs-v2 .cs-section { scroll-margin-top: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs-note-g { transition: none; }
+}
+
+/* ---- 8 · Borel only where Lindsey speaks to the visitor (the "hello," greeting, cursive words in
+   conversational page titles, Kaya's caption, the footer sign-off). Section headers and UI text
+   that used it switch to DM Serif Display ---- */
+.section h2 .script-accent { font-family: var(--serif); font-size: 1em; line-height: inherit; padding: 0; color: var(--plum); }
+.portrait .initials { font-family: var(--serif); }
+.kaya-caption { font-family: var(--script); color: var(--plum); font-size: 1.12rem; line-height: 1.5; }
