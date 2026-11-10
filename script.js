@@ -1169,11 +1169,14 @@
       if (right + w <= footEl.clientWidth - 6) hintEl.style.left = Math.round(right) + 'px';
       else hintEl.style.left = Math.round(Math.max(6, x - 10 - w)) + 'px';
     };
-    // x moves in fractional pixels every frame; drawing the downscaled pixel-art sheet at
-    // sub-pixel offsets made her shimmer, so snap what's drawn to whole device pixels
+    // x moves in fractional pixels every frame. At walking pace, drawing the downscaled pixel-art
+    // sheet at slowly creeping sub-pixel offsets makes her shimmer, so slow gaits snap to whole
+    // device pixels. Running and leaping stay sub-pixel: at that speed snapping turns into uneven
+    // 1px/2px steps (choppy), and the shimmer it prevents isn't visible anyway.
     var snap = function (v) { var r = window.devicePixelRatio || 1; return Math.round(v * r) / r; };
     var place = function () {
-      dog.style.transform = 'translateX(' + snap(x) + 'px) scaleX(' + dir + ')';
+      var fast = state === 'run' || state === 'jump';
+      dog.style.transform = 'translateX(' + (fast ? x : snap(x)) + 'px) scaleX(' + dir + ')';
       if (padEl) padEl.style.left = Math.round(x + MID) + 'px';
       if (hintEl) positionHint();
     };
