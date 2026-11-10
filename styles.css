@@ -2264,17 +2264,17 @@ footer { border-top: 5px solid var(--plum); }
 
 /* ---- 1 · footer: the plum rule is the bottom line of a five-line staff. The staff lives at
    the top of the footer itself (so it never runs into page content above): four thin lines
-   15px apart, then the 5px plum rule, which Kaya keeps walking on. Layout, from the footer's
-   top edge: thin lines at 6 / 21 / 36 / 51px, the plum rule at 66–71px ---- */
-footer { border-top: 0; padding-top: 101px; }
+   9px apart, then the 5px plum rule, which Kaya keeps walking on. Layout, from the footer's
+   top edge: thin lines at 14 / 23 / 32 / 41px (9px apart, so they read as one staff), the plum rule at 50–55px ---- */
+footer { border-top: 0; padding-top: 85px; }
 footer::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 65px; pointer-events: none;
+  content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 41px; pointer-events: none;
   background:
     linear-gradient(var(--plum), var(--plum)) 0 100% / 100% 5px no-repeat,
-    repeating-linear-gradient(to bottom, rgba(99,40,92,.35) 0 1px, transparent 1px 15px) 0 0 / 100% 46px no-repeat;
+    repeating-linear-gradient(to bottom, rgba(99,40,92,.35) 0 1px, transparent 1px 9px) 0 0 / 100% 28px no-repeat;
 }
-/* her stage: feet 2px below the plum rule's bottom edge, as before (stage bottom = 73px) */
-.corgi-stage { top: 25px; }
+/* her stage: feet 2px below the plum rule's bottom edge, as before (stage bottom = 57px) */
+.corgi-stage { top: 9px; }
 /* she no longer stands in the space above the footer, so the DAW needs no extra clearance for her */
 .daw { padding-bottom: 28px; }
 @media (max-width: 640px) { .daw { padding-bottom: 32px; } }
@@ -2340,7 +2340,7 @@ footer::before {
 
 /* ---- 4 · "now playing" bar (replaces the scrolling welcome ticker): static, sage, one line ---- */
 .now-playing { background: var(--olive); color: var(--ink); border-top: 1px solid rgba(54,49,51,.16); border-bottom: 1px solid rgba(54,49,51,.16); }
-.np-line { margin: 0; padding: 13px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; font-family: var(--ui); font-size: 16px; line-height: 1; color: var(--ink); }
+.np-line { margin: 0; padding: 13px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; font-family: var(--ui); font-size: 16px; line-height: 1; color: var(--ink); }
 .np-head { display: inline-flex; align-items: center; gap: 14px; }   /* 6px + ~8px extra between the waveform and the label */
 .np-label { font-weight: 600; }
 .np-dot { padding: 0 10px; }
@@ -2355,7 +2355,7 @@ footer::before {
 @keyframes npEq { 0%, 100% { height: 6px; } 50% { height: 18px; } }
 /* phones: stack instead of scrolling — the label, then one item per line */
 @media (max-width: 760px) {
-  .np-line { flex-direction: column; gap: 10px; padding: 15px 0 16px; text-align: center; }
+  .np-line { flex-direction: column; gap: 10px; padding: 15px 0 16px; align-items: flex-start; text-align: left; }
   .np-line .np-head { margin-bottom: 4px; }
   .np-dot, .np-sep > [aria-hidden="true"] { display: none; }
   .np-item { line-height: 1.15; }
@@ -2369,7 +2369,9 @@ footer::before {
 /* ---- 5 · icons + wave hover. At rest: plum glyph/label in an empty shape with a 1.5px plum
    ring. Hover/focus: a plum wave rises from the bottom (.wv) and a white copy of the content
    (.wv-top), clipped to the same moving edge, sits on top — see script.js ---- */
-.wave-btn { position: relative; overflow: hidden; isolation: isolate; }
+.wave-btn { position: relative; overflow: hidden; isolation: isolate; transition: background-color .15s ease, transform .15s ease; }
+/* instant feedback: a light plum tint the moment you hover, then the wave rolls in over it */
+.wave-btn:hover, .wave-btn:focus-visible { background-color: rgba(99,40,92,.12); }
 .wave-btn .wv { position: absolute; left: 0; top: 0; width: 200%; height: 130%; z-index: 1; pointer-events: none; color: var(--plum);
   transform: translateY(100%); transition: transform .95s cubic-bezier(.45,.05,.25,1); }
 .wave-btn .wv svg { display: block; width: 100%; height: 100%; animation: wvDrift 2.6s linear infinite; }
@@ -2381,7 +2383,7 @@ footer::before {
 
 /* social icons: 56px rings, 24px glyphs */
 .socials a.wave-circle { width: 56px; height: 56px; border-radius: 50%; background: transparent; border: 1.5px solid var(--plum); color: var(--plum); transform: none; }
-.socials a.wave-circle:hover, .socials a.wave-circle:focus-visible { background: transparent; transform: none; }
+.socials a.wave-circle:hover, .socials a.wave-circle:focus-visible { background: rgba(99,40,92,.12); transform: none; }
 .socials a.wave-circle i { font-size: 24px; color: var(--plum); }
 .socials a.wave-circle .wv-top i { color: #fff; }
 .socials a.wave-circle:focus { outline: none; }
@@ -2389,7 +2391,7 @@ footer::before {
 
 /* outlined text buttons + the résumé downloads: the ring + wave replace the colour sweep */
 .pill.wave-btn, .late .pill.wave-btn { color: var(--plum); border: 1.5px solid var(--plum); background: transparent; }
-.pill.wave-btn:hover, .pill.wave-btn:focus-visible, .late .pill.wave-btn:hover, .late .pill.wave-btn:focus-visible { background: transparent; }
+.pill.wave-btn:hover, .pill.wave-btn:focus-visible, .late .pill.wave-btn:hover, .late .pill.wave-btn:focus-visible { background: rgba(99,40,92,.12); }
 .pill.wave-btn .wv-top { padding: inherit; letter-spacing: inherit; font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
