@@ -513,6 +513,7 @@
           '<span class="collab-resize l" aria-hidden="true"></span>' +
           '<span class="clip-info"><span class="clip-name">collaboration ↗</span><span class="clip-sub">collaboration</span></span>' +
           '<span class="wave" data-wave aria-hidden="true"></span>' +
+          '<span class="clip-dest" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span><span class="sr-only"> (email)</span>' +
           '<span class="collab-resize r" aria-hidden="true"></span>' +
           '<span class="collab-x" role="button" tabindex="0" aria-label="Remove this clip">×</span>';
         lane.appendChild(el);
@@ -1225,6 +1226,20 @@
       });
     } else { jobs.forEach(run); }
   })();
+
+  /* ---- DAW clips: a small icon at the right end says where each link goes (Spotify,
+     YouTube, X); the new-collab clips get an envelope (they open an email) ---- */
+  var DEST = [[/spotify\.com/, 'fa-brands fa-spotify', 'Spotify'], [/youtube\.com|youtu\.be/, 'fa-brands fa-youtube', 'YouTube'],
+    [/(^|\/\/)(www\.)?(x|twitter)\.com/, 'fa-brands fa-x-twitter', 'X'], [/^mailto:/, 'fa-solid fa-envelope', 'email']];
+  [].slice.call(document.querySelectorAll('.daw a.daw-clip, .daw a.daw-file')).forEach(function (a) {
+    var href = a.getAttribute('href') || '';
+    for (var i = 0; i < DEST.length; i++) {
+      if (DEST[i][0].test(href)) {
+        a.insertAdjacentHTML('beforeend', '<span class="clip-dest" aria-hidden="true"><i class="' + DEST[i][1] + '"></i></span><span class="sr-only"> (' + DEST[i][2] + ')</span>');
+        break;
+      }
+    }
+  });
 
   /* ---- project cards: the "read case study →" row becomes a square arrow button (same
      ring + wave as the social icons, a rounded square instead of a circle). The whole card

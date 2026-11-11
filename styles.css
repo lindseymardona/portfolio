@@ -2502,3 +2502,14 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 .corgi.a-sniffwalk { background-position-y: -220px; }
 .corgi.a-sit       { background-position-y: -264px; }
 .corgi.a-jump      { background-position-y: -308px; }
+
+/* ---- DAW clips: destination icon at the right end (Spotify / YouTube / X / email) ---- */
+.daw-clip .clip-dest, .collab-blob .clip-dest { flex: none; margin-left: auto; font-size: 14px; line-height: 1; display: inline-flex; }
+.c-plum .clip-dest, .c-rose .clip-dest { color: rgba(255,255,255,.88); }
+.c-olive .clip-dest { color: rgba(54,49,51,.72); }
+.c-plumsoft .clip-dest { color: rgba(99,40,92,.75); }
+.daw-file { position: relative; padding-right: 38px; }
+.daw-file .clip-dest { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); font-size: 14px; line-height: 1; color: var(--plum); }
+/* the collab clip keeps room for its × (top-right) */
+.collab-blob .clip-dest { margin-right: 18px; color: rgba(54,49,51,.6); display: none; }
+.collab-blob.has-text .clip-dest { display: inline-flex; }
