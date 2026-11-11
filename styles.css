@@ -2311,7 +2311,7 @@ footer::before {
 
 /* the fermata she wears while sitting: her own pixel scale (sheet px × 44/99), centred over
    her ears (sheet x 72–102, one art pixel of air above them), bobbing gently */
-.corgi-fermata { position: absolute; left: 32px; top: -9.33px; width: 13.33px; height: 6.67px; display: none; pointer-events: none; color: var(--plum); }
+.corgi-fermata { position: absolute; left: 32px; top: -10.67px; width: 13.33px; height: 8px; display: none; pointer-events: none; color: var(--plum); }
 .corgi-fermata svg { display: block; width: 100%; height: 100%; }
 .corgi.a-sit .corgi-fermata { display: block; animation: fermIn .25s ease .45s both, fermBob 2.4s ease-in-out .7s infinite; }
 @keyframes fermIn  { from { opacity: 0; } to { opacity: 1; } }
@@ -2483,3 +2483,9 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 :is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow .wv-top { clip-path: inset(-6% 0 0 0); }
 /* the note after "…'cause i'm a singer" */
 .section-quote .sq-note { display: inline-block; color: var(--plum); font-style: normal; margin-left: .12em; }
+
+/* notes resting on the footer staff (behind Kaya — the stage is z-index 6) */
+.staff-notes { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 1; pointer-events: none; }
+.staff-note { position: absolute; width: 18px; height: 29.25px; margin-left: -6.2px; color: var(--hl-soft-plum); }
+.staff-note svg { display: block; width: 100%; height: 100%; }
+@media (max-width: 640px) { .staff-note.sn-wide { display: none; } }

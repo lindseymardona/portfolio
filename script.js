@@ -1367,16 +1367,29 @@
     var dog = document.createElement(reduce ? 'div' : 'button'); dog.className = 'corgi';
     if (reduce) stage.setAttribute('aria-hidden', 'true');
     else { dog.type = 'button'; dog.setAttribute('aria-label', 'play with Kaya'); }
-    // the fermata she wears while sitting: pixel art on her own 3px art grid (30×15 sheet px),
+    // the fermata she wears while sitting: pixel art on her own 3px art grid (30×18 sheet px — a round arch over the dot),
     // drawn at the sprite's scale and flipped with her (it's symmetric). CSS shows it only in .a-sit
     var ferm = document.createElement('span'); ferm.className = 'corgi-fermata'; ferm.setAttribute('aria-hidden', 'true');
-    ferm.innerHTML = '<svg viewBox="0 0 30 15" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><g fill="currentColor">' +
-      '<rect x="9" y="0" width="12" height="3"/><rect x="3" y="3" width="24" height="3"/>' +
-      '<rect x="2" y="6" width="6" height="3"/><rect x="22" y="6" width="6" height="3"/>' +
-      '<rect x="2" y="9" width="3" height="4"/><rect x="25" y="9" width="3" height="4"/>' +
-      '<rect x="12" y="9" width="6" height="6"/></g></svg>';
+    ferm.innerHTML = '<svg viewBox="0 0 30 18" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><g fill="currentColor">' +
+      '<rect x="9" y="0" width="12" height="3"/><rect x="3" y="3" width="6" height="3"/><rect x="21" y="3" width="6" height="3"/>' +
+      '<rect x="0" y="6" width="6" height="3"/><rect x="24" y="6" width="6" height="3"/>' +
+      '<rect x="0" y="9" width="3" height="9"/><rect x="27" y="9" width="3" height="9"/>' +
+      '<rect x="12" y="12" width="6" height="6"/></g></svg>';
     dog.appendChild(ferm);
     stage.appendChild(dog); footEl.appendChild(stage);
+
+    // a few notes resting on the staff, so it reads as music. They sit behind Kaya (she walks
+    // in front of them). Heads land on lines/spaces: lines at 14/23/32/41px from the footer's
+    // top, spaces halfway between; the glyph's head centre is 22.5px down its 29px box
+    var staffDeco = document.createElement('div'); staffDeco.className = 'staff-notes'; staffDeco.setAttribute('aria-hidden', 'true');
+    [[7, 'quarter', 37], [19, 'eighth', 28], [33, 'half', 41.5], [52, 'sixteenth', 23.5], [68, 'quarter', 32.5], [83, 'eighth', 37], [95, 'half', 28]]
+      .forEach(function (n, k) {
+        var s = document.createElement('span'); s.className = 'staff-note' + (k % 2 ? ' sn-wide' : '');
+        s.style.left = n[0] + '%'; s.style.top = (n[2] - 22.5) + 'px';
+        s.innerHTML = noteSVG(n[1]);
+        staffDeco.appendChild(s);
+      });
+    footEl.insertBefore(staffDeco, stage);
 
     // fetch + decode every pose's sheet up front: the CSS only requests a sheet the first time
     // its state class is applied, so a pose she hadn't used yet (jump, sit, sniff-walk…) blinked
