@@ -2383,7 +2383,7 @@ footer::before {
 
 /* social icons: 56px rings, 24px glyphs */
 .socials a.wave-circle { width: 56px; height: 56px; border-radius: 50%; background: transparent; border: 1.5px solid var(--plum); color: var(--plum); transform: none; }
-.socials a.wave-circle:hover, .socials a.wave-circle:focus-visible { background: rgba(99,40,92,.12); transform: none; }
+.socials a.wave-circle:hover, .socials a.wave-circle:focus-visible { background: rgba(99,40,92,.12); transform: translateY(-3px); }
 .socials a.wave-circle i { font-size: 24px; color: var(--plum); }
 .socials a.wave-circle .wv-top i { color: #fff; }
 .socials a.wave-circle:focus { outline: none; }
