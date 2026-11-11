@@ -1281,7 +1281,7 @@
   });
 
   /* ---- home hero proofs: hovering or focusing "designer." / "developer." / "musician."
-     shows a speech bubble of proof under the word (role="tooltip", wired with
+     shows a speech bubble of proof above the word (role="tooltip", wired with
      aria-describedby). Touch: tap a word to toggle its bubble, tap anywhere else to close.
      Escape closes. Sits on top of the entrance + hover above — it never touches either ---- */
   var heroRoles = document.querySelector('.hero .roles');
@@ -1324,7 +1324,7 @@
       var minLeft = Math.max(16, box.left + tw <= vw - 16 ? box.left : 16);
       var left = Math.max(minLeft, Math.min(centre - tw / 2, vw - 16 - tw));
       tip.style.left = Math.round(left - box.left) + 'px';
-      tip.style.top = Math.round(wr.bottom - box.top + 12) + 'px';
+      tip.style.top = Math.round(wr.top - box.top - 12 - tip.offsetHeight) + 'px';   // above the word
       tip.style.setProperty('--tail', Math.round(centre - left) + 'px');   // the tail still points at the word
     };
     var show = function (i) {
@@ -1379,26 +1379,25 @@
     stage.appendChild(dog); footEl.appendChild(stage);
 
     // a few notes resting on the staff, so it reads as music. They sit behind Kaya (she walks
-    // in front of them). Heads land on lines/spaces: lines at 14/23/32/41px from the footer's
-    // top, spaces halfway between; the glyph's head centre is 22.5px down its 29px box
+    // in front of them). Heads land on lines/spaces: lines at 24/31/38/45px from the footer's
+    // top, spaces halfway between; the glyph's head centre is 16px down its 20.8px box
     var staffDeco = document.createElement('div'); staffDeco.className = 'staff-notes'; staffDeco.setAttribute('aria-hidden', 'true');
-    [[7, 'quarter', 37], [19, 'eighth', 28], [33, 'half', 41.5], [52, 'sixteenth', 23.5], [68, 'quarter', 32.5], [83, 'eighth', 37], [95, 'half', 28]]
+    [[7, 'quarter', 42], [19, 'eighth', 35], [33, 'half', 45.5], [52, 'sixteenth', 31.5], [68, 'quarter', 38.5], [83, 'eighth', 42], [95, 'half', 35]]
       .forEach(function (n, k) {
         var s = document.createElement('span'); s.className = 'staff-note' + (k % 2 ? ' sn-wide' : '');
-        s.style.left = n[0] + '%'; s.style.top = (n[2] - 22.5) + 'px';
+        s.style.left = n[0] + '%'; s.style.top = (n[2] - 16) + 'px';
         s.innerHTML = noteSVG(n[1]);
         staffDeco.appendChild(s);
       });
     footEl.insertBefore(staffDeco, stage);
 
-    // fetch + decode every pose's sheet up front: the CSS only requests a sheet the first time
-    // its state class is applied, so a pose she hadn't used yet (jump, sit, sniff-walk…) blinked
-    // out while it loaded. Kept in `sheets` so they stay in memory.
-    var sheets = ['idle1', 'idle2', 'walk', 'run', 'sniff', 'sniffwalk', 'sit', 'jump'].map(function (s) {
-      var im = new Image(); im.src = 'assets/corgi-' + s + '.png';
-      if (im.decode) im.decode().catch(function () {});
-      return im;
-    });
+    // every pose lives in ONE image (assets/corgi-sprites.png, one row per pose), so changing
+    // pose only moves the background — it never swaps images. Swapping between separate sheets
+    // could blank her for a frame (e.g. on a jump) while the browser re-decoded the new sheet.
+    // Kept in `sheets` so the decoded image stays in memory.
+    var sheets = [new Image()];
+    sheets[0].src = 'assets/corgi-sprites.png';
+    if (sheets[0].decode) sheets[0].decode().catch(function () {});
 
     var CW = 64;
     var MID = 28.44;   // her body's centre in the 64px box (64/144 sprite px); she flips around this (see .corgi)

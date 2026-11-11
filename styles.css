@@ -132,7 +132,7 @@ h1, h2, h3, h4 { color: var(--ink); }
 .hero-left .tagline { font-family: var(--ui); font-size: clamp(1rem, 1.7vw, 1.1rem); line-height: 1.45; color: var(--ink); margin: .4em 0 0; max-width: 44ch; }
 .js .hero-left .tagline { animation: fadeUp .65s ease 3.05s both; }
 
-/* ---- hover proofs: each role word is focusable and shows a speech bubble under it
+/* ---- hover proofs: each role word is focusable and shows a speech bubble above it
    (script.js builds .proof and sets left/top/--tail so it stays 16px inside the screen) ---- */
 .hero .roles { position: relative; }
 .roles .rw:focus { outline: none; }
@@ -146,9 +146,9 @@ h1, h2, h3, h4 { color: var(--ink); }
   transition: opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
 }
 .roles .proof.on { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity .3s ease, transform .3s ease, visibility 0s; }
-/* the tail: a rotated square bordered on its top-left edges, pointing up at the word */
-.roles .proof-tail { position: absolute; top: -7.5px; left: var(--tail, 50%); width: 13px; height: 13px; background: #F8E6E4;
-  border-left: 1.5px solid var(--plum); border-top: 1.5px solid var(--plum); border-top-left-radius: 3px; transform: translateX(-50%) rotate(45deg); }
+/* the tail: a rotated square bordered on its bottom-right edges, pointing down at the word */
+.roles .proof-tail { position: absolute; bottom: -7.5px; left: var(--tail, 50%); width: 13px; height: 13px; background: #F8E6E4;
+  border-right: 1.5px solid var(--plum); border-bottom: 1.5px solid var(--plum); border-bottom-right-radius: 3px; transform: translateX(-50%) rotate(45deg); }
 
 /* ---- portrait: a tilted 11:12 photo card, two framing squares with the same ratio
    tucked behind it, two flowers + a dot, and the status sticker. --pf is the photo
@@ -1963,14 +1963,14 @@ footer { border-top: 5px solid var(--plum); }
 /* ============================================================ ROUND 69 — animated corgi sprite + D-pad ============================================================ */
 .corgi-stage { position: absolute; left: 0; right: 0; top: -46px; height: 48px; z-index: 6; pointer-events: none; }
 .corgi { position: absolute; left: 0; bottom: 0; width: 64px; height: 44px; background-repeat: no-repeat; background-size: auto 44px; background-position: 0 0; transform-origin: center bottom; cursor: pointer; pointer-events: auto; }
-.corgi.a-idle1 { background-image: url(assets/corgi-idle1.png); animation: cg5 1.4s steps(5) infinite; }
-.corgi.a-idle2 { background-image: url(assets/corgi-idle2.png); animation: cg5 1.25s steps(5) infinite; }
-.corgi.a-walk  { background-image: url(assets/corgi-walk.png);  animation: cg5 .62s steps(5) infinite; }
-.corgi.a-run   { background-image: url(assets/corgi-run.png);   animation: cg8 .56s steps(8) infinite; }
-.corgi.a-sniff { background-image: url(assets/corgi-sniff.png); animation: cg8 1s steps(8) infinite; }
-.corgi.a-sniffwalk { background-image: url(assets/corgi-sniffwalk.png); animation: cg8 .85s steps(8) infinite; }
-.corgi.a-sit   { background-image: url(assets/corgi-sit.png);   animation: cg9 .7s steps(9) forwards; }
-.corgi.a-jump  { background-image: url(assets/corgi-jump.png);  animation: cg11 .66s steps(11) forwards; }
+.corgi.a-idle1 { animation: cg5 1.4s steps(5) infinite; }
+.corgi.a-idle2 { animation: cg5 1.25s steps(5) infinite; }
+.corgi.a-walk  { animation: cg5 .62s steps(5) infinite; }
+.corgi.a-run   { animation: cg8 .56s steps(8) infinite; }
+.corgi.a-sniff { animation: cg8 1s steps(8) infinite; }
+.corgi.a-sniffwalk { animation: cg8 .85s steps(8) infinite; }
+.corgi.a-sit   { animation: cg9 .7s steps(9) forwards; }
+.corgi.a-jump  { animation: cg11 .66s steps(11) forwards; }
 @keyframes cg5  { from { background-position-x: 0; } to { background-position-x: -320px; } }
 @keyframes cg8  { from { background-position-x: 0; } to { background-position-x: -512px; } }
 @keyframes cg9  { from { background-position-x: 0; } to { background-position-x: -576px; } }
@@ -2264,16 +2264,16 @@ footer { border-top: 5px solid var(--plum); }
 
 /* ---- 1 · footer: the plum rule is the bottom line of a five-line staff. The staff lives at
    the top of the footer itself (so it never runs into page content above): four thin lines
-   9px apart, then the 5px plum rule, which Kaya keeps walking on. Layout, from the footer's
-   top edge: thin lines at 14 / 23 / 32 / 41px (9px apart, so they read as one staff), the plum rule at 50–55px ---- */
+   7px apart, then a 3px plum rule, which Kaya keeps walking on. Layout, from the footer's
+   top edge: thin lines at 24 / 31 / 38 / 45px, the plum rule at 52–55px (fine and close, so it reads as one staff) ---- */
 footer { border-top: 0; padding-top: 85px; }
 footer::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 41px; pointer-events: none;
+  content: ""; position: absolute; left: 0; right: 0; top: 24px; height: 31px; pointer-events: none;
   background:
-    linear-gradient(var(--plum), var(--plum)) 0 100% / 100% 5px no-repeat,
-    repeating-linear-gradient(to bottom, rgba(99,40,92,.35) 0 1px, transparent 1px 9px) 0 0 / 100% 28px no-repeat;
+    linear-gradient(var(--plum), var(--plum)) 0 100% / 100% 3px no-repeat,
+    repeating-linear-gradient(to bottom, rgba(99,40,92,.35) 0 1px, transparent 1px 7px) 0 0 / 100% 22px no-repeat;
 }
-/* her stage: feet 2px below the plum rule's bottom edge, as before (stage bottom = 57px) */
+/* her stage: feet 2px below the plum rule's bottom edge (stage bottom = 57px) */
 .corgi-stage { top: 9px; }
 /* she no longer stands in the space above the footer, so the DAW needs no extra clearance for her */
 .daw { padding-bottom: 28px; }
@@ -2470,12 +2470,11 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 .portrait .initials { font-family: var(--serif); }
 .kaya-caption { font-family: var(--script); color: var(--plum); font-size: 1.12rem; line-height: 1.5; }
 
-/* ---- 5b · project-card arrows: a 44px rounded square (14px radius) with the same ring + wave.
+/* ---- 5b · project-card arrows: a 36px rounded square (11px radius) with the same ring + wave.
    The card is the link, so the wave runs on card hover/focus ---- */
-.proj-view.card-arrow { width: 44px; height: 44px; flex: none; padding: 0; margin: 0; gap: 0; justify-content: center; align-self: flex-end;
-  border: 1.5px solid var(--plum); border-radius: 14px; color: var(--plum); background: transparent; }
-.proj-view.card-arrow svg { width: 20px; height: 20px; display: block; }
-.proj-view.card-arrow .wv-top svg { width: 20px; height: 20px; }
+.proj-view.card-arrow { width: 36px; height: 36px; flex: none; padding: 0; margin: 0; gap: 0; justify-content: center; align-self: flex-end;
+  border: 1.5px solid var(--plum); border-radius: 11px; color: var(--plum); background: transparent; }
+.proj-view.card-arrow > svg, .proj-view.card-arrow .wv-top > svg { width: 16px; height: 16px; display: block; }   /* the arrow only — not the wave graphic */
 .feat-card .proj-view.card-arrow, .mini-card .proj-view.card-arrow { align-self: flex-end; margin-top: auto; }
 .proj-footrow .proj-view.card-arrow { align-self: center; }
 :is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow { background-color: rgba(99,40,92,.12); }
@@ -2486,6 +2485,20 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 
 /* notes resting on the footer staff (behind Kaya — the stage is z-index 6) */
 .staff-notes { position: absolute; left: 0; right: 0; top: 0; height: 56px; z-index: 1; pointer-events: none; }
-.staff-note { position: absolute; width: 18px; height: 29.25px; margin-left: -6.2px; color: var(--hl-soft-plum); }
+.staff-note { position: absolute; width: 12.8px; height: 20.8px; margin-left: -4.4px; color: var(--hl-soft-plum); }
 .staff-note svg { display: block; width: 100%; height: 100%; }
 @media (max-width: 640px) { .staff-note.sn-wide { display: none; } }
+
+/* ---- Kaya: one sprite atlas (assets/corgi-sprites.png: 8 rows × 99 sheet px, one per pose, in
+   this order: idle1 idle2 walk run sniff sniffwalk sit jump). A pose change only moves the
+   background vertically, so there's no image swap to blank her for a frame. The frame keyframes
+   (cg5/cg8/cg9/cg11) still animate background-position-x ---- */
+.corgi { background-image: url(assets/corgi-sprites.png); background-size: auto 352px; }
+.corgi.a-idle1     { background-position-y: 0; }
+.corgi.a-idle2     { background-position-y: -44px; }
+.corgi.a-walk      { background-position-y: -88px; }
+.corgi.a-run       { background-position-y: -132px; }
+.corgi.a-sniff     { background-position-y: -176px; }
+.corgi.a-sniffwalk { background-position-y: -220px; }
+.corgi.a-sit       { background-position-y: -264px; }
+.corgi.a-jump      { background-position-y: -308px; }
