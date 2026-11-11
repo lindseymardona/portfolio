@@ -1170,7 +1170,7 @@
               s.style.animationDelay = (i++ * 30) + 'ms'; frag.appendChild(s);
             }
             node.replaceChild(frag, c);
-          } else if (c.nodeType === 1 && !c.classList.contains('eq')) { walk(c); }
+          } else if (c.nodeType === 1 && !c.classList.contains('eq') && !c.classList.contains('sq-note')) { walk(c); }
         });
       };
       el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
@@ -1226,14 +1226,23 @@
     } else { jobs.forEach(run); }
   })();
 
-  /* ---- wave hover (social icons, outlined pills, the résumé downloads): a plum wave rises
+  /* ---- project cards: the "read case study →" row becomes a square arrow button (same
+     ring + wave as the social icons, a rounded square instead of a circle). The whole card
+     is the link, so the arrow stays decorative (the card's text names it) ---- */
+  [].slice.call(document.querySelectorAll('a.proj .proj-view, a.feat-card .proj-view, a.mini-card .proj-view')).forEach(function (v) {
+    v.classList.add('card-arrow');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12 H19 M13 6 L19 12 L13 18"/></svg>';
+  });
+
+  /* ---- wave hover (social icons, card arrows, outlined pills, the résumé downloads): a plum wave rises
      from the bottom and fills the shape. The content is drawn twice — the plum original
      under the wave, and a white copy on top clipped to exactly where the wave has reached —
      so the icon/label never turns white against the light background before the wave gets
      there. Both added layers are aria-hidden; the link keeps its own accessible name ---- */
   var WAVE_SVG = '<svg viewBox="0 0 200 130" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
     '<path d="M0 9 Q12.5 0 25 9 T50 9 T75 9 T100 9 T125 9 T150 9 T175 9 T200 9 V130 H0 Z" fill="currentColor"/></svg>';
-  [].slice.call(document.querySelectorAll('.socials a, a.pill.ghost, a.pill[download]')).forEach(function (a) {
+  [].slice.call(document.querySelectorAll('.socials a, .proj-view.card-arrow, a.pill.ghost, a.pill[download]')).forEach(function (a) {
     if (a.querySelector('.wv')) return;
     var copy = a.innerHTML;
     a.classList.add('wave-btn');

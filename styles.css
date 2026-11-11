@@ -2469,3 +2469,17 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 .section h2 .script-accent { font-family: var(--serif); font-size: 1em; line-height: inherit; padding: 0; color: var(--plum); }
 .portrait .initials { font-family: var(--serif); }
 .kaya-caption { font-family: var(--script); color: var(--plum); font-size: 1.12rem; line-height: 1.5; }
+
+/* ---- 5b · project-card arrows: a 44px rounded square (14px radius) with the same ring + wave.
+   The card is the link, so the wave runs on card hover/focus ---- */
+.proj-view.card-arrow { width: 44px; height: 44px; flex: none; padding: 0; margin: 0; gap: 0; justify-content: center; align-self: flex-end;
+  border: 1.5px solid var(--plum); border-radius: 14px; color: var(--plum); background: transparent; }
+.proj-view.card-arrow svg { width: 20px; height: 20px; display: block; }
+.proj-view.card-arrow .wv-top svg { width: 20px; height: 20px; }
+.feat-card .proj-view.card-arrow, .mini-card .proj-view.card-arrow { align-self: flex-end; margin-top: auto; }
+.proj-footrow .proj-view.card-arrow { align-self: center; }
+:is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow { background-color: rgba(99,40,92,.12); }
+:is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow .wv { transform: translateY(-12%); }
+:is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow .wv-top { clip-path: inset(-6% 0 0 0); }
+/* the note after "…'cause i'm a singer" */
+.section-quote .sq-note { display: inline-block; color: var(--plum); font-style: normal; margin-left: .12em; }
