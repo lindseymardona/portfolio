@@ -2002,16 +2002,17 @@ footer { border-top: 5px solid var(--plum); }
 @media (prefers-reduced-motion: reduce) { .corgi { animation: none !important; } }
 
 /* ============================================================ ROUND 70 — header entrances restored + refined: cursive damped-bounces, serif pushes from the left, lead pushes up from below ============================================================ */
-/* cursive words (.hello + .script-accent) rise in with a single overshoot, matching the
-   reference curve: ~650ms, 16px → −2px → 0. A slow start into a smooth S-rise, peaking just
-   past the middle, then a hair of give below rest and a soft settle — no repeated bounces */
-.float-el.float-go { animation: floatIn .65s linear both; }
-.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn .65s linear both; }
+/* cursive words (.hello + .script-accent) bounce in: up, down, up, down, settling —
+   amplitude decays like real damped motion; ease-in-out per segment so it never lingers at a peak */
+.float-el.float-go { animation: floatIn 1.3s linear both; }
+.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1.3s linear both; }
 @keyframes floatIn {
-  0%   { opacity: 0; transform: translateY(16px);  animation-timing-function: cubic-bezier(.45,0,.35,1); }
-  40%  { opacity: 1; }
-  48%  { transform: translateY(-2px);  animation-timing-function: cubic-bezier(.45,0,.55,1); }
-  68%  { transform: translateY(.5px);  animation-timing-function: cubic-bezier(.33,0,.3,1); }
+  0%   { opacity: 0; transform: translateY(24px);  animation-timing-function: cubic-bezier(.25,0,.5,1); }
+  27%  { opacity: 1; transform: translateY(-10px); animation-timing-function: cubic-bezier(.32,0,.5,1); }
+  45%  { opacity: 1; transform: translateY(6px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  62%  { opacity: 1; transform: translateY(-4px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  77%  { opacity: 1; transform: translateY(2px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  90%  { opacity: 1; transform: translateY(-1px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
   100% { opacity: 1; transform: translateY(0); }
 }
 /* serif parts of a hero heading push in from the left (was a plain fade) */
