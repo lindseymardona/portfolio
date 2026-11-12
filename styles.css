@@ -2547,11 +2547,11 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 footer { background: linear-gradient(to bottom, var(--staff-bg, var(--gray)) 0 52px, var(--gray) 52px); }
 
 /* ---- cursive entrance (.hello + .script-accent): a softened easeOutElastic. It's a damped
-   spring that starts from rest (so the first move eases in instead of snapping), overshoots
-   ~6px of its 24px rise, then two smaller wobbles settle it — sampled into linear(). Browsers
+   spring with a little starting push (quick but not snappy), overshoots ~7.6px of its 24px
+   rise, then two smaller wobbles settle it — sampled into linear(). The fade is short (0.18s) so the rise reads. Browsers
    without linear() keep the older keyframed bounce (floatIn) from the first declaration ---- */
-.float-el.float-go { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.044, 0.159, 0.319, 0.5, 0.681, 0.848, 0.99, 1.1, 1.176, 1.22, 1.236, 1.228, 1.202, 1.165, 1.123, 1.08, 1.04, 1.006, 0.979, 0.96, 0.949, 0.944, 0.946, 0.952, 0.96, 0.97, 0.98, 0.99, 0.998, 1.004, 1.009, 1.012, 1.013, 1.013, 1.012, 1.01, 1.007, 1.005, 1.003, 1) both, fadeQuick .3s ease-out both; }
-.seg-h.seg-go .seg-float { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.044, 0.159, 0.319, 0.5, 0.681, 0.848, 0.99, 1.1, 1.176, 1.22, 1.236, 1.228, 1.202, 1.165, 1.123, 1.08, 1.04, 1.006, 0.979, 0.96, 0.949, 0.944, 0.946, 0.952, 0.96, 0.97, 0.98, 0.99, 0.998, 1.004, 1.009, 1.012, 1.013, 1.013, 1.012, 1.01, 1.007, 1.005, 1.003, 1) both, fadeQuick .3s ease-out both; }
+.float-el.float-go { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.091, 0.246, 0.438, 0.643, 0.839, 1.011, 1.149, 1.245, 1.301, 1.318, 1.304, 1.265, 1.209, 1.146, 1.082, 1.024, 0.975, 0.937, 0.913, 0.902, 0.901, 0.91, 0.925, 0.943, 0.964, 0.983, 1, 1.014, 1.024, 1.029, 1.031, 1.03, 1.026, 1.021, 1.015, 1.008, 1.003, 0.998, 0.994, 1) both, fadeQuick .18s ease-out both; }
+.seg-h.seg-go .seg-float { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.091, 0.246, 0.438, 0.643, 0.839, 1.011, 1.149, 1.245, 1.301, 1.318, 1.304, 1.265, 1.209, 1.146, 1.082, 1.024, 0.975, 0.937, 0.913, 0.902, 0.901, 0.91, 0.925, 0.943, 0.964, 0.983, 1, 1.014, 1.024, 1.029, 1.031, 1.03, 1.026, 1.021, 1.015, 1.008, 1.003, 0.998, 0.994, 1) both, fadeQuick .18s ease-out both; }
 @keyframes floatSpring {
   from { transform: translateY(24px); }
   to   { transform: translateY(0); }
