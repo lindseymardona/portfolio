@@ -154,21 +154,23 @@ h1, h2, h3, h4 { color: var(--ink); }
    tucked behind it, two flowers + a dot, and the status sticker. --pf is the photo
    width; everything around it is sized off it ---- */
 .portrait { position: relative; justify-self: end; transform: translateY(-20px); margin-right: 28px; --pf: clamp(280px, 31vw, 380px); }  /* margin: inset so the outline square + dot don't kiss the page edge */
-/* entrance: the photo pushes up gently, the two framing cards follow a beat apart, then the
-   flowers + sticker fade in. `translate` (not transform) so the tilts and hovers are untouched */
-.hero .portrait .frame         { animation: heroUp .95s cubic-bezier(.22,1,.36,1) .2s both; }
-.hero .portrait .frame-bg.bg1  { animation: heroUpSoft .95s cubic-bezier(.22,1,.36,1) .32s both; }
-.hero .portrait .frame-bg.bg2  { animation: heroUpSoft .95s cubic-bezier(.22,1,.36,1) .42s both; }
-.hero .portrait .accent        { transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .7s ease .7s; }
-.hero .portrait .status-sticker { transition: opacity .7s ease .85s; }
-@keyframes heroUp     { from { opacity: 0; translate: 0 34px; } to { opacity: 1; translate: 0 0; } }
-@keyframes heroUpSoft { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+/* entrance: the photo pushes up, the two framing cards follow a beat apart, then the flowers,
+   dot and sticker push up too. The fade finishes in the first ~30% so the rise itself reads;
+   `translate` (not transform) on the photo + cards so their tilts and hovers are untouched */
+.hero .portrait .frame         { animation: heroUp .9s cubic-bezier(.22,1,.36,1) .2s both; }
+.hero .portrait .frame-bg.bg1  { animation: heroUpSoft .9s cubic-bezier(.22,1,.36,1) .3s both; }
+.hero .portrait .frame-bg.bg2  { animation: heroUpSoft .9s cubic-bezier(.22,1,.36,1) .4s both; }
+.hero .portrait .ss-inner      { animation: decoUp .85s cubic-bezier(.22,1,.36,1) .75s backwards; }
+@keyframes heroUp     { 0% { opacity: 0; translate: 0 44px; } 30% { opacity: 1; } 100% { opacity: 1; translate: 0 0; } }
+@keyframes heroUpSoft { 0% { opacity: 0; translate: 0 30px; } 30% { opacity: 1; } 100% { opacity: 1; translate: 0 0; } }
+/* flowers + dot (script.js adds this after their drift) and the sticker card: transform-based,
+   `backwards` so it lets go when done and their hovers work again */
+@keyframes decoUp     { 0% { opacity: 0; transform: translateY(26px); } 30% { opacity: 1; } 100% { opacity: 1; transform: translateY(0); } }
 
 /* the gate (see script.js): until the fonts + photo are ready the hero is hidden and its CSS
    animations hold at their first frame, so nothing starts early and then jumps */
 .hero-wait .hero .hero-grid { opacity: 0; }
 .hero-wait .hero, .hero-wait .hero * { animation-play-state: paused !important; }
-.hero-wait .hero .portrait .accent, .hero-wait .hero .portrait .status-sticker { opacity: 0; }
 
 .portrait .frame {
   position: relative; z-index: 2; width: var(--pf); aspect-ratio: 11 / 12; border-radius: 39px; overflow: hidden;

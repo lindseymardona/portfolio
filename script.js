@@ -841,12 +841,20 @@
      around the profile photo also drift/float. translate + rotate are independent props
      so the two motions compose without fighting ---- */
   if (!reduce) {
+    var heroDeco = 0;
     [].slice.call(document.querySelectorAll('.portrait .accent, .gal-accent, .about-photo .accent')).forEach(function (el) {
       var fdur = (4 + Math.random() * 3);          // 4–7s float
       var sdur = (20 + Math.random() * 22);        // 20–42s rotation (slow)
       var ccw = Math.random() < 0.32;              // mostly clockwise, a few counter
       el.style.animation = 'accFloat ' + fdur.toFixed(1) + 's ease-in-out infinite, accSpin ' + sdur.toFixed(1) + 's linear infinite' + (ccw ? ' reverse' : '');
       el.style.animationDelay = '-' + (Math.random() * fdur).toFixed(1) + 's, -' + (Math.random() * sdur).toFixed(1) + 's';
+      // home hero: the flowers + dot also push up into place, a beat after the photo (decoUp
+      // animates `transform`, which the drift doesn't use, and lets go once it's done)
+      if (el.closest('.hero')) {
+        var drifts = el.style.animationDelay;   // re-setting the shorthand resets every delay, so keep these
+        el.style.animation += ', decoUp .85s cubic-bezier(.22,1,.36,1) backwards';
+        el.style.animationDelay = drifts + ', ' + (0.5 + heroDeco++ * 0.09).toFixed(2) + 's';
+      }
     });
   }
 
