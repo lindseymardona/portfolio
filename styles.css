@@ -138,7 +138,7 @@ h1, h2, h3, h4 { color: var(--ink); }
 .roles .rw:focus { outline: none; }
 .roles .rw:focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; border-radius: 3px; }
 .roles .proof {
-  position: absolute; left: 0; top: 100%; z-index: 30; width: min(340px, calc(100vw - 32px)); box-sizing: border-box;
+  position: absolute; left: 0; top: 100%; z-index: 30; width: max-content; max-width: min(300px, calc(100vw - 32px)); box-sizing: border-box;
   padding: 13px 18px 14px; background: #F8E6E4; border: 1.5px solid var(--plum); border-radius: 18px;
   font-family: var(--ui); font-size: 15px; font-weight: 400; line-height: 1.45; color: var(--ink); text-align: left; white-space: normal;
   box-shadow: 0 12px 26px -16px rgba(99,40,92,.45);

@@ -1302,9 +1302,9 @@
   var heroRoles = document.querySelector('.hero .roles');
   if (heroRoles) (function proofs () {
     var PROOFS = {
-      designer: 'sole designer of UCLA’s Latino Climate & Health Dashboard, featured in Health Affairs.',
-      developer: 'a.s. in computer science. i prototype in code and built this site myself.',
-      musician: 'i arrange vocal harmonies on commission and still sing in a community choir.'
+      designer: 'research-led, from interfaces to motion graphics to print',
+      developer: 'CS-trained, building in code with AI',
+      musician: 'originals, covers, choirs, and vocal arrangements'
     };
     var words = [].slice.call(heroRoles.querySelectorAll('.rw'));
     if (!words.length) {
