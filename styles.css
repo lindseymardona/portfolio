@@ -2545,3 +2545,15 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 @keyframes noteHover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 /* the staff band matches the section above it (script.js sets --staff-bg); grey from the plum rule down */
 footer { background: linear-gradient(to bottom, var(--staff-bg, var(--gray)) 0 52px, var(--gray) 52px); }
+
+/* ---- cursive entrance (.hello + .script-accent): a softened easeOutElastic. It's a damped
+   spring that starts from rest (so the first move eases in instead of snapping), overshoots
+   ~6px of its 24px rise, then two smaller wobbles settle it — sampled into linear(). Browsers
+   without linear() keep the older keyframed bounce (floatIn) from the first declaration ---- */
+.float-el.float-go { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.044, 0.159, 0.319, 0.5, 0.681, 0.848, 0.99, 1.1, 1.176, 1.22, 1.236, 1.228, 1.202, 1.165, 1.123, 1.08, 1.04, 1.006, 0.979, 0.96, 0.949, 0.944, 0.946, 0.952, 0.96, 0.97, 0.98, 0.99, 0.998, 1.004, 1.009, 1.012, 1.013, 1.013, 1.012, 1.01, 1.007, 1.005, 1.003, 1) both, fadeQuick .3s ease-out both; }
+.seg-h.seg-go .seg-float { animation: floatIn 1.3s linear both; animation: floatSpring 1.3s linear(0, 0.044, 0.159, 0.319, 0.5, 0.681, 0.848, 0.99, 1.1, 1.176, 1.22, 1.236, 1.228, 1.202, 1.165, 1.123, 1.08, 1.04, 1.006, 0.979, 0.96, 0.949, 0.944, 0.946, 0.952, 0.96, 0.97, 0.98, 0.99, 0.998, 1.004, 1.009, 1.012, 1.013, 1.013, 1.012, 1.01, 1.007, 1.005, 1.003, 1) both, fadeQuick .3s ease-out both; }
+@keyframes floatSpring {
+  from { transform: translateY(24px); }
+  to   { transform: translateY(0); }
+}
+@keyframes fadeQuick { from { opacity: 0; } to { opacity: 1; } }
