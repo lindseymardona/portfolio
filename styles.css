@@ -154,7 +154,21 @@ h1, h2, h3, h4 { color: var(--ink); }
    tucked behind it, two flowers + a dot, and the status sticker. --pf is the photo
    width; everything around it is sized off it ---- */
 .portrait { position: relative; justify-self: end; transform: translateY(-20px); margin-right: 28px; --pf: clamp(280px, 31vw, 380px); }  /* margin: inset so the outline square + dot don't kiss the page edge */
-.hero .portrait { animation: fadeIn .8s ease .35s both; }
+/* entrance: the photo pushes up gently, the two framing cards follow a beat apart, then the
+   flowers + sticker fade in. `translate` (not transform) so the tilts and hovers are untouched */
+.hero .portrait .frame         { animation: heroUp .95s cubic-bezier(.22,1,.36,1) .2s both; }
+.hero .portrait .frame-bg.bg1  { animation: heroUpSoft .95s cubic-bezier(.22,1,.36,1) .32s both; }
+.hero .portrait .frame-bg.bg2  { animation: heroUpSoft .95s cubic-bezier(.22,1,.36,1) .42s both; }
+.hero .portrait .accent        { transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .7s ease .7s; }
+.hero .portrait .status-sticker { transition: opacity .7s ease .85s; }
+@keyframes heroUp     { from { opacity: 0; translate: 0 34px; } to { opacity: 1; translate: 0 0; } }
+@keyframes heroUpSoft { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+
+/* the gate (see script.js): until the fonts + photo are ready the hero is hidden and its CSS
+   animations hold at their first frame, so nothing starts early and then jumps */
+.hero-wait .hero .hero-grid { opacity: 0; }
+.hero-wait .hero, .hero-wait .hero * { animation-play-state: paused !important; }
+.hero-wait .hero .portrait .accent, .hero-wait .hero .portrait .status-sticker { opacity: 0; }
 
 .portrait .frame {
   position: relative; z-index: 2; width: var(--pf); aspect-ratio: 11 / 12; border-radius: 39px; overflow: hidden;
@@ -1988,20 +2002,16 @@ footer { border-top: 5px solid var(--plum); }
 @media (prefers-reduced-motion: reduce) { .corgi { animation: none !important; } }
 
 /* ============================================================ ROUND 70 — header entrances restored + refined: cursive damped-bounces, serif pushes from the left, lead pushes up from below ============================================================ */
-/* cursive words (.hello + .script-accent) bounce in: up, down, up, down, settling —
-   amplitude decays like real damped motion; ease-in-out per segment so it never lingers at a peak */
-.float-el.float-go { animation: floatIn 1.3s linear both; }
-.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1.3s linear both; }
+/* cursive words (.hello + .script-accent) rise in with ONE soft overshoot and settle: a fast,
+   decelerating rise (ease-out-quint) to a hair above rest, then an easy drop into place. Was a
+   damped multi-bounce, whose changing speeds read as jittery */
+.float-el.float-go { animation: floatIn 1s linear both; }
+.seg-h.seg-go .seg-float { display: inline-block; animation: floatIn 1s linear both; }
 @keyframes floatIn {
-  0%   { opacity: 0; transform: translateY(24px);  animation-timing-function: cubic-bezier(.25,0,.5,1); }
-  27%  { opacity: 1; transform: translateY(-10px); animation-timing-function: cubic-bezier(.32,0,.5,1); }
-  45%  { opacity: 1; transform: translateY(6px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
-  62%  { opacity: 1; transform: translateY(-4px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
-  77%  { opacity: 1; transform: translateY(2px);   animation-timing-function: cubic-bezier(.45,0,.5,1); }
-  90%  { opacity: 1; transform: translateY(-1px);  animation-timing-function: cubic-bezier(.45,0,.5,1); }
+  0%   { opacity: 0; transform: translateY(22px); animation-timing-function: cubic-bezier(.22,1,.36,1); }
+  68%  { opacity: 1; transform: translateY(-3px); animation-timing-function: cubic-bezier(.45,0,.55,1); }
   100% { opacity: 1; transform: translateY(0); }
 }
-
 /* serif parts of a hero heading push in from the left (was a plain fade) */
 .seg-h.seg-go .seg-smooth { display: inline-block; animation: segLeft .62s cubic-bezier(.22,.72,.28,1) both; }
 @keyframes segLeft { 0% { opacity: 0; transform: translateX(-26px); } 100% { opacity: 1; transform: translateX(0); } }
@@ -2470,13 +2480,19 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 .portrait .initials { font-family: var(--serif); }
 .kaya-caption { font-family: var(--script); color: var(--plum); font-size: 1.12rem; line-height: 1.5; }
 
-/* ---- 5b · project-card arrows: a 36px rounded square (11px radius) with the same ring + wave.
-   The card is the link, so the wave runs on card hover/focus ---- */
-.proj-view.card-arrow { width: 36px; height: 36px; flex: none; padding: 0; margin: 0; gap: 0; justify-content: center; align-self: flex-end;
+/* ---- 5b · project-card arrows: the row keeps its words ("read case study") and ends in a
+   36px rounded square (11px radius) with the same ring + wave as the social icons. The card
+   is the link, so the wave runs on card hover/focus ---- */
+.proj-view.has-arrow { display: inline-flex; align-items: center; gap: 12px; margin: 0; padding: 0; align-self: flex-end; }
+.feat-card .proj-view.has-arrow, .mini-card .proj-view.has-arrow { align-self: flex-end; margin-top: auto; }
+.proj-footrow .proj-view.has-arrow { align-self: center; margin-left: auto; }
+/* when the card is too narrow for tags + label + arrow, the label + arrow drop to their own row */
+.proj-footrow:has(.has-arrow) { flex-wrap: wrap; row-gap: 12px; }
+.proj-footrow:has(.has-arrow) .proj-tags { flex: 1 1 110px; min-width: 110px; }
+.proj-view .pv-label { white-space: nowrap; }
+.proj-view .card-arrow { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; flex: none;
   border: 1.5px solid var(--plum); border-radius: 11px; color: var(--plum); background: transparent; }
-.proj-view.card-arrow > svg, .proj-view.card-arrow .wv-top > svg { width: 16px; height: 16px; display: block; }   /* the arrow only — not the wave graphic */
-.feat-card .proj-view.card-arrow, .mini-card .proj-view.card-arrow { align-self: flex-end; margin-top: auto; }
-.proj-footrow .proj-view.card-arrow { align-self: center; }
+.proj-view .card-arrow > svg, .proj-view .card-arrow .wv-top > svg { width: 16px; height: 16px; display: block; }   /* the arrow only — not the wave graphic */
 :is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow { background-color: rgba(99,40,92,.12); }
 :is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow .wv { transform: translateY(-12%); }
 :is(.proj, .feat-card, .mini-card):is(:hover, :focus-visible) .card-arrow .wv-top { clip-path: inset(-6% 0 0 0); }

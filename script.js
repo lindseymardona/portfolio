@@ -3,6 +3,27 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- home hero gate: index.html's <head> adds .hero-wait, which hides the hero and pauses
+     its CSS animations. Lift it once the hero's fonts and photo are ready (or after 1.4s at most),
+     so the entrance plays in one go instead of jumping when a font swaps in or the photo pops in.
+     The header-entrance jobs for hero elements wait on this too ---- */
+  var heroGate = new Promise(function (resolve) {
+    var root = document.documentElement;
+    if (!root.classList.contains('hero-wait')) { resolve(); return; }
+    var done = false;
+    var finish = function () { if (done) return; done = true; root.classList.remove('hero-wait'); resolve(); };
+    var waits = [];
+    if (document.fonts && document.fonts.load) {
+      ['1em Borel', '400 1em "DM Serif Display"', '400 1em Karla', '500 1em Karla'].forEach(function (f) {
+        waits.push(document.fonts.load(f).catch(function () {}));
+      });
+    }
+    var heroImg = document.querySelector('.hero .portrait img');
+    if (heroImg && heroImg.decode) waits.push(heroImg.decode().catch(function () {}));
+    Promise.all(waits).then(function () { requestAnimationFrame(finish); });
+    setTimeout(finish, 1400);
+  });
+
   /* ---- music-note glyphs (Kaya's floating note, the case-study staff rail). One 16×26 box;
      the note head is centred at (5.5, 20), so a staff line drawn through y=20 runs through it.
      Colour comes from currentColor; a half note is always hollow ---- */
@@ -1212,7 +1233,11 @@
     if (nameEl) { nameEl.classList.add('name-anim'); jobs.push({ el: nameEl, go: function () { if (!nameEl.dataset.typed) { nameEl.dataset.typed = '1'; typeName(nameEl); } } }); }
 
     // trigger on view (immediately for anything already in view at load)
-    var run = function (j) { if (j && !j.done) { j.done = true; j.go(); } };
+    var run = function (j) {
+      if (!j || j.done) return;
+      j.done = true;
+      if (j.el.closest && j.el.closest('.hero')) heroGate.then(j.go); else j.go();   // the hero waits for its fonts + photo
+    };
     if ('IntersectionObserver' in window) {
       var hio = new IntersectionObserver(function (ents) {
         ents.forEach(function (e) { if (e.isIntersecting) { run(e.target.__hjob); hio.unobserve(e.target); } });
@@ -1245,9 +1270,12 @@
      ring + wave as the social icons, a rounded square instead of a circle). The whole card
      is the link, so the arrow stays decorative (the card's text names it) ---- */
   [].slice.call(document.querySelectorAll('a.proj .proj-view, a.feat-card .proj-view, a.mini-card .proj-view')).forEach(function (v) {
-    v.classList.add('card-arrow');
+    // keep the row's own words ("read case study", "read the write-up") to the left of the square
+    var label = v.textContent.replace(/[→↗]/g, '').replace(/\s+/g, ' ').trim();
+    v.classList.add('has-arrow');
     v.setAttribute('aria-hidden', 'true');
-    v.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12 H19 M13 6 L19 12 L13 18"/></svg>';
+    v.innerHTML = '<span class="pv-label"></span><span class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12 H19 M13 6 L19 12 L13 18"/></svg></span>';
+    v.querySelector('.pv-label').textContent = label;
   });
 
   /* ---- wave hover (social icons, card arrows, outlined pills, the résumé downloads): a plum wave rises
@@ -1257,7 +1285,7 @@
      there. Both added layers are aria-hidden; the link keeps its own accessible name ---- */
   var WAVE_SVG = '<svg viewBox="0 0 200 130" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
     '<path d="M0 9 Q12.5 0 25 9 T50 9 T75 9 T100 9 T125 9 T150 9 T175 9 T200 9 V130 H0 Z" fill="currentColor"/></svg>';
-  [].slice.call(document.querySelectorAll('.socials a, .proj-view.card-arrow, a.pill.ghost, a.pill[download]')).forEach(function (a) {
+  [].slice.call(document.querySelectorAll('.socials a, .proj-view .card-arrow, a.pill.ghost, a.pill[download]')).forEach(function (a) {
     if (a.querySelector('.wv')) return;
     var copy = a.innerHTML;
     a.classList.add('wave-btn');
