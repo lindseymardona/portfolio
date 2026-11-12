@@ -1442,6 +1442,31 @@
       });
     footEl.insertBefore(staffDeco, stage);
 
+    // the staff band (above the plum rule) takes the colour of whatever sits directly above the
+    // footer, so it reads as part of the page and the footer's grey starts at the rule. Walk down
+    // through the elements that reach the bottom edge and keep the deepest opaque background
+    var opaque = function (c) { return c && c !== 'transparent' && !/rgba\([^)]*,\s*0\)$/.test(c); };
+    var matchStaffBg = function () {
+      var el = footEl.previousElementSibling, bg = null;
+      while (el) {
+        var c = getComputedStyle(el).backgroundColor;
+        if (opaque(c)) bg = c;
+        var bottom = el.getBoundingClientRect().bottom, next = null;
+        for (var k = el.children.length - 1; k >= 0; k--) {
+          var ch = el.children[k], r = ch.getBoundingClientRect(), cs = getComputedStyle(ch);
+          if (cs.display === 'none' || cs.position === 'fixed' || cs.position === 'absolute' || !r.height) continue;
+          if (Math.abs(r.bottom - bottom) <= 1) next = ch;
+          break;
+        }
+        el = next;
+      }
+      footEl.style.setProperty('--staff-bg', bg || getComputedStyle(document.body).backgroundColor);
+    };
+    matchStaffBg();
+    window.addEventListener('load', matchStaffBg);
+    var staffBgT = null;
+    window.addEventListener('resize', function () { clearTimeout(staffBgT); staffBgT = setTimeout(matchStaffBg, 150); });
+
     // every pose lives in ONE image (assets/corgi-sprites.png, one row per pose), so changing
     // pose only moves the background — it never swaps images. Swapping between separate sheets
     // could blank her for a frame (e.g. on a jump) while the browser re-decoded the new sheet.

@@ -2543,3 +2543,5 @@ a.ext-link:hover .ext, a.ext-link:focus-visible .ext { transform: translate(2.5p
 .staff-note:nth-child(6) { animation-duration: 4.4s; animation-delay: -1.8s; }
 .staff-note:nth-child(7) { animation-duration: 3.5s; animation-delay: -2.9s; }
 @keyframes noteHover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+/* the staff band matches the section above it (script.js sets --staff-bg); grey from the plum rule down */
+footer { background: linear-gradient(to bottom, var(--staff-bg, var(--gray)) 0 52px, var(--gray) 52px); }
